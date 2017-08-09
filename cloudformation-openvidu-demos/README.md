@@ -28,7 +28,7 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 2. The first one is the *Stack Name*. Feel free to be as original as you want but we recomend __OpenVidu_Demos__ and we use this name throughout the docs.
 
-3. In this scenario you don't need to complete the *Secure Socket Layer (SSL) Configuration* section.
+3. In this scenario you don't need to complete the *Let's Encrypt Configuration (Optional) Configuration* section.
 
 4. Focus on the *Other parameters* 
 
@@ -56,7 +56,7 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 2. The first one is the *Stack Name*. Feel free to be as original as you want but we recomend __OpenVidu_Demos__ and we use this name throughout the docs.
 
-3. In the *Secure Socket Layer (SSL) Configuration* section we are going set up the information for Let's Encrypt.
+3. In the *SLet's Encrypt Configuration (Optional) Configuration* section we are going set up the information for Let's Encrypt.
 
     1. First of all, choose to use a Let's Encrypt Certificate from the drop-down menu.
 

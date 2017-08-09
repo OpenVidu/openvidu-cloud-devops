@@ -160,7 +160,7 @@
       "ParameterGroups": [
         {
           "Label": {
-            "default": "Secure Socket Layer (SSL) Configuration"
+            "default": "Let's Encrypt Configuration (Optional)"
           },
           "Parameters": [
             "WantToUseLetsEncrypt",
