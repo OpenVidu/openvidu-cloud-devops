@@ -2,4 +2,3 @@ domain_name: DOMAIN_NAME
 letsencrypt_email: LETSENCRYPT_EMAIL
 aws_eip: AWS_EIP
 letsencrypt: No
-openvidusecurity: false
