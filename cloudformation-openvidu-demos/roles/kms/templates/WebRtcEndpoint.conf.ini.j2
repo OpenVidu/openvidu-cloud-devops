@@ -15,9 +15,4 @@
 ;pemCertificateRSA=<path>
 ;pemCertificateECDSA=<path>
 
-{% if stun_or_turn == "Stun" %}
-stunServerAddress={{ openvidu_stun_ip }}
-stunServerPort={{ openvidu_stun_port }}
-{% else %}
 turnURL={{ turn_user }}:{{ turn_password }}@{{ aws_public_ip }}:3478
-{% endif %}
