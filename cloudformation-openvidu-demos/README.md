@@ -85,3 +85,9 @@ Independent of the scenario of your choice, there are some steps you should do i
 11. And that's it. Enjoy!
 
 **IMPORTANT**: Despite saying *CREATE_COMPLETE* it can take a bit longer to finish the deployment. Please be patient.
+
+## Troubleshooting
+
+### Shutdown the instance
+
+We know that if you are not using an *Elastic IP* and you power off your instance the configuration won't be the same at new boot. If for any reason you powered off your instance, we recomend that you create a new one.
