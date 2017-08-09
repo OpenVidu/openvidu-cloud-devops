@@ -49,34 +49,6 @@
 		"LetsEncryptEmail": {
 			"Description": "Email necesary for Let's Encrypt notifications",
 			"Type": "String"
-		},
-
-		"WantToUseStun": {
-			"Description": "Choose if you want to use Stun or Turn",
-			"Type": "String",
-			"Default": "Stun",
-			"AllowedValues": ["Stun", "Turn"]
-		},
-
-		"StunServer": {
-			"Description": "Stun IP Address",
-			"Type": "String"
-		},
-
-		"StunPort": {
-			"Description": "Stun Port",
-			"Type": "String"
-		},
-
-		"TurnUser": {
-			"Description": "Turn user",
-			"Type": "String"
-		},
-
-		"TurnPassword": {
-			"Description": "Turn password",
-			"Type": "String",
-			"NoEcho": "True"
 		}
 
 	},
@@ -135,12 +107,6 @@
 						"default": "Secure Socket Layer (SSL) Configuration"
 					},
 					"Parameters": ["WantToUseLetsEncrypt", "LetsEncryptEmail", "MyDomainName", "PublicElasticIP"]
-				},
-				{
-					"Label": {
-						"default": "Stun/Turn Configuration"
-					},
-					"Parameters": ["WantToUseStun", "StunServer", "StunPort", "TurnUser", "TurnPassword"]
 				}
 			],
 			"ParameterLabels": {
@@ -155,21 +121,6 @@
 				},
 				"PublicElasticIP": {
 					"default": "Public elastic IP, if needed"
-				},
-				"WantToUseStun": {
-					"default": "Please, choose what do you want to use if the server lives behind a nat"
-				},
-				"StunServer": {
-					"default": "Which IP to use"
-				},
-				"StunPort": {
-					"default": "Which port to use"
-				},
-				"TurnUser": {
-					"default": "Turn Username"
-				},
-				"TurnPassword": {
-					"default": "Turn user password"
 				}
 			}
 		}
@@ -181,11 +132,6 @@
 			"Fn::Equals": [{
 				"Ref": "WantToUseLetsEncrypt"
 			}, "True"]
-		},
-		"StunOrTurn": {
-			"Fn::Equals": [{
-				"Ref": "WantToUseStun"
-			}, "Stun"]
 		}
 	},
 
@@ -223,47 +169,21 @@
 
 							"git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
 							"pushd /opt/workdir/cloudformation-openvidu-demos\n",
+              "git checkout autopass\n",              
               "WORKINGDIR=/opt/workdir/cloudformation-openvidu-demos\n",
 							"PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
-							"sed -i \"s/DOMAIN_NAME/", {
-								"Ref": "MyDomainName"
-							}, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-							"sed -i \"s/LETSENCRYPT_EMAIL/", {
-								"Ref": "LetsEncryptEmail"
-							}, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-							"sed -i \"s/letsencrypt: false/letsencrypt: ", {
-								"Ref": "WantToUseLetsEncrypt"
-							}, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-							"sed -i \"s/STUN_SERVER/", {
-								"Ref": "StunServer"
-							}, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-              "sed -i \"s/letsencrypt: false/letsencrypt: ", {
-								"Ref": "WantToUseLetsEncrypt"
-							}, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-              "sed -i \"s/DOMAIN_NAME/", {
-								"Ref": "MyDomainName"
-							}, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-							"sed -i \"s/STUN_PORT/", {
-								"Ref": "StunPort"
-							}, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-							"sed -i \"s/stun_or_turn: stun/stun_or_turn: ", {
-								"Ref": "WantToUseStun"
-							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-							"sed -i \"s/STUN_SERVER/", {
-								"Ref": "StunServer"
-							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-							"sed -i \"s/STUN_PORT/", {
-								"Ref": "StunPort"
-							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-							"sed -i \"s/TURN_USER/", {
-								"Ref": "TurnUser"
-							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-							"sed -i \"s/TURN_PASSWORD/", {
-								"Ref": "TurnPassword"
-							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+							"sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n", 
+              "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+              "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",              
+							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+              "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+							
+							"sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+							"sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+              
 							"ansible-playbook -i \"localhost,\" -c local play.yml\n",
 							"popd\n"
 						]]
@@ -337,6 +257,10 @@
 				}]]
 			},
 			"Condition": "UseLetsEncrypt"
-		}
+		},
+    "TurnPassword" : {
+      "Description" : "Passoword for the user turn_user",
+      "Value" : { "Fn::Base64": { "Ref": "AWS::StackName" } }
+    } 
 	}
 }
