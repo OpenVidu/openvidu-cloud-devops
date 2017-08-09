@@ -258,7 +258,7 @@
 			"Condition": "UseLetsEncrypt"
 		},
     "TurnPassword" : {
-      "Description" : "Passoword for the user turn_user",
+      "Description" : "Password for the user turn_user",
       "Value" : { "Fn::Base64": { "Ref": "AWS::StackName" } }
     } 
 	}
