@@ -223,46 +223,47 @@
 
 							"git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
 							"pushd /opt/workdir/cloudformation-openvidu-demos\n",
+              "WORKINGDIR=/opt/workdir/cloudformation-openvidu-demos\n",
 							"PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
 							"sed -i \"s/DOMAIN_NAME/", {
 								"Ref": "MyDomainName"
-							}, "/\" /opt/workdir/roles/nginx/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
 							"sed -i \"s/LETSENCRYPT_EMAIL/", {
 								"Ref": "LetsEncryptEmail"
-							}, "/\" /opt/workdir/roles/nginx/vars/main.yml\n",
-							"sed -i \"s/AWS_EIP/$PIP/\" /opt/workdir/roles/nginx/vars/main.yml\n",
-							"sed -i \"s/AWS_EIP/$PIP/\" /opt/workdir/roles/supervisord/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
 							"sed -i \"s/letsencrypt: false/letsencrypt: ", {
 								"Ref": "WantToUseLetsEncrypt"
-							}, "/\" /opt/workdir/roles/nginx/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
 							"sed -i \"s/STUN_SERVER/", {
 								"Ref": "StunServer"
-							}, "/\" /opt/workdir/roles/supervisord/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
               "sed -i \"s/letsencrypt: false/letsencrypt: ", {
 								"Ref": "WantToUseLetsEncrypt"
-							}, "/\" /opt/workdir/roles/supervisord/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
               "sed -i \"s/DOMAIN_NAME/", {
 								"Ref": "MyDomainName"
-							}, "/\" /opt/workdir/roles/supervisord/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
 							"sed -i \"s/STUN_PORT/", {
 								"Ref": "StunPort"
-							}, "/\" /opt/workdir/roles/supervisord/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
 							"sed -i \"s/stun_or_turn: stun/stun_or_turn: ", {
 								"Ref": "WantToUseStun"
-							}, "/\" /opt/workdir/roles/kms/vars/main.yml\n",
-							"sed -i \"s/AWS_EIP/$PIP/\" /opt/workdir/roles/kms/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
 							"sed -i \"s/STUN_SERVER/", {
 								"Ref": "StunServer"
-							}, "/\" /opt/workdir/roles/kms/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
 							"sed -i \"s/STUN_PORT/", {
 								"Ref": "StunPort"
-							}, "/\" /opt/workdir/roles/kms/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
 							"sed -i \"s/TURN_USER/", {
 								"Ref": "TurnUser"
-							}, "/\" /opt/workdir/roles/kms/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
 							"sed -i \"s/TURN_PASSWORD/", {
 								"Ref": "TurnPassword"
-							}, "/\" /opt/workdir/roles/kms/vars/main.yml\n",
+							}, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
 							"ansible-playbook -i \"localhost,\" -c local play.yml\n",
 							"popd\n"
 						]]
