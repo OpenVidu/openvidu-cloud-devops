@@ -169,7 +169,6 @@
 
 							"git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
 							"pushd /opt/workdir/cloudformation-openvidu-demos\n",
-              "git checkout autopass\n",              
               "WORKINGDIR=/opt/workdir/cloudformation-openvidu-demos\n",
 							"PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
 							"sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
