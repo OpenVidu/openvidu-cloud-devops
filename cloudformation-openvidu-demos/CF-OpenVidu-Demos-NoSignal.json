@@ -42,8 +42,8 @@
 		"WantToUseLetsEncrypt": {
 			"Description": "Choose if you want to use a Let's Encrypt Certificate",
 			"Type": "String",
-			"Default": "False",
-			"AllowedValues": ["True", "False"]
+			"Default": "No",
+			"AllowedValues": ["Yes", "No"]
 		},
 
 		"LetsEncryptEmail": {
@@ -104,23 +104,23 @@
 		"AWS::CloudFormation::Interface": {
 			"ParameterGroups": [{
 					"Label": {
-						"default": "Secure Socket Layer (SSL) Configuration"
+						"default": "Let's Encrypt Configuration (Optional)"
 					},
 					"Parameters": ["WantToUseLetsEncrypt", "LetsEncryptEmail", "MyDomainName", "PublicElasticIP"]
 				}
 			],
 			"ParameterLabels": {
 				"WantToUseLetsEncrypt": {
-					"default": "Please choose if you want to use a Let's Encrypt Certificate"
+					"default": "Do you want Let's Encrypt"
 				},
-				"LetsEncryptEmail": {
-					"default": "Please, write your email address"
-				},
-				"MyDomainName": {
+        "MyDomainName": {
 					"default": "Fully qualified domain name"
 				},
-				"PublicElasticIP": {
-					"default": "Public elastic IP, if needed"
+        "PublicElasticIP": {
+					"default": "Elastic IP"
+				},
+				"LetsEncryptEmail": {
+					"default": "Email address"
 				}
 			}
 		}

@@ -1,13 +1,13 @@
 server {
     listen 8443 ssl;
-{% if letsencrypt == True %}
+{% if letsencrypt == "Yes" %}
     server_name {{ domain_name }};
 {% else %}
     server_name {{ aws_eip }};
 {% endif %}
 
     ssl on;
-{% if letsencrypt == True %}
+{% if letsencrypt == "Yes" %}
     ssl_certificate         /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
     ssl_certificate_key     /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
     ssl_trusted_certificate /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
