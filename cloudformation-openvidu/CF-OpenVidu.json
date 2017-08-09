@@ -1,0 +1,265 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+
+	"Description": "Deploying OpenVidu Demos over AWS",
+
+	"Parameters": {
+
+		"KeyName": {
+			"Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+			"Type": "AWS::EC2::KeyPair::KeyName",
+			"ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+		},
+
+		"InstanceType": {
+			"Description": "Demos Machine EC2 instance type",
+			"Type": "String",
+			"Default": "t2.small",
+			"AllowedValues": ["t1.micro", "t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "m1.small", "m1.medium", "m1.large", "m1.xlarge", "m2.xlarge", "m2.2xlarge", "m2.4xlarge", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "m4.large", "m4.xlarge", "m4.2xlarge", "m4.4xlarge", "m4.10xlarge", "c1.medium", "c1.xlarge", "c3.large", "c3.xlarge", "c3.2xlarge", "c3.4xlarge", "c3.8xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "g2.2xlarge", "g2.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "d2.xlarge", "d2.2xlarge", "d2.4xlarge", "d2.8xlarge", "hi1.4xlarge", "hs1.8xlarge", "cr1.8xlarge", "cc2.8xlarge", "cg1.4xlarge"],
+			"ConstraintDescription": "must be a valid EC2 instance type."
+		},
+
+		"SSHLocation": {
+			"Description": "The IP address range that can be used to SSH to the EC2 instances",
+			"Type": "String",
+			"MinLength": "7",
+			"MaxLength": "18",
+			"Default": "0.0.0.0/0",
+			"AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+			"ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+		},
+
+		"MyDomainName": {
+			"Description": "Fully qualified domain name",
+			"Type": "String"
+		},
+
+		"PublicElasticIP": {
+			"Description": "In case you want to use Let's Encrypt, the Elastic IP you generated",
+			"Type": "String"
+		},
+
+		"WantToUseLetsEncrypt": {
+			"Description": "Choose if you want to use a Let's Encrypt Certificate",
+			"Type": "String",
+			"Default": "False",
+			"AllowedValues": ["True", "False"]
+		},
+
+		"LetsEncryptEmail": {
+			"Description": "Email necesary for Let's Encrypt notifications",
+			"Type": "String"
+		}
+
+	},
+
+	"Mappings": {
+		"RegionMap": {
+			"us-east-1": {
+				"AMI1": "ami-cd0f5cb6"
+			},
+			"us-west-1": {
+				"AMI1": "ami-09d2fb69"
+			},
+			"ap-northeast-2": {
+				"AMI1": "ami-d28a53bc"
+			},
+			"ap-northeast-1": {
+				"AMI1": "ami-ea4eae8c"
+			},
+			"sa-east-1": {
+				"AMI1": "ami-10186f7c"
+			},
+			"ap-southeast-1": {
+				"AMI1": "ami-6f198a0c"
+			},
+			"ca-central-1": {
+				"AMI1": "ami-9818a7fc"
+			},
+			"ap-southeast-2": {
+				"AMI1": "ami-e2021d81"
+			},
+			"us-west-2": {
+				"AMI1": "ami-6e1a0117"
+			},
+			"us-east-2": {
+				"AMI1": "ami-10547475"
+			},
+			"ap-south-1": {
+				"AMI1": "ami-099fe766"
+			},
+			"eu-central-1": {
+				"AMI1": "ami-1e339e71"
+			},
+			"eu-west-1": {
+				"AMI1": "ami-785db401"
+			},
+			"eu-west-2": {
+				"AMI1": "ami-996372fd"
+			}
+		}
+	},
+
+	"Metadata": {
+		"AWS::CloudFormation::Interface": {
+			"ParameterGroups": [{
+					"Label": {
+						"default": "Secure Socket Layer (SSL) Configuration"
+					},
+					"Parameters": ["WantToUseLetsEncrypt", "LetsEncryptEmail", "MyDomainName", "PublicElasticIP"]
+				}
+			],
+			"ParameterLabels": {
+				"WantToUseLetsEncrypt": {
+					"default": "Please choose if you want to use a Let's Encrypt Certificate"
+				},
+				"LetsEncryptEmail": {
+					"default": "Please, write your email address"
+				},
+				"MyDomainName": {
+					"default": "Fully qualified domain name"
+				},
+				"PublicElasticIP": {
+					"default": "Public elastic IP, if needed"
+				}
+			}
+		}
+	},
+
+	"Conditions": {
+
+		"UseLetsEncrypt": {
+			"Fn::Equals": [{
+				"Ref": "WantToUseLetsEncrypt"
+			}, "True"]
+		}
+	},
+
+	"Resources": {
+
+		"WebServerInstance": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"ImageId": {
+					"Fn::FindInMap": ["RegionMap", {
+						"Ref": "AWS::Region"
+					}, "AMI1"]
+				},
+				"InstanceType": {
+					"Ref": "InstanceType"
+				},
+				"SecurityGroups": [{
+					"Ref": "WebServerSecurityGroup"
+				}],
+				"KeyName": {
+					"Ref": "KeyName"
+				},
+				"Tags": [{
+					"Key": "Name",
+					"Value": {
+						"Ref": "AWS::StackName"
+					}
+				}],
+				"UserData": {
+					"Fn::Base64": {
+						"Fn::Join": ["", [
+							"#!/bin/bash -xe\n",
+							"apt-get update\n",
+							"apt-get install -y git ansible\n",
+
+							"git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
+							"pushd /opt/workdir/cloudformation-openvidu\n",
+              "WORKINGDIR=/opt/workdir/cloudformation-openvidu-demos\n",
+							"PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
+							"sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n", 
+              "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+              "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",              
+							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+              "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+							
+							"sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+							"sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+              
+							"ansible-playbook -i \"localhost,\" -c local play.yml\n",
+							"popd\n"
+						]]
+					}
+				}
+			}
+		},
+
+		"MyEIP": {
+			"Type": "AWS::EC2::EIPAssociation",
+			"Condition": "UseLetsEncrypt",
+			"Properties": {
+				"InstanceId": {
+					"Ref": "WebServerInstance"
+				},
+				"EIP": {
+					"Ref": "PublicElasticIP"
+				}
+			}
+		},
+
+		"WebServerSecurityGroup": {
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties": {
+				"GroupDescription": "Full open access",
+				"SecurityGroupIngress": [{
+						"IpProtocol": "udp",
+						"FromPort": "0",
+						"ToPort": "65535",
+						"CidrIp": "0.0.0.0/0"
+					},
+					{
+						"IpProtocol": "tcp",
+						"FromPort": "0",
+						"ToPort": "65535",
+						"CidrIp": "0.0.0.0/0"
+					},
+					{
+						"IpProtocol": "tcp",
+						"FromPort": "22",
+						"ToPort": "22",
+						"CidrIp": {
+							"Ref": "SSHLocation"
+						}
+					}
+				]
+			}
+		}
+	},
+
+	"Outputs": {
+		"WebsiteURL": {
+			"Description": "Use this URL to access the demos",
+			"Value": {
+				"Fn::Join": ["", ["https://", {
+					"Fn::GetAtt": ["WebServerInstance", "PublicDnsName"]
+				}]]
+			}
+		},
+		"WebsiteIP": {
+			"Description": "alternatively, you can access througt this IP",
+			"Value": {
+				"Fn::GetAtt": ["WebServerInstance", "PublicIp"]
+			}
+		},
+		"WebsiteURLLE": {
+			"Description": "Use this URL to access the demos",
+			"Value": {
+				"Fn::Join": ["", ["https://", {
+					"Ref": "MyDomainName"
+				}]]
+			},
+			"Condition": "UseLetsEncrypt"
+		},
+    "TurnPassword" : {
+      "Description" : "Passoword for the user turn_user",
+      "Value" : { "Fn::Base64": { "Ref": "AWS::StackName" } }
+    } 
+	}
+}
