@@ -1,0 +1,12 @@
+---
+- name: creating working dir
+  file:
+    path: "/opt/openvidu"
+    state: "directory"
+    mode: 0755
+
+- name: copying OpenVidu JAR
+  copy: 
+    src: "openvidu-server.jar"
+    dest: "/opt/openvidu"
+

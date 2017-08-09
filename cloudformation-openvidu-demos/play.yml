@@ -1,0 +1,9 @@
+- hosts: all
+  roles:
+    - nginx
+    - docker
+    - kms
+    - openvidu
+    - supervisord
+    - demos
+

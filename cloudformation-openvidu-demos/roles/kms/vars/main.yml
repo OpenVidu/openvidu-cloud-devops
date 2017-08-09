@@ -1,0 +1,8 @@
+---
+openvidu_stun_ip: STUN_SERVER
+openvidu_stun_port: STUN_PORT
+aws_public_ip: AWS_EIP
+
+stun_or_turn: stun
+turn_user: TURN_USER
+turn_password: TURN_PASSWORD

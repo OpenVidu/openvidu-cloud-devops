@@ -1,0 +1,31 @@
+[supervisord]
+nodaemon=true
+logfile=/var/log/supervisor/supervisord.log;
+pidfile=/var/run/supervisord.pid;
+loglevel=debug
+
+[program:openvidu-server]
+{% if letsencrypt == True %}
+command=java -jar -Dopenvidu.security=false -Dopenvidu.publicurl=https://{{ domain_name }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
+{% else %}
+command=java -jar -Dopenvidu.security=false -Dopenvidu.publicurl=https://{{ aws_public_ip }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
+{% endif %}
+
+[program:mysql]
+command=docker run -d --rm --name openvidu-mysql -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=openvidu_sample_app -e MYSQL_USER=op-root -e MYSQL_PASSWORD=pass mysql
+
+[program:js-java]
+{% if letsencrypt == True %}
+command=/bin/bash /var/www/html/basic-webinar/app.sh {{ domain_name }}
+{% else %}
+command=/bin/bash /var/www/html/basic-webinar/app.sh {{ aws_public_ip }}
+{% endif %}
+redirect_stderr=true
+
+[program:classroom-demo]
+{% if letsencrypt == True %}
+command=/bin/bash /var/www/html/classroom/app.sh {{ domain_name }}
+{% else %}
+command=/bin/bash /var/www/html/classroom/app.sh {{ aws_public_ip }}
+{% endif %}
+redirect_stderr=true
