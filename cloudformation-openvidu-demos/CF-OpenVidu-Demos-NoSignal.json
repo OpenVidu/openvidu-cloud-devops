@@ -65,9 +65,7 @@
 
 		"StunPort": {
 			"Description": "Stun Port",
-			"Type": "Number",
-			"MinValue": "3478",
-			"MaxValue": "65535"
+			"Type": "String"
 		},
 
 		"TurnUser": {
