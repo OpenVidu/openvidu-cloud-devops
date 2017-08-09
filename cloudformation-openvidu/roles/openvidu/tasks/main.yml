@@ -5,6 +5,11 @@
     state: "directory"
     mode: 0755
 
+- name: installing necessary software
+  apt:
+    name: openjdk-8-jdk
+    update_cache: yes
+
 - name: copying OpenVidu JAR
   copy: 
     src: "openvidu-server.jar"
