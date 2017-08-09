@@ -1,6 +1,6 @@
 # OpenVidu Demos on AWS
 
-This repository is intended to be a point where the user can deploy OpenVidu Demos on an AWS instance.
+This repository allow you to easily deploy an Amazon EC2 instance for OpenVidu Server.
 
 ## Community
 
