@@ -1,6 +1,4 @@
 ---
-openvidu_stun_ip: STUN_SERVER
-openvidu_stun_port: STUN_PORT
 aws_public_ip: AWS_EIP
 letsencrypt: false
 domain_name: DOMAIN_NAME
