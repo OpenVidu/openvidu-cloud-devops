@@ -9,9 +9,6 @@
 - name: Remove default nginx config
   file: name=/etc/nginx/sites-enabled/default state=absent
 
-- name: Setting waiting web page
-  copy: src=index.html dest=/var/www/html/index.html
-
 - name: configuring nginx
   copy: src=nginx.conf dest=/etc/nginx/nginx.conf
 
@@ -48,20 +45,6 @@
   shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
   args:
     creates: /etc/nginx/dhparams.pem
-
-- name: Install nginx site for specified site
-  template:
-    src: templates/nginx-le.j2
-    dest: /etc/nginx/sites-enabled/le
-  notify: restart nginx
-  when: letsencrypt
-
-- name: enabling site config
-  template:
-    src: templates/default.conf.j2
-    dest: /etc/nginx/sites-enabled/default
-  notify: restart nginx
-  when: not letsencrypt
 
 - name: adding entry for OpenVidu requests
   template:
