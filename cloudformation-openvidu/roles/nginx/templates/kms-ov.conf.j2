@@ -19,7 +19,7 @@ server {
     include sites-available/proxy.conf;
 
     location / {
-{% if openvidu-security == true %}
+{% if openvidusecurity == true %}
         proxy_pass https://{{ aws_eip }}:5443;
 {% else %}
         proxy_pass http://{{ aws_eip }}:5443;
