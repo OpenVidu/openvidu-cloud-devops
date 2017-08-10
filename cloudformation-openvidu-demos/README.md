@@ -36,17 +36,17 @@ Independent of the scenario of your choice, there are some steps you should do i
 
     2. Choose a value for *KeyName*. It must be the name of an existing EC2 Key Pair, used later to access the instance through SSH. If you haven't already created an EC2 Key Pair, [check the documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) and create or import a new key.
 
-6. Press Next to continue.
+5. Press Next to continue.
 
-7. The next screen gives you the chance to specify some __keys__ and other options. We are not using this screen right now, so you can press Next.
+6. The next screen gives you the chance to specify some __keys__ and other options. We are not using this screen right now, so you can press Next.
 
-8. You can now review all the parameters you've introduced before. If everything looks great, press Create.
+7. You can now review all the parameters you've introduced before. If everything looks great, press Create.
 
-9. You will see the *Stack* in *CREATE_IN_PROGRESS* status.
+8. You will see the *Stack* in *CREATE_IN_PROGRESS* status.
 
-10. It takes about 7 to 10 minutes to deploy the Demo Software, so please be patient. Once the deployment is ready you should be able to access the Demos throught the URL you can find under the *Outputs* tab.
+9. It takes about 7 to 10 minutes to deploy the Demo Software, so please be patient. Once the deployment is ready you should be able to access the Demos throught the URL you can find under the *Outputs* tab.
 
-11. And that's it. Enjoy!
+10. And that's it. Enjoy!
 
 ## TURN and Let's Encrypt certificate
 
@@ -72,17 +72,17 @@ Independent of the scenario of your choice, there are some steps you should do i
 
     2. Choose a value for *KeyName*. It must be the name of an existing EC2 Key Pair, used later to access the instance through SSH. If you haven't already created an EC2 Key Pair, [check the documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) and create or import a new key.
 
-6. Press Next to continue.
+5. Press Next to continue.
 
-7. The next screen gives you the chance to specify some __keys__ and other options. We are not using this screen right now, so you can press Next.
+6. The next screen gives you the chance to specify some __keys__ and other options. We are not using this screen right now, so you can press Next.
 
-8. You can now review all the parameters you've introduced before. If everything looks great, press Create.
+7. You can now review all the parameters you've introduced before. If everything looks great, press Create.
 
-9. You will see the *Stack* in *CREATE_IN_PROGRESS* status.
+8. You will see the *Stack* in *CREATE_IN_PROGRESS* status.
 
-10. It takes about 7 to 10 minutes to deploy the Demo Software, so please be patient. Once the deployment is ready you should be able to access the Demos throught the URL you can find under the *Outputs* tab.
+9. It takes about 7 to 10 minutes to deploy the Demo Software, so please be patient. Once the deployment is ready you should be able to access the Demos throught the URL you can find under the *Outputs* tab.
 
-11. And that's it. Enjoy!
+10. And that's it. Enjoy!
 
 **IMPORTANT**: Despite saying *CREATE_COMPLETE* it can take a bit longer to finish the deployment. Please be patient.
 
