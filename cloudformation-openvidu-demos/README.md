@@ -30,11 +30,11 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 3. In this scenario you don't need to complete the section *Let's Encrypt Configuration (Optional)*.
 
-4. Focus on the section *Other parameters*:
+4. In the section *Other parameters*:
 
-    1. Choose an *Instance Type*. We recommend __t2.medium__ at least.
+    1. Choose an value for *InstanceType*. We recommend __t2.medium__ at least.
 
-    2. Choose an existing *Key Name* in order to access the instance once it is built.
+    2. Choose a value for *KeyName*. It must be the name of an existing EC2 Key Pair, used later to access the instance through SSH. If you haven't already created an EC2 Key Pair, [check the documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) and create or import a new key.
 
 6. Press Next to continue.
 
@@ -66,11 +66,11 @@ Independent of the scenario of your choice, there are some steps you should do i
 
     4. Enter the Elastic IP address you've allocated.
 
-4. Check now *Other parameters*:
+4. In the section *Other parameters*:
 
-    1. Choose an *Instance Type*. We recommended __t2.medium__ at least.
+    1. Choose an value for *InstanceType*. We recommend __t2.medium__ at least.
 
-    2. Choose an existing *Key Name* in order to access the instance once it is built.
+    2. Choose a value for *KeyName*. It must be the name of an existing EC2 Key Pair, used later to access the instance through SSH. If you haven't already created an EC2 Key Pair, [check the documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) and create or import a new key.
 
 6. Press Next to continue.
 
