@@ -1,0 +1,13 @@
+---
+- name: installing mysql
+  apt: name=mysql-server state=latest
+
+- name: installing python mysqldb module
+  apt: name=python-mysqldb state=latest
+
+- name: creating database user
+  mysql_user: user={{ mysql_user }} password={{ mysql_user_pass }} priv=*.*:ALL state=present
+
+- name: creating database
+  mysql_db: db={{ mysql_database }} state=present
+
