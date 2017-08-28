@@ -19,6 +19,9 @@
     - "localhost"
   notify: restart mysql
 
+- name: copy .my.cnf file with root password credentials
+  template: src=.my.cnf.j2 dest=~/.my.cnf mode=0600
+
 - name: creating database user
   mysql_user: 
     name: "{{ mysql_user }}"
