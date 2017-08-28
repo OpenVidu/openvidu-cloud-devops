@@ -1,6 +1,6 @@
 ---
 - name: installing mysql
-  apt: name=mysql-server state=latest
+  apt: name=mysql-server=5.5 state=latest
 
 - name: installing python mysqldb module
   apt: name=python-mysqldb state=latest 
