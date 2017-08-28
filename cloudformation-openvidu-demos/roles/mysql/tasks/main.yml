@@ -17,30 +17,11 @@
     - "127.0.0.1"
     - "::1"
     - "localhost"
-  notify: restart mysql
-
-- name: copy .my.cnf file with root password credentials
-  template: src=.my.cnf.j2 dest=~/.my.cnf mode=0600
-
-- name: creating database user
-  mysql_user: 
-    name: "{{ mysql_user }}"
-    password: "{{ mysql_user_pass }}"
-    priv: "*.*:ALL"
-    login_user: "root"
-    login_password: "{{ mysql_root_pass }}"
-    state: "present"
-  with_items:
-    - "%"
-    - "127.0.0.1"
-    - "::1"
-    - "localhost"
-  notify: restart mysql
 
 - name: creating database
   mysql_db: 
     name: "{{ mysql_database }}"
     state: "present"
-    login_user: "{{ mysql_user }}"
-    login_password: "{{ mysql_user_pass }}"
+    login_user: "root"
+    login_password: "{{ mysql_root_pass }}"
 
