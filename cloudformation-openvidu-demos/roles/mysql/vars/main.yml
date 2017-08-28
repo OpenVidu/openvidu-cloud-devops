@@ -1,5 +1,4 @@
-mysql_root_pass: pass
-mysql_database: openvidu_sample_app
-mysql_user: op-root
-mysql_user_pass: pass
+---
+env:
+ RUNLEVEL: 1
 
