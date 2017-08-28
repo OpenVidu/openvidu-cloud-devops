@@ -3,14 +3,39 @@
   apt: name=mysql-server state=latest
 
 - name: installing python mysqldb module
-  apt: name=python-mysqldb state=latest
+  apt: name=python-mysqldb state=latest 
 
 - name: setting root password
-  mysql_user: user=root password={{ mysql_root_pass }} priv=*.*:ALL state=present
+  mysql_user: 
+    name: "root"
+    host: "{{ item }}"
+    password: "{{ mysql_root_pass }}"
+    priv: "*.*:ALL,GRANT"
+    state: "present"
+  with_items:
+    - "%"
+    - "127.0.0.1"
+    - "::1"
+    - "localhost"
 
 - name: creating database user
-  mysql_user: user={{ mysql_user }} password={{ mysql_user_pass }} priv=*.*:ALL state=present
+  mysql_user: 
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_user_pass }}"
+    priv: "*.*:ALL"
+    login_user: "root"
+    login_password: "{{ mysql_root_pass }}"
+    state: "present"
+  with_items:
+    - "%"
+    - "127.0.0.1"
+    - "::1"
+    - "localhost"
 
 - name: creating database
-  mysql_db: db={{ mysql_database }} state=present
+  mysql_db: 
+    name: "{{ mysql_database }}"
+    state: "present"
+    login_user: "{{ mysql_user }}"
+    login_password: "{{ mysql_user_pass }}"
 

@@ -1,9 +1,9 @@
 - hosts: all
   roles:
-    - nginx
+#    - nginx
     - mysql
-    - kms
-    - openvidu
-    - supervisord
-    - demos
+#    - kms
+#    - openvidu
+#    - supervisord
+#    - demos
 
