@@ -1,5 +1,4 @@
 ---
-
 mysql_port: 3306
 mysql_bind_address: "0.0.0.0"
 mysql_root_db_pass: pass
