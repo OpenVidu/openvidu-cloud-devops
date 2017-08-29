@@ -102,7 +102,7 @@ If your app is Java, then follow this steps:
 
 3. Nginx
 
-You must register your app in the proxy service. Simply, edit */etc/nginx/sites-enabled/default* and add a new upstream for your app, like:
+You must register your app in the proxy service. Simply, edit */etc/nginx/sites-enabled/default* and add a new **upstream** for your app, like:
 
 ```
 upstream YOUR_APP {
@@ -141,7 +141,7 @@ Then restart supervisor
 # systemctl restart supervisor
 ```
 
-Now, you should be able to access through https://AWS_EC2_URL/YOUR_APP 
+Now, you should be able to access through **https://AWS_EC2_URL/YOUR_APP**
 
 6. Troubleshooting
 
