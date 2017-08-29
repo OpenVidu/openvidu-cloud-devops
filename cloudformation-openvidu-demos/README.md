@@ -86,6 +86,73 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 **IMPORTANT**: Despite saying *CREATE_COMPLETE* it can take a bit longer to finish the deployment. Please be patient.
 
+## Adding your own app
+
+Would you like to add your own app to the instance? 
+
+First of all, you must login into the instance using your AWS key. In doubt, [check this tutorial](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
+
+If you app is plain HTML and JS and CSS just copying it under /var/www/html/YOUR_APP directory. Then, you should be able to access through https://AWS_EC2_URL/YOUR_APP 
+
+If your app is Java, then follow this steps:
+
+1. Copy your JAR into a folder under /var/www/html
+
+2. Write a script to launch your app with all the parameters it needs.
+
+3. Nginx
+
+You must register your app in the proxy service. Simply, edit */etc/nginx/sites-enabled/default* and add a new upstream for your app, like:
+
+```
+upstream YOUR_APP {
+    server EC_2_INSTANCE_IP:YOUR_APP_PORT;
+}
+```
+
+and a new location directive, like:
+
+```
+location /YOUR_APP {
+    rewrite /YOUR_APP(.*) /$1 break;
+    proxy_pass https://YOUR_APP;
+}
+```
+
+Don't forget to reload nginx:
+
+```
+# systemctl restart nginx
+```
+
+4. Supervisor
+
+We use Supervisor for process control. You can add the script you wrote at step #2 to */etc/supervisor/conf.d/openvidu.conf* like:
+
+```
+[program:YOUR_APP]
+command=/bin/bash /var/www/html/YOUR_APP/YOUR_LAUNCHER.sh YOUR_APP_PARAM_#1 YOUR_APP_PARAM_#2 ...
+redirect_stderr=true
+```
+
+Then restart supervisor
+
+```
+# systemctl restart supervisor
+```
+
+Now, you should be able to access through https://AWS_EC2_URL/YOUR_APP 
+
+6. Troubleshooting
+
+If your app is not working as expected, there is a few files you should check for debuging:
+
+*/var/log/nginx/* Contains information about the proxy.
+
+*/var/log/supervisor/* Contains infomation about the output of your app.
+
+You can also try to connect to the app directly to the port like: https://AWS_EC2_URL:YOUR_APP_PORT
+
 ## Troubleshooting
 
 ### Shutdown the instance
