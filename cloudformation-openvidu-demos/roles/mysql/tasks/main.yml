@@ -18,13 +18,6 @@
     - "::1"
     - "localhost"
 
-- name: forcing to use tcp instead of socket for root@localhost
-  command: 'mysql -ne "{{ item }}"'
-  with_items:
-    - ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ mysql_root_pass: }}'
-  changed_when: False
-
-
 - name: reload privilege tables
   command: 'mysql -ne "{{ item }}"'
   with_items:
@@ -58,6 +51,12 @@
   command: 'mysql -ne "{{ item }}"'
   with_items:
     - FLUSH PRIVILEGES
+  changed_when: False
+
+- name: forcing to use tcp instead of socket for root@localhost
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ mysql_root_pass }}'
   changed_when: False
 
 - name: creating database
