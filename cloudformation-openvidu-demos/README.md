@@ -92,11 +92,11 @@ Would you like to add your own app to the instance?
 
 First of all, you must login into the instance using your AWS key. In doubt, [check this tutorial](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
 
-If you app is plain HTML and JS and CSS just copying it under /var/www/html/YOUR_APP directory. Then, you should be able to access through https://AWS_EC2_URL/YOUR_APP 
+If you app is plain HTML and JS and CSS just copying it under */var/www/html/YOUR_APP* directory. Then, you should be able to access through **https://AWS_EC2_URL/YOUR_APP** 
 
 If your app is Java, then follow this steps:
 
-1. Copy your JAR into a folder under /var/www/html
+1. Copy your JAR into a folder under */var/www/html*
 
 2. Write a script to launch your app with all the parameters it needs.
 
@@ -110,7 +110,7 @@ upstream YOUR_APP {
 }
 ```
 
-and a new location directive, like:
+and a new **location directive**, like:
 
 ```
 location /YOUR_APP {
@@ -149,7 +149,7 @@ If your app is not working as expected, there is a few files you should check fo
 
 */var/log/nginx/* Contains information about the proxy.
 
-*/var/log/supervisor/* Contains infomation about the output of your app.
+*/var/log/supervisor/* Contains information about the output of your app.
 
 You can also try to connect to the app directly to the port like: https://AWS_EC2_URL:YOUR_APP_PORT
 
