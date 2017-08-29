@@ -2,6 +2,16 @@
 
 This repository is intended to be a point where the user can deploy OpenVidu Demos on an AWS instance.
 
+## Table of Contents
+
+- [Community](#Community)
+- [Different scenarios](#Different scenarios)
+  * [TURN and self-signed certificate](#TURN and self-signed certificate)
+  * [TURN and Let's Encrypt certificate](#TURN and Let's Encrypt certificate)
+- [Adding your own app](#Adding your own app)
+- [Troubleshooting](#Troubleshooting)
+  * [Shutdown the instance](#Shutdown the instance)
+
 ## Community
 
 ### [OpenVidu Web Page](http://openvidu.io/)
