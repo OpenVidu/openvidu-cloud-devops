@@ -27,6 +27,12 @@
 - name: build classroom
   copy: src=classroom dest=/var/www/html
 
+- name: configuring classroom demo
+  template:
+    src: templates/app.sh.j2
+    dest: /var/www/html/classroom/app.sh
+    mode: 0755
+
 - name: deploying index
   unarchive:
     src: index.tar.gz
