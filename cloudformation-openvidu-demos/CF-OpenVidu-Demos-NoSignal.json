@@ -42,8 +42,8 @@
 		"WantToUseLetsEncrypt": {
 			"Description": "Choose if you want to use a Let's Encrypt Certificate",
 			"Type": "String",
-			"Default": "No",
-			"AllowedValues": ["True", "False"]
+			"Default": "false",
+			"AllowedValues": ["true", "false"]
 		},
 
 		"LetsEncryptEmail": {
@@ -131,7 +131,7 @@
 		"UseLetsEncrypt": {
 			"Fn::Equals": [{
 				"Ref": "WantToUseLetsEncrypt"
-			}, "True"]
+			}, "true"]
 		}
 	},
 
@@ -176,8 +176,8 @@
 							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n", 
               "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
               "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",              
-							"sed -i \"s/letsencrypt: False/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-							"sed -i \"s/letsencrypt: False/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
               "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
 							
 							"sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",

@@ -42,7 +42,7 @@
   command: openssl req -new -nodes -x509 -subj "/CN={{ ansible_hostname }}" -days 3650 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca
   args:
     creates: /etc/nginx/ssl/nginx.crt
-  when: letsencrypt
+  when: not letsencrypt
 
 - name: Generate dhparams
   shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
