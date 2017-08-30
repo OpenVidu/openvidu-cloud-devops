@@ -4,13 +4,13 @@ This repository is intended to be a point where the user can deploy OpenVidu Dem
 
 ## Table of Contents
 
-- [Community](#Community)
-- [Different scenarios](#Different-scenarios)
-  * [TURN and self-signed certificate](#TURN-and-self-signed-certificate)
-  * [TURN and Let's Encrypt certificate](#TURN-and-Let's-Encrypt-certificate)
-- [Adding your own app](#Adding-your-own-app)
-- [Troubleshooting](#Troubleshooting)
-  * [Shutdown the instance](#Shutdown-the-instance)
+- [Community](#community)
+- [Different scenarios](#different-scenarios)
+  * [TURN and self-signed certificate](#turn-and-self-signed-certificate)
+  * [TURN and Let's Encrypt certificate](#turn-and-Let's-encrypt-certificate)
+- [Adding your own app](#adding-your-own-app)
+- [Troubleshooting](#troubleshooting)
+  * [Shutdown the instance](#shutdown-the-instance)
 
 ## Community
 
