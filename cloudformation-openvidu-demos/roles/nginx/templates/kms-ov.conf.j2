@@ -19,7 +19,7 @@ server {
     include sites-available/proxy.conf;
 
     location / {
-        proxy_pass https://{{ aws_eip }}:5443;
+        proxy_pass http://{{ aws_eip }}:5443;
     }
 
 }
