@@ -2,4 +2,5 @@ domain_name: DOMAIN_NAME
 letsencrypt_email: LETSENCRYPT_EMAIL
 aws_eip: AWS_EIP
 letsencrypt: false
+aws_public_hostname: AWS_PUBLIC_HOSTNAME
 
