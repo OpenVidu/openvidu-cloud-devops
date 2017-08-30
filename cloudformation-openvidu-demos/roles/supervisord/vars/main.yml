@@ -1,4 +1,4 @@
 ---
 aws_public_ip: AWS_EIP
-letsencrypt: No
+letsencrypt: False
 domain_name: DOMAIN_NAME

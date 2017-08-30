@@ -4,7 +4,7 @@
 
 - name: install letsencrypt
   apt: name=letsencrypt state=latest
-  when: letsencrypt == "Yes"
+  when: letsencrypt
 
 - name: Remove default nginx config
   file: name=/etc/nginx/sites-enabled/default state=absent
@@ -23,26 +23,26 @@
     src: templates/nginx-http.j2
     dest: /etc/nginx/sites-enabled/http
   notify: restart nginx
-  when: letsencrypt == "Yes"
+  when: letsencrypt
 
 - name: Create letsencrypt certificate
   shell: letsencrypt certonly -n --webroot -w /var/www/html -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
   args:
     creates: /etc/letsencrypt/live/{{ domain_name }}
-  when: letsencrypt == "Yes"
+  when: letsencrypt
 
 - name: previous task to generate self signed certificate
   file: 
     path: /etc/nginx/ssl
     state: directory
     mode: 0755
-  when: letsencrypt == "No"
+  when: not letsencrypt
 
 - name: generating self signed certificated
   command: openssl req -new -nodes -x509 -subj "/CN={{ ansible_hostname }}" -days 3650 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca
   args:
     creates: /etc/nginx/ssl/nginx.crt
-  when: letsencrypt == "Yes"
+  when: letsencrypt
 
 - name: Generate dhparams
   shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
@@ -54,14 +54,14 @@
     src: templates/nginx-le.j2
     dest: /etc/nginx/sites-enabled/le
   notify: restart nginx
-  when: letsencrypt == "Yes"
+  when: letsencrypt
 
 - name: enabling site config
   template:
     src: templates/default.conf.j2
     dest: /etc/nginx/sites-enabled/default
   notify: restart nginx
-  when: letsencrypt == "No"
+  when: not letsencrypt
 
 - name: adding entry for OpenVidu requests
   template:
@@ -74,5 +74,5 @@
     name: letsencrypt_renewal
     special_time: weekly
     job: letsencrypt --renew certonly -n --webroot -w /var/www/letsencrypt -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }} -d {{ aws_eip }}
-  when: letsencrypt == "Yes"
+  when: letsencrypt
 
