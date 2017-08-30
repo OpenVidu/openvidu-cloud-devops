@@ -131,7 +131,7 @@
 		"UseLetsEncrypt": {
 			"Fn::Equals": [{
 				"Ref": "WantToUseLetsEncrypt"
-			}, "True"]
+			}, "Yes"]
 		}
 	},
 
