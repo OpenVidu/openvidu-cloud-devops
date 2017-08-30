@@ -176,8 +176,8 @@
 							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n", 
               "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
               "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",              
-							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+							"sed -i \"s/letsencrypt: No/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+							"sed -i \"s/letsencrypt: No/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
               "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
 							
 							"sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
