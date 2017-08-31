@@ -90,7 +90,7 @@
       "Description": "Secret to generate OpenVidu token",
       "Type": "String",
       "Default": "MY_SECRET"
-    }
+    },
     "WantToUseLetsEncrypt": {
       "Description": "Choose if you want to use a Let's Encrypt Certificate",
       "Type": "String",
@@ -258,7 +258,7 @@
                 "sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
                 "sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n", 
-                "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "WantOpenViduSecret" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+                "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "OpenViduSecret" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
                 "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n", 
                 "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
                 "ansible-playbook -i \"localhost,\" -c local play.yml\n",
