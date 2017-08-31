@@ -86,15 +86,11 @@
       "Description": "In case you want to use Let's Encrypt, the Elastic IP you generated",
       "Type": "String"
     },
-    "WantOpenViduSecurity": {
-      "Description": "Choose if you want to use OpenVidu integrated security",
+    "OpenViduSecret": {
+      "Description": "Secret to generate OpenVidu token",
       "Type": "String",
-      "Default": "false",
-      "AllowedValues": [
-        "false",
-        "true"
-      ]
-    },
+      "Default": "MY_SECRET"
+    }
     "WantToUseLetsEncrypt": {
       "Description": "Choose if you want to use a Let's Encrypt Certificate",
       "Type": "String",
@@ -174,7 +170,7 @@
             "default": "OpenVidu Configuration"
           },
           "Parameters": [
-            "WantOpenViduSecurity"
+            "OpenViduSecret"
           ]
         }
       ],
@@ -191,8 +187,8 @@
         "LetsEncryptEmail": {
           "default": "Email address"
         },
-        "WantOpenViduSecurity": {
-          "default": "Do you want to use OpenVidu security"
+        "WantOpenViduSecret": {
+          "default": "Enter your own secret here"
         }
       }
     }
@@ -251,47 +247,20 @@
                 "pushd /opt/workdir/cloudformation-openvidu\n",
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
-                "sed -i \"s/DOMAIN_NAME/",
-                {
-                  "Ref": "MyDomainName"
-                },
-                "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-                "sed -i \"s/LETSENCRYPT_EMAIL/",
-                {
-                  "Ref": "LetsEncryptEmail"
-                },
-                "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+                "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
+                "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+                "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+                "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+                "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",                
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-                "sed -i \"s/letsencrypt: No/letsencrypt: ",
-                {
-                  "Ref": "WantToUseLetsEncrypt"
-                },
-                "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-                "sed -i \"s/letsencrypt: No/letsencrypt: ",
-                {
-                  "Ref": "WantToUseLetsEncrypt"
-                },
-                "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-                "sed -i \"s/DOMAIN_NAME/",
-                {
-                  "Ref": "MyDomainName"
-                },
-                "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-                "sed -i \"s/openvidusecurity: false/openvidusecurity: ",
-                {
-                  "Ref": "WantOpenViduSecurity"
-                },
-                "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-                "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-                "sed -i \"s/TURN_PASSWORD/",
-                {
-                  "Fn::Base64": {
-                    "Ref": "AWS::StackName"
-                  }
-                },
-                "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+                "sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+                "sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+                "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n", 
+                "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "WantOpenViduSecret" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+                "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n", 
+                "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
                 "ansible-playbook -i \"localhost,\" -c local play.yml\n",
                 "popd\n"
               ]

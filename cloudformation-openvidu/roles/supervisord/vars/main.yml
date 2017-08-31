@@ -2,4 +2,6 @@
 aws_public_ip: AWS_EIP
 letsencrypt: false
 domain_name: DOMAIN_NAME
-openvidusecurity: false
+openvidusecret: MY_SECRET
+aws_public_hostname: AWS_PUBLIC_HOSTNAME
+
