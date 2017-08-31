@@ -3,7 +3,7 @@ server {
 {% if letsencrypt == true %}
     server_name {{ domain_name }};
 {% else %}
-    server_name {{ aws_eip }};
+    server_name {{ aws_public_hostname }};
 {% endif %}
 
     ssl on;
