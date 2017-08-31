@@ -6,8 +6,8 @@ loglevel=debug
 
 [program:openvidu-server]
 {% if letsencrypt == true %}
-command=java -jar -Dopenvidu.secret={{ openvidusecret }} -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ domain_name }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
+command=java -jar -Dopenvidu.secret="{{ openvidusecret }}" -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ domain_name }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
 {% else %}
-command=java -jar -Dopenvidu.secret={{ openvidusecret }} -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ aws_public_hostname }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
+command=java -jar -Dopenvidu.secret="{{ openvidusecret }}" -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ aws_public_hostname }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
 {% endif %}
 
