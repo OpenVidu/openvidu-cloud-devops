@@ -176,6 +176,7 @@
 							"sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
 							"sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n", 
               "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+              "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
               "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
               "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",              
 							"sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
