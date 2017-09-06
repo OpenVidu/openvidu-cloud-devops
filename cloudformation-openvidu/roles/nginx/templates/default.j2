@@ -1,5 +1,5 @@
 server {
-    listen 443 ssl default deferred;;
+    listen 443 ssl default deferred;
 {% if letsencrypt == true  %}
     server_name {{ domain_name }};
 {% else %}
