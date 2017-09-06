@@ -50,11 +50,16 @@
   template:
     src: templates/kms-ov.conf.j2
     dest: /etc/nginx/sites-enabled/kms-ov
+
+- name: adding default server
+  template:
+    src: templates/default.j2 
+    dest: /etc/nginx/sites-enabled/default
   notify: restart nginx
 
-- name: Add letsencrypt cronjob for cert renewal
-  cron:
-    name: letsencrypt_renewal
-    special_time: weekly
-    job: letsencrypt --renew certonly -n --webroot -w /var/www/letsencrypt -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }} -d {{ aws_eip }}
-  when: letsencrypt
+- name: copying default index.html
+  copy:
+    src: index.html
+    dest: /var/www/html
+
+
