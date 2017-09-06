@@ -70,7 +70,7 @@
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
     "MyDomainName": {
-      "Description": "Fully qualified domain name",
+      "Description": "For example: openvidu.io",
       "Type": "String"
     },
     "PublicElasticIP": {
@@ -78,7 +78,7 @@
       "Type": "String"
     },
     "OpenViduSecret": {
-      "Description": "Secret to generate OpenVidu token",
+      "Description": "Secret to connect to your OpenVidu Server",
       "Type": "String",
       "Default": "MY_SECRET"
     },
@@ -172,7 +172,7 @@
             "default": "OpenVidu Configuration"
           },
           "Parameters": [
-            "OpenVidu Secret"
+            "OpenViduSecret"
           ]
         }
       ],
@@ -197,6 +197,9 @@
         },
         "OwnCertKEY": {
           "default": "KEY file"
+        },
+        "OpenViduSecret": {
+          "default": "OpenVidu Secret"
         }
       }
     }
