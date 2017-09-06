@@ -1,7 +1,7 @@
 - hosts: all
   roles:
     - nginx
-#    - kms
-#    - openvidu
-#    - supervisord
+    - kms
+    - openvidu
+    - supervisord
 
