@@ -94,10 +94,10 @@
     "WantToUseLetsEncrypt": {
       "Description": "Choose if you want to use a Let's Encrypt Certificate",
       "Type": "String",
-      "Default": "No",
+      "Default": "false",
       "AllowedValues": [
-        "Yes",
-        "No"
+        "true",
+        "false"
       ]
     },
     "LetsEncryptEmail": {
@@ -199,7 +199,7 @@
         {
           "Ref": "WantToUseLetsEncrypt"
         },
-        "True"
+        "true"
       ]
     }
   },
@@ -312,7 +312,7 @@
   },
   "Outputs": {
     "WebsiteURL": {
-      "Description": "Use this URL to access the demos",
+      "Description": "Use this URL to connect OpenVidu",
       "Value": {
         "Fn::Join": [
           "",
@@ -323,7 +323,8 @@
                 "WebServerInstance",
                 "PublicDnsName"
               ]
-            }
+            },
+            ":8443"
           ]
         ]
       }
@@ -338,7 +339,7 @@
       }
     },
     "WebsiteURLLE": {
-      "Description": "Use this URL to access the demos",
+      "Description": "Use this URL to connect to OpenVidu",
       "Value": {
         "Fn::Join": [
           "",
@@ -346,11 +347,18 @@
             "https://",
             {
               "Ref": "MyDomainName"
-            }
+            },
+            ":8443"
           ]
         ]
       },
       "Condition": "UseLetsEncrypt"
+    },
+    "OpenViduSecretOutput": {
+      "Description": "OpenVidu secret to generate tokens",
+      "Value": {
+          "Ref": "OpenViduSecret"
+      }
     },
     "TurnPassword": {
       "Description": "Password for the user turn_user",
