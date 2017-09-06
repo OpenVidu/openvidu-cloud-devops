@@ -97,11 +97,11 @@
       "Type": "String"
     },
     "OwnCertCRT": {
-      "Description" : "CRT File",
+      "Description" : "Copy and paste CRT file content here",
       "Type": "String"
     },
     "OwnCertKEY": {
-      "Description": "KEY File",
+      "Description": "Copy and paste KEY file content here",
       "Type": "String"
     }
   },
@@ -172,13 +172,13 @@
             "default": "OpenVidu Configuration"
           },
           "Parameters": [
-            "OpenViduSecret"
+            "OpenVidu Secret"
           ]
         }
       ],
       "ParameterLabels": {
         "WhichCert": {
-          "default": "You can choose from the list below which certificate to use"
+          "default": "Type of SSL Certificate"
         },
         "MyDomainName": {
           "default": "Fully qualified domain name"
@@ -187,16 +187,16 @@
           "default": "Elastic IP"
         },
         "LetsEncryptEmail": {
-          "default": "Email address"
+          "default": "Email"
         },
         "WantOpenViduSecret": {
           "default": "Enter your own secret here"
         },
         "OwnCertCRT": {
-          "default": "Copy and paste CRT File content here"
+          "default": "CRT file"
         },
         "OwnCertKEY": {
-          "default": "Copy and paste KEY File content here"
+          "default": "KEY file"
         }
       }
     }
