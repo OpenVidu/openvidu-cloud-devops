@@ -1,13 +1,13 @@
 server {
     listen 443 ssl default deferred;;
-{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
+{% letsencrypt == true  %}
     server_name {{ domain_name }};
 {% else %}
     server_name {{ aws_public_hostname }};
 {% endif %}
 
     ssl on;
-{% if whichcert == "letsencrypt" %}
+{% if letsencrypt == true %}
     ssl_certificate         /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
     ssl_certificate_key     /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
     ssl_trusted_certificate /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
