@@ -4,7 +4,7 @@
 
 - name: install letsencrypt
   apt: name=letsencrypt state=latest
-  when: letsencrypt
+  when: whichcert == "letsencrypt"
 
 - name: Remove default nginx config
   file: name=/etc/nginx/sites-enabled/default state=absent
@@ -20,26 +20,33 @@
     src: templates/nginx-http.j2
     dest: /etc/nginx/sites-enabled/http
   notify: restart nginx
-  when: letsencrypt
+  when: whichcert == "letsencrypt"
 
 - name: Create letsencrypt certificate
   shell: letsencrypt certonly -n --webroot -w /var/www/html -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
   args:
     creates: /etc/letsencrypt/live/{{ domain_name }}
-  when: letsencrypt
+  when: whichcert == "letsencrypt"
 
 - name: previous task to generate self signed certificate
   file: 
     path: /etc/nginx/ssl
     state: directory
     mode: 0755
-  when: not letsencrypt
+  when: whichcert != "letsencrypt"
 
 - name: generating self signed certificated
   command: openssl req -new -nodes -x509 -subj "/CN={{ aws_public_hostname }}" -days 3650 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca
   args:
     creates: /etc/nginx/ssl/nginx.crt
-  when: not letsencrypt
+  when: whichcert == "selfsigned"
+
+- name: copying user certificates
+  copy: src={{ item }} dest=/etc/nginx/ssl
+  with_items:
+    - nginx.key
+    - nginx.crt
+  when: whichcert == "owncert"
 
 - name: Generate dhparams
   shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
@@ -52,9 +59,3 @@
     dest: /etc/nginx/sites-enabled/kms-ov
   notify: restart nginx
 
-- name: Add letsencrypt cronjob for cert renewal
-  cron:
-    name: letsencrypt_renewal
-    special_time: weekly
-    job: letsencrypt --renew certonly -n --webroot -w /var/www/letsencrypt -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }} -d {{ aws_eip }}
-  when: letsencrypt

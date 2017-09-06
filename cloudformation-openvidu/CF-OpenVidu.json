@@ -82,17 +82,26 @@
       "Type": "String",
       "Default": "MY_SECRET"
     },
-    "WantToUseLetsEncrypt": {
-      "Description": "Choose if you want to use a Let's Encrypt Certificate",
+    "WhichCert": {
+      "Description": "You can choose from the list below which certificate to use",
       "Type": "String",
-      "Default": "false",
+      "Default": "selfsigned",
       "AllowedValues": [
-        "true",
-        "false"
+        "selfsigned",
+        "letsencrypt",
+        "owncert"
       ]
     },
     "LetsEncryptEmail": {
       "Description": "Email necesary for Let's Encrypt notifications",
+      "Type": "String"
+    },
+    "OwnCertCRT": {
+      "Description" : "CRT File",
+      "Type": "String"
+    },
+    "OwnCertKEY": {
+      "Description": "KEY File",
       "Type": "String"
     }
   },
@@ -147,13 +156,15 @@
       "ParameterGroups": [
         {
           "Label": {
-            "default": "Let's Encrypt Configuration (Optional)"
+            "default": "SSL Certificate Configuration"
           },
           "Parameters": [
-            "WantToUseLetsEncrypt",
+            "WhichCert",
             "LetsEncryptEmail",
             "MyDomainName",
-            "PublicElasticIP"
+            "PublicElasticIP",
+            "OwnCertCRT",
+            "OwnCertKEY"
           ]
         },
         {
@@ -166,8 +177,8 @@
         }
       ],
       "ParameterLabels": {
-        "WantToUseLetsEncrypt": {
-          "default": "Do you want Let's Encrypt"
+        "WhichCert": {
+          "default": "You can choose from the list below which certificate to use"
         },
         "MyDomainName": {
           "default": "Fully qualified domain name"
@@ -180,19 +191,25 @@
         },
         "WantOpenViduSecret": {
           "default": "Enter your own secret here"
+        },
+        "OwnCertCRT": {
+          "default": "Copy and paste CRT File content here"
+        },
+        "OwnCertKEY": {
+          "default": "Copy and paste KEY File content here"
         }
       }
     }
   },
   "Conditions": {
-    "UseLetsEncrypt": {
-      "Fn::Equals": [
-        {
-          "Ref": "WantToUseLetsEncrypt"
-        },
-        "true"
+    "NoSelfSigned": {
+      "Fn::Not" : [{
+        "Fn::Equals": [
+          {"Ref": "WhichCert"},
+        "selfsigned"
       ]
-    }
+    }]
+  }
   },
   "Resources": {
     "WebServerInstance": {
@@ -236,6 +253,7 @@
                 "apt-get install -y git ansible\n",
                 "git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
                 "pushd /opt/workdir/cloudformation-openvidu\n",
+                "git checkout cert-options\n",
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
@@ -246,8 +264,12 @@
                 "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",                
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-                "sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-                "sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+                "# nginx\n",
+                "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+                "echo OwnCertCRT > $WORKINGDIR/roles/nginx/files/nginx.crt\n",
+                "echo OwnCertKEY > $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "# Supervisor\n",
+                "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n", 
                 "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "OpenViduSecret" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
                 "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n", 
@@ -262,7 +284,7 @@
     },
     "MyEIP": {
       "Type": "AWS::EC2::EIPAssociation",
-      "Condition": "UseLetsEncrypt",
+      "Condition": "NoSelfSigned",
       "Properties": {
         "InstanceId": {
           "Ref": "WebServerInstance"
@@ -335,7 +357,7 @@
           ]
         ]
       },
-      "Condition": "UseLetsEncrypt"
+      "Condition": "NoSelfSigned"
     },
     "OpenViduSecretOutput": {
       "Description": "OpenVidu secret to generate tokens",
