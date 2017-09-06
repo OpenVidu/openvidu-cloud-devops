@@ -20,7 +20,7 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 3. Next, you see the **Cloud Formation** Dashboard where you have to press *Create Stack*.
 
-4. Once there, you must upload [this](https://github.com/OpenVidu/openvidu-cloud-devops/blob/master/cloudformation-openvidu-demos/CF-OpenVidu-Demos-NoSignal.json) file we provide and press Next.
+4. Once there, you must upload [this](https://github.com/OpenVidu/openvidu-cloud-devops/blob/master/cloudformation-openvidu/CF-OpenVidu.json) file we provide and press Next.
 
 ## Turn and Self signed certificate
 
@@ -89,3 +89,90 @@ Independent of the scenario of your choice, there are some steps you should do i
 11. And that's it. Enjoy!
 
 **IMPORTANT**: Despite saying *CREATE_COMPLETE* it can take a bit longer to finish the deployment. Please be patient.
+
+## Adding your own app
+
+Would you like to add your own app to the instance? 
+
+First of all, you must login into the instance using your AWS key. In doubt, [check this tutorial](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html). Then become to root.
+
+```sudo -s```
+
+If your app is plain HTML and JS and CSS just copying it under */var/www/html/YOUR_APP* directory. Then, you should be able to access through **https://AWS_EC2_URL/YOUR_APP** 
+
+If your app is Java, then follow this steps:
+
+1. Copy your JAR into a folder under */var/www/html*
+
+2. Write a script to launch your app with all the parameters it needs.
+
+3. Nginx
+
+You must register your app in the proxy service. Simply, edit */etc/nginx/sites-enabled/default* and add a new **location** directive for your app, like:
+
+
+```
+location /YOUR_APP {
+    rewrite /YOUR_APP(.*) /$1 break;
+    proxy_pass https://localhost:PORT;
+}
+```
+
+In example, your app is called *foo* and listen to connection on *port 5000*, then the **location** directive should looks like:
+
+```
+location /foo {
+    rewrite /foo(.*) /$1 break;
+    proxy_pass https://localhost:5000;
+}
+```
+
+Don't forget to reload nginx:
+
+```
+# systemctl restart nginx
+```
+
+4. Supervisor
+
+We use Supervisor for process control. You can add the script you wrote at step #2 to */etc/supervisor/conf.d/openvidu.conf* like:
+
+```
+[program:YOUR_APP]
+command=/bin/bash /var/www/html/YOUR_APP/YOUR_LAUNCHER.sh YOUR_APP_PARAM_#1 YOUR_APP_PARAM_#2 ...
+redirect_stderr=true
+```
+
+In order to connect to the OpenVidu server you must use the instance's DNS name like:
+
+```
+-Dopenvidu.url=https://foo.example.com:8443
+```
+
+**Port 8443 is where OpenVidu server is waiting for income connections.**
+
+Then restart supervisor
+
+```
+# systemctl restart supervisor
+```
+
+Alternatively, you may want to launch your app in the command line like:
+
+```
+# java -Dopenvidu.url=https://XXX:8443 -Dfoo.param1=value ... -jar foo.jar
+```
+
+Change **XXX** for an appropiate value.
+
+Now, you should be able to access through **https://AWS_EC2_URL/YOUR_APP**
+
+6. Troubleshooting
+
+If your app is not working as expected, there is a few files you should check for debuging:
+
+*/var/log/nginx/* Contains information about the proxy.
+
+*/var/log/supervisor/* Contains information about the output of your app.
+
+You can also try to connect to the app directly to the port like: https://AWS_EC2_URL:YOUR_APP_PORT

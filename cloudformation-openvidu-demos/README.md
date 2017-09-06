@@ -100,9 +100,11 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 Would you like to add your own app to the instance? 
 
-First of all, you must login into the instance using your AWS key. In doubt, [check this tutorial](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
+First of all, you must login into the instance using your AWS key. In doubt, [check this tutorial](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html). Then become to root.
 
-If you app is plain HTML and JS and CSS just copying it under */var/www/html/YOUR_APP* directory. Then, you should be able to access through **https://AWS_EC2_URL/YOUR_APP** 
+```sudo -s```
+
+If your app is plain HTML and JS and CSS just copying it under */var/www/html/YOUR_APP* directory. Then, you should be able to access through **https://AWS_EC2_URL/YOUR_APP** 
 
 If your app is Java, then follow this steps:
 
