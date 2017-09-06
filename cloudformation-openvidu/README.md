@@ -7,8 +7,8 @@ This repository allow you to easily deploy an Amazon EC2 instance for OpenVidu S
 ### [OpenVidu Web Page](http://openvidu.io/)
 
 ## Different scenarios:
-- __Turn and Self signed certificate__
-- __Turn and Let's Encrypt certificate__
+- __Self signed certificate__
+- __Let's Encrypt certificate__
 
 ## Common steps
 
@@ -20,9 +20,9 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 3. Next, you see the **Cloud Formation** Dashboard where you have to press *Create Stack*.
 
-4. Once there, you must upload [this](https://github.com/OpenVidu/openvidu-cloud-devops/blob/master/cloudformation-openvidu/CF-OpenVidu.json) file we provide and press Next.
+4. Once there, you must upload [this](https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu.json) file we provide and press Next.
 
-## Turn and Self signed certificate
+## Self signed certificate
 
 1. Now, you should see a list of Parameters.
 
@@ -50,7 +50,7 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 11. And that's it. Enjoy!
 
-## Turn and Let's Encrypt certificate
+## Let's Encrypt certificate
 
 **IMPORTANT**: You must allocate an *Elastic IP* and register on a valid DNS provider in order to use Let's Encrypt.
 
@@ -98,11 +98,13 @@ First of all, you must login into the instance using your AWS key. In doubt, [ch
 
 ```sudo -s```
 
-If your app is plain HTML and JS and CSS just copying it under */var/www/html/YOUR_APP* directory. Then, you should be able to access through **https://AWS_EC2_URL/YOUR_APP** 
+If your app is plain HTML and JS and CSS just copying it under */var/www/html/YOUR_APP* directory. Then, you should be able to access through **https://DNS NAME OR FQDN/YOUR_APP** 
+
+You can use git clone, [scp](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html#AccessingInstancesLinuxSCP) or [Filezilla](https://beamtic.com/connect-to-aws-ec2-with-ftp) to upload your files.
 
 If your app is Java, then follow this steps:
 
-1. Copy your JAR into a folder under */var/www/html*
+1. Copy your JAR into a folder under */var/www/html* using one of the ways we discuss before.
 
 2. Write a script to launch your app with all the parameters it needs.
 
@@ -127,6 +129,8 @@ location /foo {
 }
 ```
 
+**location directive must be inside a _server_ context**
+
 Don't forget to reload nginx:
 
 ```
@@ -146,10 +150,10 @@ redirect_stderr=true
 In order to connect to the OpenVidu server you must use the instance's DNS name like:
 
 ```
--Dopenvidu.url=https://foo.example.com:8443
+-Dopenvidu.url=https://AWS DNS NAME or FQDN:8443
 ```
 
-**Port 8443 is where OpenVidu server is waiting for income connections.**
+**Port 8443 is where OpenVidu server is waiting for incoming connections.**
 
 Then restart supervisor
 
@@ -165,7 +169,7 @@ Alternatively, you may want to launch your app in the command line like:
 
 Change **XXX** for an appropiate value.
 
-Now, you should be able to access through **https://AWS_EC2_URL/YOUR_APP**
+Now, you should be able to access through **https://AWS DNS NAME or FQDN/YOUR_APP**
 
 6. Troubleshooting
 
