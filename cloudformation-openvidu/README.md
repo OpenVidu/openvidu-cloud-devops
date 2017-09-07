@@ -147,13 +147,7 @@ command=/bin/bash /var/www/html/YOUR_APP/YOUR_LAUNCHER.sh YOUR_APP_PARAM_#1 YOUR
 redirect_stderr=true
 ```
 
-In order to connect to the OpenVidu server you must use the instance's DNS name like:
-
-```
--Dopenvidu.url=https://AWS DNS NAME or FQDN:8443
-```
-
-**Port 8443 is where OpenVidu server is waiting for incoming connections.**
+The access to the OpenVidu endpoint depends on your own app, we provide an OpenVidu server listening for incoming connections on ports 5443 and 8443. From inside the instance both ports are reachable, while from the outside only 8443 is available. Keep this in mind in order to run your app.
 
 Then restart supervisor
 
