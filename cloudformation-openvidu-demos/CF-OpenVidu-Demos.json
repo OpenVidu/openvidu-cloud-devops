@@ -69,15 +69,6 @@
       ],
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
-    "SSHLocation": {
-      "Description": "The IP address range that can be used to SSH to the EC2 instances",
-      "Type": "String",
-      "MinLength": "7",
-      "MaxLength": "18",
-      "Default": "0.0.0.0/0",
-      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
-      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
-    },
     "MyDomainName": {
       "Description": "Fully qualified domain name",
       "Type": "String"
@@ -86,17 +77,26 @@
       "Description": "In case you want to use Let's Encrypt, the Elastic IP you generated",
       "Type": "String"
     },
-    "WantToUseLetsEncrypt": {
-      "Description": "Choose if you want to use a Let's Encrypt Certificate",
+    "WhichCert": {
+      "Description": "You can choose from the list below which certificate to use",
       "Type": "String",
-      "Default": "false",
+      "Default": "selfsigned",
       "AllowedValues": [
-        "true",
-        "false"
+        "selfsigned",
+        "letsencrypt",
+        "owncert"
       ]
     },
     "LetsEncryptEmail": {
       "Description": "Email necesary for Let's Encrypt notifications",
+      "Type": "String"
+    },
+    "OwnCertCRT": {
+      "Description" : "CRT File",
+      "Type": "String"
+    },
+    "OwnCertKEY": {
+      "Description": "KEY File",
       "Type": "String"
     }
   },
@@ -151,19 +151,21 @@
       "ParameterGroups": [
         {
           "Label": {
-            "default": "Let's Encrypt Configuration (Optional)"
+            "default": "SSL Certificate Configuration"
           },
           "Parameters": [
-            "WantToUseLetsEncrypt",
+            "WhichCert",
             "LetsEncryptEmail",
             "MyDomainName",
-            "PublicElasticIP"
+            "PublicElasticIP",
+            "OwnCertCRT",
+            "OwnCertKEY"
           ]
         }
       ],
       "ParameterLabels": {
-        "WantToUseLetsEncrypt": {
-          "default": "Do you want Let's Encrypt"
+        "WhichCert": {
+          "default": "You can choose from the list below which certificate to use"
         },
         "MyDomainName": {
           "default": "Fully qualified domain name"
@@ -173,19 +175,25 @@
         },
         "LetsEncryptEmail": {
           "default": "Email address"
+        },
+        "OwnCertCRT": {
+          "default": "Copy and paste CRT File content here"
+        },
+        "OwnCertKEY": {
+          "default": "Copy and paste KEY File content here"
         }
       }
     }
   },
-  "Conditions": {
-    "UseLetsEncrypt": {
-      "Fn::Equals": [
-        {
-          "Ref": "WantToUseLetsEncrypt"
-        },
-        "true"
+"Conditions": {
+    "NoSelfSigned": {
+      "Fn::Not" : [{
+        "Fn::Equals": [
+          {"Ref": "WhichCert"},
+        "selfsigned"
       ]
-    }
+    }]
+  }
   },
   "Resources": {
     "WebServerInstance": {
@@ -229,21 +237,39 @@
                 "apt-get install -y git ansible\n",
                 "git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
                 "pushd /opt/workdir/cloudformation-openvidu-demos\n",
+                "git checkout cert-options\n",
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu-demos\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
+                "# nginx\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
                 "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
                 "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+                "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
+                "echo ", { "Ref": "OwnCertCRT" }, " > $WORKINGDIR/roles/nginx/files/nginx.crt\n",
+                "sed -i \"s/BEGIN CERTIFICATE/BEGINCERTIFICATE/\" $WORKINGDIR/roles/nginx/files/nginx.crt\n",
+                "sed -i \"s/END CERTIFICATE/ENDCERTIFICATE/\" $WORKINGDIR/roles/nginx/files/nginx.crt\n",
+                "sed -i \"s/ /\\n/g\" $WORKINGDIR/roles/nginx/files/nginx.crt\n",
+                "sed -i \"s/BEGINCERTIFICATE/BEGIN CERTIFICATE/\" $WORKINGDIR/roles/nginx/files/nginx.crt\n",
+                "sed -i \"s/ENDCERTIFICATE/END CERTIFICATE/\" $WORKINGDIR/roles/nginx/files/nginx.crt\n",
+                "echo ", { "Ref": "OwnCertKEY" }, " > $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/BEGIN RSA PRIVATE KEY/BEGINRSAPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/END RSA PRIVATE KEY/ENDRSAPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/BEGIN PRIVATE KEY/BEGINPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/ /\\n/g\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/BEGINRSAPRIVATEKEY/BEGIN RSA PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/ENDRSAPRIVATEKEY/END RSA PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/ENDPRIVATEKEY/END PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "# supervisor\n",
                 "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-                "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-                "sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
-                "sed -i \"s/letsencrypt: false/letsencrypt: ", { "Ref": "WantToUseLetsEncrypt" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+                "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-                "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
                 "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+                "# KMS\n",
+                "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",                
+                "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
                 "ansible-playbook -i \"localhost,\" -c local play.yml\n",
                 "popd\n"
               ]
@@ -254,7 +280,7 @@
     },
     "MyEIP": {
       "Type": "AWS::EC2::EIPAssociation",
-      "Condition": "UseLetsEncrypt",
+      "Condition": "NoSelfSigned",
       "Properties": {
         "InstanceId": {
           "Ref": "WebServerInstance"
@@ -280,14 +306,6 @@
             "FromPort": "0",
             "ToPort": "65535",
             "CidrIp": "0.0.0.0/0"
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "22",
-            "ToPort": "22",
-            "CidrIp": {
-              "Ref": "SSHLocation"
-            }
           }
         ]
       }
@@ -333,7 +351,7 @@
           ]
         ]
       },
-      "Condition": "UseLetsEncrypt"
+      "Condition": "NoSelfSigned"
     },
     "TurnPassword": {
       "Description": "Password for the user turn_user",

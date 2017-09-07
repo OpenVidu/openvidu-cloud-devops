@@ -5,14 +5,14 @@ pidfile=/var/run/supervisord.pid
 loglevel=debug
 
 [program:openvidu-server]
-{% if letsencrypt == true %}
+{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 command=java -jar -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ domain_name }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
 {% else %}
 command=java -jar -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ aws_public_hostname }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
 {% endif %}
 
 [program:js-java]
-{% if letsencrypt == true %}
+{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 command=/bin/bash /var/www/html/basic-webinar/app.sh {{ domain_name }}
 {% else %}
 command=/bin/bash /var/www/html/basic-webinar/app.sh {{ aws_public_hostname }}
@@ -20,7 +20,7 @@ command=/bin/bash /var/www/html/basic-webinar/app.sh {{ aws_public_hostname }}
 redirect_stderr=true
 
 [program:classroom-demo]
-{% if letsencrypt == true %}
+{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 command=/bin/bash /var/www/html/classroom/app.sh {{ domain_name }}
 {% else %}
 command=/bin/bash /var/www/html/classroom/app.sh {{ aws_public_hostname }}

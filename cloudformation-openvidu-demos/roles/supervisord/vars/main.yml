@@ -1,6 +1,6 @@
 ---
 aws_public_ip: AWS_EIP
-letsencrypt: false
+whichcert: selfsigned
 domain_name: DOMAIN_NAME
 aws_public_hostname: AWS_PUBLIC_HOSTNAME
 
