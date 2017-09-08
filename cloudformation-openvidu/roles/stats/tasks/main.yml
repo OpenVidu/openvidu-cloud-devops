@@ -3,7 +3,7 @@
   copy: 
     src: ping.sh
     dest: /usr/local/bin
-  mode: u+rwx
+    mode: u+rwx
   when: allowsendinfo 
 
 - name: sending ping
