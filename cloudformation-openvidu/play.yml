@@ -4,4 +4,4 @@
     - kms
     - openvidu
     - supervisord
-
+    - stats
