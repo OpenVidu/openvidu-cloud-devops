@@ -8,7 +8,7 @@
       "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
     },
     "InstanceType": {
-      "Description": "Demos Machine EC2 instance type",
+      "Description": "OpenVidu Demos EC2 instance type",
       "Type": "String",
       "Default": "t2.small",
       "AllowedValues": [
@@ -70,7 +70,7 @@
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
     "MyDomainName": {
-      "Description": "Fully qualified domain name",
+      "Description": "For example: openvidu.io",
       "Type": "String"
     },
     "PublicElasticIP": {
@@ -92,11 +92,11 @@
       "Type": "String"
     },
     "OwnCertCRT": {
-      "Description" : "CRT File",
+      "Description" : "Copy and paste CRT file content here",
       "Type": "String"
     },
     "OwnCertKEY": {
-      "Description": "KEY File",
+      "Description": "Copy and paste KEY file content here",
       "Type": "String"
     }
   },
@@ -165,7 +165,7 @@
       ],
       "ParameterLabels": {
         "WhichCert": {
-          "default": "You can choose from the list below which certificate to use"
+          "default": "Type of SSL Certificate"
         },
         "MyDomainName": {
           "default": "Fully qualified domain name"
@@ -174,13 +174,13 @@
           "default": "Elastic IP"
         },
         "LetsEncryptEmail": {
-          "default": "Email address"
+          "default": "Email"
         },
         "OwnCertCRT": {
-          "default": "Copy and paste CRT File content here"
+          "default": "CRT file"
         },
         "OwnCertKEY": {
-          "default": "Copy and paste KEY File content here"
+          "default": "KEY file"
         }
       }
     }

@@ -8,7 +8,7 @@
       "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
     },
     "InstanceType": {
-      "Description": "Demos Machine EC2 instance type",
+      "Description": "OpenVidu Server EC2 instance type",
       "Type": "String",
       "Default": "t2.small",
       "AllowedValues": [
