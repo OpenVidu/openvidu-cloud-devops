@@ -1,0 +1,18 @@
+---
+- name: adding ping script
+  copy: 
+    src: ping.sh
+    dest: /usr/local/bin
+    mode: u+rwx
+  when: allowsendinfo 
+
+- name: sending ping
+  shell: /usr/local/bin/ping.sh
+  when: allowsendinfo
+
+- name: cleaning the house
+  file:
+    path: /usr/local/bin/ping.sh
+    state: absent
+  when: allowsendinfo
+
