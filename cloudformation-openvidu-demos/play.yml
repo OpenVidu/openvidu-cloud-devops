@@ -6,4 +6,4 @@
     - openvidu
     - supervisord
     - demos
-
+    - stats

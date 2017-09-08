@@ -98,6 +98,12 @@
     "OwnCertKEY": {
       "Description": "KEY File",
       "Type": "String"
+    },
+    "WantToSendInfo": {
+      "Description": "Do you agree to send anonymous information to OpenVidu Team for statistics",
+      "Type": "String",
+      "Default": "true",
+      "AllowedValues": [ "true", "false" ]
     }
   },
   "Mappings": {
@@ -269,6 +275,8 @@
                 "# KMS\n",
                 "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",                
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+                "# stats\n",
+                "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/roles/stats/vars/main.yml\n", 
                 "ansible-playbook -i \"localhost,\" -c local play.yml\n",
                 "popd\n"
               ]
