@@ -8,6 +8,6 @@
 openvidu-cloud-devops
 ===
 
-Configuration files for automatic launching of OpenVidu Server and OpenVidu Demos in AWS CloudFormation.
+Configuration files for automatic launching of [OpenVidu Server](http://openvidu.io/docs/deployment/deploying-aws/) and [OpenVidu Demos](http://openvidu.io/docs/deployment/deploying-demos-aws/) in AWS CloudFormation.
 
 [OpenViduLogo]: https://secure.gravatar.com/avatar/5daba1d43042f2e4e85849733c8e5702?s=120
