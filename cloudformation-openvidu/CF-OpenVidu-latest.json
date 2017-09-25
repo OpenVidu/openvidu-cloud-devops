@@ -286,7 +286,7 @@
                 "sed -i \"s/ENDRSAPRIVATEKEY/END RSA PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/ENDPRIVATEKEY/END PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "# OpenVidu\n",
-                "sed -i \"s/OV_VERSION/v1.1.0/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
+                "sed -i \"s/OV_VERSION/latest/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
                 "# Supervisor\n",
                 "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",                
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
