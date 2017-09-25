@@ -10,6 +10,15 @@
     name: openjdk-8-jdk
     update_cache: yes
 
+- name: download helper
+  copy:
+    src: download_ov.sh
+    dest: /usr/local/bin
+    mode: u+rwx
+
+- name: downloading latest version of OpenVidu Server
+  shell: /usr/local/bin/download_ov.sh
+
 - name: copying OpenVidu JAR
   copy: 
     src: "openvidu-server.jar"

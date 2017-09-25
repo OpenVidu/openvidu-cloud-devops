@@ -107,7 +107,8 @@
     "WantToSendInfo": {
       "Description": "Do you agree to send anonymous information to OpenVidu Team for statistics",
       "Type": "String",
-      "Default": "true"
+      "Default": "true",
+      "AllowedValues": [ "true", "false" ]
     }
   },
   "Mappings": {

@@ -8,7 +8,7 @@
       "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
     },
     "InstanceType": {
-      "Description": "OpenVidu Demos EC2 instance type",
+      "Description": "Demos Machine EC2 instance type",
       "Type": "String",
       "Default": "t2.small",
       "AllowedValues": [
@@ -70,7 +70,7 @@
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
     "MyDomainName": {
-      "Description": "For example: openvidu.io",
+      "Description": "Fully qualified domain name",
       "Type": "String"
     },
     "PublicElasticIP": {
@@ -92,12 +92,18 @@
       "Type": "String"
     },
     "OwnCertCRT": {
-      "Description" : "Copy and paste CRT file content here",
+      "Description" : "CRT File",
       "Type": "String"
     },
     "OwnCertKEY": {
-      "Description": "Copy and paste KEY file content here",
+      "Description": "KEY File",
       "Type": "String"
+    },
+    "WantToSendInfo": {
+      "Description": "Do you agree to send anonymous information to OpenVidu Team for statistics",
+      "Type": "String",
+      "Default": "true",
+      "AllowedValues": [ "true", "false" ]
     }
   },
   "Mappings": {
@@ -165,7 +171,7 @@
       ],
       "ParameterLabels": {
         "WhichCert": {
-          "default": "Type of SSL Certificate"
+          "default": "You can choose from the list below which certificate to use"
         },
         "MyDomainName": {
           "default": "Fully qualified domain name"
@@ -174,13 +180,13 @@
           "default": "Elastic IP"
         },
         "LetsEncryptEmail": {
-          "default": "Email"
+          "default": "Email address"
         },
         "OwnCertCRT": {
-          "default": "CRT file"
+          "default": "Copy and paste CRT File content here"
         },
         "OwnCertKEY": {
-          "default": "KEY file"
+          "default": "Copy and paste KEY File content here"
         }
       }
     }
@@ -269,6 +275,8 @@
                 "# KMS\n",
                 "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",                
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+                "# stats\n",
+                "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/roles/stats/vars/main.yml\n", 
                 "ansible-playbook -i \"localhost,\" -c local play.yml\n",
                 "popd\n"
               ]
