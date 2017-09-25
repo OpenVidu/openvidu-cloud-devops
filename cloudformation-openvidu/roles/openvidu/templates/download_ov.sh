@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUTPUT=/opt/workdir/cloudformation-openvidu/roles/openvidu/files/openvidu-server.jar
+OUTPUT=/opt/openvidu/openvidu-server.jar
 
 {% if version == "latest" %}
 RELEASE_URL=https://api.github.com/repos/openvidu/openvidu/releases/latest
