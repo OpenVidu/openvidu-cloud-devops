@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INXDB_URL=52.17.94.9
+INXDB_URL=193.147.51.51
 INXDB_DB=ov_server
 INXDB_MEASUREMENT=server
 
