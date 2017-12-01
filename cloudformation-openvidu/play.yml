@@ -5,3 +5,5 @@
     - openvidu
     - supervisord
     - stats
+    - system-shutdown
+
