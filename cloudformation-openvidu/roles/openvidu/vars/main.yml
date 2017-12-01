@@ -1,2 +1,4 @@
 ---
 version: OV_VERSION
+openvidusecret: MY_SECRET
+

@@ -19,3 +19,8 @@
 - name: downloading latest version of OpenVidu Server
   shell: /usr/local/bin/download_ov.sh
 
+- name: copying openvid launch script
+  template:
+    src: openvidu-server.sh
+    dest: /usr/local/bin
+    mode: u+rwx
