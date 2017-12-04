@@ -259,9 +259,7 @@
               [
                 "#!/bin/bash -xe\n",
                 "apt-get update\n",
-                "apt-get install -y git ansible python-pip\n",
-                "pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
-                "/usr/local/bin/cfn-init -v --stack ", { "Ref": "AWS::StackName" }, " --resource ElastestEC2Instance --region ", { "Ref": "AWS::Region" }, "\n",
+                "apt-get install -y git ansible\n",
                 "git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
                 "pushd /opt/workdir/cloudformation-openvidu\n",
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
@@ -289,7 +287,6 @@
                 "sed -i \"s/ENDPRIVATEKEY/END PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "# OpenVidu\n",
                 "sed -i \"s/OV_VERSION/latest/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
-                "sed -i \"s/run_ec2: false/run_ec2: true/\" roles/openvidu/vars/main.yml\n", 
                 "# Supervisor\n",
                 "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",                
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
@@ -306,9 +303,7 @@
                 "# stats\n",
                 "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/roles/stats/vars/main.yml\n", 
                 "ansible-playbook -i \"localhost,\" -c local play.yml\n",
-                "popd\n",
-                "/usr/local/bin/check_app_ready.sh\n",
-                "/usr/local/bin/cfn-signal -e $? --stack ", { "Ref": "AWS::StackName" }, " --resource WaitCondition --region ", { "Ref": "AWS::Region" }, "\n"
+                "popd\n"
               ]
             ]
           }
@@ -324,15 +319,6 @@
         },
         "EIP": {
           "Ref": "PublicElasticIP"
-        }
-      }
-    },
-    "WaitCondition" : {
-      "Type" : "AWS::CloudFormation::WaitCondition",
-      "CreationPolicy" : {
-        "ResourceSignal" : {
-          "Timeout" : "PT15M",
-          "Count" : "1"
         }
       }
     },

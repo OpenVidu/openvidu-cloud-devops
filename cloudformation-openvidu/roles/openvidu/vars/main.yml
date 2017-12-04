@@ -1,4 +1,5 @@
 ---
 version: OV_VERSION
 openvidusecret: MY_SECRET
+run_ec2: false
 
