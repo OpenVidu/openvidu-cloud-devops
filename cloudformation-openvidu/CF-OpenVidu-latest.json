@@ -258,10 +258,11 @@
               "",
               [
                 "#!/bin/bash -xe\n",
+                "source /home/ubuntu/.bashrc\n",
+                "export HOME=/home/ubuntu\n",
                 "apt-get update\n",
                 "apt-get install -y git ansible python-pip\n",
                 "pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
-                "/usr/local/bin/cfn-init -v --stack ", { "Ref": "AWS::StackName" }, " --resource ElastestEC2Instance --region ", { "Ref": "AWS::Region" }, "\n",
                 "git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
                 "pushd /opt/workdir/cloudformation-openvidu\n",
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
