@@ -109,6 +109,12 @@
       "Type": "String",
       "Default": "true",
       "AllowedValues": [ "true", "false" ]
+    },
+    "FreeHTTPAccesToRecordingVideos" {
+      "Description": "Do you want to access your recordings",
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [ "true", "false" ]
     }
   },
   "Mappings": {
@@ -178,7 +184,8 @@
             "default": "OpenVidu Configuration"
           },
           "Parameters": [
-            "OpenViduSecret"
+            "OpenViduSecret",
+            "FreeHTTPAccesToRecordingVideos"
           ]
         }
       ],
@@ -206,6 +213,9 @@
         },
         "OpenViduSecret": {
           "default": "OpenVidu Secret"
+        },
+        "FreeHTTPAccesToRecordingVideos": {
+          "default": "ree HTTP access to recorded videos"
         }
       }
     }
@@ -268,6 +278,8 @@
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
+                "# install docker\n",
+                "ansible-galaxy install geerlingguy.docker\n",
                 "# nginx\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
                 "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
@@ -301,8 +313,8 @@
                 "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n", 
                 "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
-		"# System shutdown\n",
-		"sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/system-shutdown/vars/main.yml\n",
+		            "# System shutdown\n",
+		            "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/system-shutdown/vars/main.yml\n",
                 "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/system-shutdown/vars/main.yml\n",
                 "# stats\n",
                 "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/roles/stats/vars/main.yml\n", 
