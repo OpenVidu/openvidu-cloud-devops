@@ -1,5 +1,6 @@
 - hosts: all
   roles:
+    - geerlingguy.docker
     - nginx
     - kms
     - openvidu
