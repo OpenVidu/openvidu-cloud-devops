@@ -5,9 +5,10 @@
     update_cache: yes
 
 - name: copying supervisor openvidu stanza
-  template:
-    src: "openvidu.conf.j2"
+  copy:
+    src: "openvidu.conf"
     dest: "/etc/supervisor/conf.d/openvidu.conf"
+    mode: "0755"
   notify:
     - restart supervisor
 

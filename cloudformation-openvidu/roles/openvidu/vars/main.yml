@@ -2,5 +2,6 @@
 version: OV_VERSION
 openvidusecret: MY_SECRET
 run_ec2: false
+domain_name: DOMAIN_NAME
 FreeHTTPAccesToRecordingVideos: FREEHTTPACCESTORECORDINGVIDEOS
 
