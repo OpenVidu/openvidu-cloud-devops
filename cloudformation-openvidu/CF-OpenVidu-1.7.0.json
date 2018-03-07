@@ -255,7 +255,7 @@
                 "sed -i \"s/ENDRSAPRIVATEKEY/END RSA PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/ENDPRIVATEKEY/END PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "# OpenVidu\n",
-                "sed -i \"s/OV_VERSION/latest/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
+                "sed -i \"s/OV_VERSION/1.7.0/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
                 "sed -i \"s/run_ec2: false/run_ec2: true/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
                 "sed -i \"s/FREEHTTPACCESTORECORDINGVIDEOS/", { "Ref": "FreeHTTPAccesToRecordingVideos" }, "/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
