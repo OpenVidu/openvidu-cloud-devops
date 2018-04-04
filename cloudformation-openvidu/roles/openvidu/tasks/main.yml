@@ -32,3 +32,8 @@
     mode: "0755"
   when: run_ec2
 
+- name: creating recording directory
+  file:
+    path: /opt/openvidu/recordings
+    state: directory
+    mode: 0755
