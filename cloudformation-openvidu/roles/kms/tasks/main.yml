@@ -1,12 +1,13 @@
 ---
 - name: adding kurento PGP key
   apt_key: 
-    url: "http://ubuntu.kurento.org/kurento.gpg.key"
+    keyserver: keyserver.ubuntu.com
+    id: 234821A61B67740F89BF D669FC8A16625AFA7A83
     state: present
 
 - name: adding kurento repository
   apt_repository:
-    repo: "deb http://ubuntu.kurento.org xenial kms6"
+    repo: "deb http://ubuntu.openvidu.io/6.7.0 xenial kms6"
 
 - name: installing necesary software
   apt:
