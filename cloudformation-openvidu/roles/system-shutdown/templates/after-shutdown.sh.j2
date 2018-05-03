@@ -15,7 +15,7 @@ mv /tmp/turnserver.conf /etc/turnserver.conf
 echo "turnURL=${TURN_USER}:${TURN_PASSWORD}@${PUBLIC_IP}:3478" > /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
 cat >/etc/nginx/sites-enabled/kms-ov<<EOF
 server {
-    listen 8443 ssl;
+    listen {{ openvidu_port }} ssl;
     server_name ${PUBLIC_HOSTNAME};
 
     ssl on;
