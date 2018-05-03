@@ -26,7 +26,7 @@
     mode: "u+rwx"
 
 - name: copying script for aws signal
-  copy:
+  template:
     src: "check_app_ready.sh"
     dest: "/usr/local/bin"
     mode: "0755"
