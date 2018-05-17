@@ -68,3 +68,12 @@
   copy:
     src: index.html
     dest: /var/www/html
+
+- name: Add cron job for certbot renewal (if configured).
+  cron:
+    name: Certbot automatic renewal.
+    job: "/usr/bin/letsencrypt renew -d {{ domain_name }}"
+    minute: "0"
+    hour: "0"
+    user: "{{ ansible_user }}"
+  when: whichcert == "letsencrypt"
