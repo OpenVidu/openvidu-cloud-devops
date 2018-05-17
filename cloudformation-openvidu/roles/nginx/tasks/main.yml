@@ -72,8 +72,7 @@
 - name: Add cron job for certbot renewal (if configured).
   cron:
     name: Certbot automatic renewal.
-    job: "/usr/bin/letsencrypt renew -d {{ domain_name }}"
+    job: "sudo /usr/bin/letsencrypt renew "
     minute: "0"
     hour: "0"
-    user: "{{ ansible_user }}"
   when: whichcert == "letsencrypt"
