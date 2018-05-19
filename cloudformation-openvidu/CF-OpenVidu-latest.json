@@ -70,7 +70,7 @@
       "AllowedValues": ["true", "false"]
     },
     "FreeHTTPAccesToRecordingVideos": {
-      "Description": "Do you want to access your recordings",
+      "Description": "Do you want your recordings to be access publicly?",
       "Type": "String",
       "Default": "false",
       "AllowedValues": ["true", "false"]
