@@ -5,8 +5,44 @@
     state: "directory"
     mode: 0755
 
-- name: copying OpenVidu JAR
-  copy: 
-    src: "openvidu-server.jar"
-    dest: "/opt/openvidu"
+- name: installing necessary software
+  apt:
+    name: openjdk-8-jdk
+    update_cache: yes
 
+- name: download helper
+  template:
+    src: download_ov.sh
+    dest: /usr/local/bin
+    mode: u+rwx
+
+- name: downloading latest version of OpenVidu Server
+  shell: /usr/local/bin/download_ov.sh
+
+- name: copying openvidu launch script
+  template:
+    src: "openvidu-server.sh"
+    dest: "/usr/local/bin"
+    mode: "u+rwx"
+
+- name: copying script for aws signal
+  template:
+    src: "check_app_ready.sh"
+    dest: "/usr/local/bin"
+    mode: "0755"
+  when: run_ec2
+
+- name: creating recording directory
+  file:
+    path: /opt/openvidu/recordings
+    state: directory
+    mode: 0755
+
+- name: copying the script to generate demos structure
+  copy:
+    src: "openvidu_create_demos_structure.sh"
+    dest: "/usr/local/bin/openvidu_create_demos_structure.sh"
+    mode: 0755
+
+- name: creating demos structure
+  shell: /usr/local/bin/openvidu_create_demos_structure.sh
