@@ -199,13 +199,19 @@
               "",
               [
                 "#!/bin/bash -xe\n",
+                "source /home/ubuntu/.bashrc\n",
+                "export HOME=/home/ubuntu\n",
                 "apt-get update\n",
-                "apt-get install -y git ansible\n",
+                "apt-get install -y git software-properties-common python-pip\n",
+                "sudo apt-add-repository -y ppa:ansible/ansible\n",
+                "sudo apt-get update && sudo apt-get install -y ansible\n",
+                "pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                 "git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
                 "pushd /opt/workdir/cloudformation-openvidu-demos\n",
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu-demos\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
+                "ansible-galaxy install geerlingguy.docker\n",
                 "# nginx\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
                 "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
@@ -238,7 +244,13 @@
                 "# stats\n",
                 "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/roles/stats/vars/main.yml\n", 
                 "ansible-playbook -i \"localhost,\" -c local play.yml\n",
-                "popd\n"
+                "popd\n",
+                "/usr/local/bin/check_app_ready.sh\n",
+                "/usr/local/bin/cfn-signal -e $? --stack ", {
+                  "Ref": "AWS::StackName"
+                }, " --resource WaitCondition --region ", {
+                  "Ref": "AWS::Region"
+                }, "\n"
               ]
             ]
           }
@@ -254,6 +266,15 @@
         },
         "EIP": {
           "Ref": "PublicElasticIP"
+        }
+      }
+    },
+    "WaitCondition": {
+      "Type": "AWS::CloudFormation::WaitCondition",
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Timeout": "PT15M",
+          "Count": "1"
         }
       }
     },
