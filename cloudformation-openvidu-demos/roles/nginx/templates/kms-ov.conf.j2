@@ -1,5 +1,5 @@
 server {
-    listen 8443 ssl;
+    listen 4443 ssl;
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server_name {{ domain_name }};
 {% else %}

@@ -6,9 +6,9 @@ loglevel=debug
 
 [program:openvidu-server]
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
-command=java -jar -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ domain_name }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
+command=java -jar -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ domain_name }}:4443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
 {% else %}
-command=java -jar -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ aws_public_hostname }}:8443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
+command=java -jar -Dserver.ssl.enabled=false -Dopenvidu.publicurl=https://{{ aws_public_hostname }}:4443 -Dserver.port=5443 /opt/openvidu/openvidu-server.jar
 {% endif %}
 
 [program:js-java]

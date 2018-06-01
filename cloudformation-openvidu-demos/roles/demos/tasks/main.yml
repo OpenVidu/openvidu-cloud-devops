@@ -4,45 +4,21 @@
     name: openjdk-8-jdk
     update_cache: yes
 
-- name: creating filesystem structure
-  file:
-    path: /var/www/html/{{ item }}
-    state: directory
-    mode: 0755
-  with_items:
-    - basic-videoconference
-    - getaroom
-    - basic-webinar
-    - classroom
-
-- name: building basic-videoconference
-  copy: src=basic-videoconference dest=/var/www/html
-
-- name: building getaroom
-  copy: src=getaroom dest=/var/www/html
-
 - name: building basic-webinar
-  copy: src=basic-webinar dest=/var/www/html
+  copy: 
+    src: "basic-webinar/app.sh"
+    dest: "/var/www/html"
+    mode: 0755
 
 - name: build classroom
-  copy: src=classroom dest=/var/www/html
+  copy: 
+    src: "classroom/app.sh"
+    dest: "/var/www/html"
+    mode: 0755
 
 - name: configuring classroom demo
   template:
     src: templates/app.sh.j2
     dest: /var/www/html/classroom/app.sh
     mode: 0755
-
-- name: deploying index
-  unarchive:
-    src: index.tar.gz
-    dest: /var/www/html
-
-- name: adjusting file permission
-  file:
-    path: /var/www/html/{{ item }}
-    mode: 0755
-  with_items:
-    - basic-webinar/app.sh
-    - classroom/app.sh
 

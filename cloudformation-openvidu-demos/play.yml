@@ -5,4 +5,5 @@
     - kms
     - openvidu
     - supervisord
+    - demos
     - stats
