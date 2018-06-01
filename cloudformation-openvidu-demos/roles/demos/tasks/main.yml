@@ -10,12 +10,6 @@
     dest: "/var/www/html"
     mode: 0755
 
-- name: build classroom
-  copy: 
-    src: "classroom/app.sh"
-    dest: "/var/www/html"
-    mode: 0755
-
 - name: configuring classroom demo
   template:
     src: templates/app.sh.j2
