@@ -11,10 +11,10 @@
     update_cache: yes
 
 - name: download helper
-  template:
+  copy:
     src: download_ov.sh
     dest: /usr/local/bin
-    mode: u+rwx
+    mode: 0755
 
 - name: downloading latest version of OpenVidu Server
   shell: /usr/local/bin/download_ov.sh

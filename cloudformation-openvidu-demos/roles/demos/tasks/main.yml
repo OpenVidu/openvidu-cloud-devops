@@ -7,7 +7,7 @@
 - name: building basic-webinar
   copy: 
     src: "basic-webinar/app.sh"
-    dest: "/var/www/html"
+    dest: "/var/www/html/basic-webinar"
     mode: 0755
 
 - name: configuring classroom demo
