@@ -6,7 +6,7 @@ DEMOS_RELEASE=2.0.0
 OV_RELEASE=2.0.0
 CF_RELEASE=master
 WORKDIR=$(mktemp -d --suffix .ov)
-TARGETDIR=$(mktemp -d --suffix .ov) # /var/www/html
+TARGETDIR=/var/www/html
 OV_RELEASE_URL=https://github.com/OpenVidu/openvidu/releases/download/v${OV_RELEASE}/openvidu-server-${OV_RELEASE}.jar
 
 ## Common tasks
@@ -38,8 +38,6 @@ git clone https://github.com/OpenVidu/openvidu-cloud-devops
 cd openvidu-cloud-devops
 git checkout $CF_RELEASE
 cp -rav web-demos-openvidu/* $TARGETDIR/
-
-tree $TARGETDIR
 
 # Cleaning the house
 rm -rf $WORKDIR
