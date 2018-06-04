@@ -1,6 +1,7 @@
 - hosts: all
   roles:
     - nginx
+    - geerlingguy.mysql
     - kms
     - openvidu
     - supervisord
@@ -9,7 +10,7 @@
 
   vars:
     mysql_root_password_update: no
-    mysql_root_home: /root
+    mysql_root_home: /home/ubuntu
     mysql_root_username: root
     mysql_root_password: egh1erieVi8oph%
     mysql_databases: [
