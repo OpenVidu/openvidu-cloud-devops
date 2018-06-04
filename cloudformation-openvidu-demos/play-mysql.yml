@@ -1,11 +1,7 @@
 - hosts: all
   roles:
-    - nginx
-    - kms
-    - openvidu
-    - supervisord
-    - demos
-    - stats
+    - role: geerlingguy.mysql
+      become: yes
 
   vars:
     mysql_root_password_update: no
@@ -15,3 +11,4 @@
     mysql_databases: [
       name: openvidu_sample_app
     ]
+EOF
