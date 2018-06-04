@@ -3,11 +3,10 @@ set -eu -o pipefail
 
 # Vars
 DEMOS_RELEASE=2.0.0
-OV_RELEASE=2.0.0
+OV_RELEASE=2.1.0
 CF_RELEASE=master
 WORKDIR=$(mktemp -d --suffix .ov)
 TARGETDIR=/var/www/html
-OV_RELEASE_URL=https://github.com/OpenVidu/openvidu/releases/download/v${OV_RELEASE}/openvidu-server-${OV_RELEASE}.jar
 
 ## Common tasks
 # clone the repos
