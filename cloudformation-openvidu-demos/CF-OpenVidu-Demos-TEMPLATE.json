@@ -213,7 +213,7 @@
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
                 "ansible-galaxy install geerlingguy.mysql\n",
                 "OPENVIDU_PORT=4443\n",
-                "OPENVUDU_VERSION=@OV_V@\n",
+                "OPENVIDU_VERSION=@OV_V@\n",
                 "OPENVIDU_DEMOS_VERSION=@OV_D_V@\n",
                 "# nginx\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
