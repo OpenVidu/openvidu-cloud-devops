@@ -11,4 +11,3 @@
     mysql_databases: [
       name: openvidu_sample_app
     ]
-EOF
