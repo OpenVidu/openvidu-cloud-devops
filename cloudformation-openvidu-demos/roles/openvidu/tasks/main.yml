@@ -16,8 +16,8 @@
     dest: /usr/local/bin
     mode: 0755
 
-- name: downloading latest version of OpenVidu Server
-  shell: /usr/local/bin/download_ov.sh
+- name: downloading OpenVidu Server
+  shell: /usr/local/bin/download_ov.sh {{ ov_server }}
 
 - name: copying openvidu launch script
   template:
@@ -45,4 +45,4 @@
     mode: 0755
 
 - name: creating demos structure
-  shell: /usr/local/bin/openvidu_create_demos_structure.sh
+  shell: /usr/local/bin/openvidu_create_demos_structure.sh {{ DEMOS_RELEASE }}

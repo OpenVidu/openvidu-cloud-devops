@@ -5,3 +5,4 @@ run_ec2: false
 domain_name: DOMAIN_NAME
 FreeHTTPAccesToRecordingVideos: FREEHTTPACCESTORECORDINGVIDEOS
 openvidu_port: 8443
+demos_release: DEMOS_RELEASE

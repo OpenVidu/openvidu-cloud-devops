@@ -2,8 +2,7 @@
 set -eu -o pipefail
 
 # Vars
-DEMOS_RELEASE=2.0.0
-OV_RELEASE=2.1.0
+DEMOS_RELEASE=$1
 CF_RELEASE=master
 WORKDIR=$(mktemp -d --suffix .ov)
 TARGETDIR=/var/www/html
