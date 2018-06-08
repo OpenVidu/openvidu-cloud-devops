@@ -11,7 +11,7 @@
     update_cache: yes
 
 - name: download helper
-  copy:
+  template:
     src: download_ov.sh
     dest: /usr/local/bin
     mode: u+rwx
