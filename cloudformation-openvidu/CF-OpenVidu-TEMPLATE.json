@@ -231,6 +231,7 @@
                 "pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                 "git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
                 "pushd /opt/workdir/cloudformation-openvidu\n",
+                "BRANCH"
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "OPENVIDU_PORT=4443\n",
@@ -254,9 +255,11 @@
                 "sed -i \"s/BEGIN RSA PRIVATE KEY/BEGINRSAPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/BEGIN PRIVATE KEY/BEGINPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/END RSA PRIVATE KEY/ENDRSAPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/END PRIVATE KEY/ENDPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/ /\\n/g\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/BEGINRSAPRIVATEKEY/BEGIN RSA PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/ENDRSAPRIVATEKEY/END RSA PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/BEGINPRIVATEKEY/BEGIN PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/ENDPRIVATEKEY/END PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "# OpenVidu\n",
                 "sed -i \"s/OV_VERSION/@OV_V@/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
@@ -266,6 +269,7 @@
                 "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
 		            "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "OpenViduSecret" }, "/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
                 "sed -i \"s/openvidu_port: 8443/openvidu_port: $OPENVIDU_PORT/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
+                "STAGE"
                 "# KMS\n",
                 "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
                 "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
