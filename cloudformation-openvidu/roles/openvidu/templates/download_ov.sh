@@ -1,12 +1,9 @@
 #!/bin/bash
 
-OUTPUT=/opt/openvidu/openvidu-server.jar
-
-{% if version == "latest" %}
-RELEASE_URL=https://api.github.com/repos/openvidu/openvidu/releases/latest
-DOWNLOAD_URL=$(curl -s $RELEASE_URL | grep browser_download_url | cut -d '"' -f 4 | grep openvidu-server)
-curl -L -o $OUTPUT $DOWNLOAD_URL
+{% if stage == "prod" %}
+# Ansible openvidu producction environment
+wget -O /opt/openvidu/openvidu-server.jar https://github.com/OpenVidu/openvidu/releases/download/v$1/openvidu-server-$1.jar
 {% else %}
-curl -L -o $OUTPUT https://github.com/OpenVidu/openvidu/releases/download/v{{ version }}/openvidu-server-{{ version }}.jar
+# Ansible openvidu producction environment
+wget -O /opt/openvidu/openvidu-server.jar http://builds.openvidu.io/openvidu/nightly/latest/openvidu-server-latest.jar
 {% endif %}
-
