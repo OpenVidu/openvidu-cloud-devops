@@ -16,3 +16,14 @@
     dest: /var/www/html/classroom/app.sh
     mode: 0755
 
+- name: copy openvidu call tarball
+  copy: 
+    src: "openvidu-call.tar.gz"
+    dest: "/home/ubuntu"
+    mode: 0755
+
+- name: inflating openvidu call tarball
+  unarchive:
+    src: "/home/ubuntu/openvidu-call.tar.gz"
+    dest: "/var/www/html"
+
