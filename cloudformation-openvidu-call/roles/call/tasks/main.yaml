@@ -1,0 +1,12 @@
+------
+- name: copy tarball
+  copy: 
+    src: "openvidu-call.tar.gz"
+    dest: "/home/ubuntu"
+    mode: 0755
+
+- name: inflating tarball
+  unarchive:
+    src: "/home/ubuntuopenvidu-call.tar.gz"
+    dest: "/var/www/html"
+

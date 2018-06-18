@@ -1,0 +1,23 @@
+server {
+    listen 443 ssl default deferred;
+{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
+    server_name {{ domain_name }};
+{% else %}
+    server_name {{ aws_public_hostname }};
+{% endif %}
+
+    ssl on;
+{% if whichcert == "letsencrypt" %}
+    ssl_certificate         /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+{% else %}
+    ssl_certificate /etc/nginx/ssl/nginx.crt;
+    ssl_certificate_key /etc/nginx/ssl/nginx.key;
+{% endif %}
+
+    include sites-available/proxy.conf;
+
+    root /var/www/html;
+}
+

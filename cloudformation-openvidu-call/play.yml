@@ -1,0 +1,11 @@
+- hosts: all
+  roles:
+    - geerlingguy.docker
+    - nginx
+    - kms
+    - openvidu
+    - call
+    - supervisord
+    - stats
+    - system-shutdown
+
