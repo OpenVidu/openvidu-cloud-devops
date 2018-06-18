@@ -7,6 +7,6 @@
 
 - name: inflating tarball
   unarchive:
-    src: "/home/ubuntuopenvidu-call.tar.gz"
+    src: "/home/ubuntu/openvidu-call.tar.gz"
     dest: "/var/www/html"
 
