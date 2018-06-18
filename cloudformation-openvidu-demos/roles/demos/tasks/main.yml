@@ -25,5 +25,5 @@
 - name: inflating openvidu call tarball
   unarchive:
     src: "/home/ubuntu/openvidu-call.tar.gz"
-    dest: "/var/www/html"
+    dest: "/var/www/html/openvidu-call"
 
