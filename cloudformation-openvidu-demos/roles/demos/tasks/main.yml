@@ -22,8 +22,11 @@
     dest: "/home/ubuntu"
     mode: 0755
 
-- name: inflating openvidu call tarball
-  unarchive:
-    src: "/home/ubuntu/openvidu-call.tar.gz"
-    dest: "/var/www/html/openvidu-call"
+- name: copying the script to generate demos structure
+  copy:
+    src: "openvidu_create_demos_structure.sh"
+    dest: "/usr/local/bin/openvidu_create_demos_structure.sh"
+    mode: 0755
 
+- name: creating demos structure
+  shell: /usr/local/bin/openvidu_create_demos_structure.sh {{ demos_release }}
