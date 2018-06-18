@@ -1,4 +1,4 @@
-------
+---
 - name: copy tarball
   copy: 
     src: "openvidu-call.tar.gz"
