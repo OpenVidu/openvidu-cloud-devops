@@ -31,6 +31,10 @@ cp -rav $WORKDIR/openvidu-tutorials/openvidu-getaroom/web/* $TARGETDIR/getaroom
 mkdir -p $TARGETDIR/classroom
 wget https://github.com/OpenVidu/classroom-demo/releases/download/v${DEMOS_RELEASE}/classroom-demo-${DEMOS_RELEASE}.war -O $TARGETDIR/classroom/classroom-demo.jar
 
+# Openvidu Call
+mkdir -p $TARGETDIR/openvidu-call
+tar zxf /home/ubuntu/openvidu-call.tar.gz -C $TARGETDIR/openvidu-call
+
 # Web Page
 git clone https://github.com/OpenVidu/openvidu-cloud-devops
 cd openvidu-cloud-devops
