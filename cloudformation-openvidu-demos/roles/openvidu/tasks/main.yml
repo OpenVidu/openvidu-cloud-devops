@@ -5,7 +5,7 @@
     state: "directory"
     mode: 0755
 
-- name: installing necessary software
+- name: installing java 8
   apt:
     name: openjdk-8-jdk
     update_cache: yes
