@@ -3,3 +3,4 @@
   systemd:
     state: restarted
     enabled: True
+    name: redis-server
