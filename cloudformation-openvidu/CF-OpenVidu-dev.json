@@ -10,62 +10,21 @@
     "InstanceType": {
       "Description": "Demos Machine EC2 instance type",
       "Type": "String",
-      "Default": "t2.small",
+      "Default": "t2.xlarge",
       "AllowedValues": [
-        "t1.micro",
-        "t2.nano",
-        "t2.micro",
-        "t2.small",
-        "t2.medium",
         "t2.large",
-        "m1.small",
-        "m1.medium",
-        "m1.large",
-        "m1.xlarge",
-        "m2.xlarge",
-        "m2.2xlarge",
-        "m2.4xlarge",
-        "m3.medium",
-        "m3.large",
-        "m3.xlarge",
-        "m3.2xlarge",
-        "m4.large",
-        "m4.xlarge",
-        "m4.2xlarge",
-        "m4.4xlarge",
-        "m4.10xlarge",
-        "c1.medium",
-        "c1.xlarge",
-        "c3.large",
-        "c3.xlarge",
-        "c3.2xlarge",
-        "c3.4xlarge",
-        "c3.8xlarge",
-        "c4.large",
-        "c4.xlarge",
-        "c4.2xlarge",
-        "c4.4xlarge",
-        "c4.8xlarge",
-        "g2.2xlarge",
-        "g2.8xlarge",
-        "r3.large",
-        "r3.xlarge",
-        "r3.2xlarge",
-        "r3.4xlarge",
-        "r3.8xlarge",
-        "i2.xlarge",
-        "i2.2xlarge",
-        "i2.4xlarge",
-        "i2.8xlarge",
-        "d2.xlarge",
-        "d2.2xlarge",
-        "d2.4xlarge",
-        "d2.8xlarge",
-        "hi1.4xlarge",
-        "hs1.8xlarge",
-        "cr1.8xlarge",
-        "cc2.8xlarge",
-        "cg1.4xlarge"
+            "t2.xlarge",
+            "t2.2xlarge",
+            "m5.xlarge",
+            "m5.2xlarge",
+            "m5.4xlarge",
+            "m5.12xlarge",
+            "m5.24xlarge",
+            "m4.xlarge",
+            "m4.2xlarge",
+            "m4.4xlarge",
+            "m4.10xlarge",
+            "m4.16xlarge"
       ],
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
@@ -97,7 +56,7 @@
       "Type": "String"
     },
     "OwnCertCRT": {
-      "Description" : "Copy and paste CRT file content here",
+      "Description": "Copy and paste CRT file content here",
       "Type": "String"
     },
     "OwnCertKEY": {
@@ -108,7 +67,13 @@
       "Description": "Do you agree to send anonymous information to OpenVidu Team for statistics",
       "Type": "String",
       "Default": "true",
-      "AllowedValues": [ "true", "false" ]
+      "AllowedValues": ["true", "false"]
+    },
+    "FreeHTTPAccesToRecordingVideos": {
+      "Description": "Do you want your recordings to be access publicly?",
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": ["true", "false"]
     }
   },
   "Mappings": {
@@ -159,8 +124,7 @@
   },
   "Metadata": {
     "AWS::CloudFormation::Interface": {
-      "ParameterGroups": [
-        {
+      "ParameterGroups": [{
           "Label": {
             "default": "SSL Certificate Configuration"
           },
@@ -178,7 +142,8 @@
             "default": "OpenVidu Configuration"
           },
           "Parameters": [
-            "OpenViduSecret"
+            "OpenViduSecret",
+            "FreeHTTPAccesToRecordingVideos"
           ]
         }
       ],
@@ -206,19 +171,23 @@
         },
         "OpenViduSecret": {
           "default": "OpenVidu Secret"
+        },
+        "FreeHTTPAccesToRecordingVideos": {
+          "default": "Free HTTP access to recorded videos"
         }
       }
     }
   },
   "Conditions": {
     "NoSelfSigned": {
-      "Fn::Not" : [{
-        "Fn::Equals": [
-          {"Ref": "WhichCert"},
-        "selfsigned"
-      ]
-    }]
-  }
+      "Fn::Not": [{
+        "Fn::Equals": [{
+            "Ref": "WhichCert"
+          },
+          "selfsigned"
+        ]
+      }]
+    }
   },
   "Resources": {
     "WebServerInstance": {
@@ -236,35 +205,38 @@
         "InstanceType": {
           "Ref": "InstanceType"
         },
-        "SecurityGroups": [
-          {
-            "Ref": "WebServerSecurityGroup"
-          }
-        ],
+        "SecurityGroups": [{
+          "Ref": "WebServerSecurityGroup"
+        }],
         "KeyName": {
           "Ref": "KeyName"
         },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
+        "Tags": [{
+          "Key": "Name",
+          "Value": {
+            "Ref": "AWS::StackName"
           }
-        ],
+        }],
         "UserData": {
           "Fn::Base64": {
             "Fn::Join": [
-              "",
-              [
+              "", [
                 "#!/bin/bash -xe\n",
+                "source /home/ubuntu/.bashrc\n",
+                "export HOME=/home/ubuntu\n",
                 "apt-get update\n",
-                "apt-get install -y git ansible\n",
+                "apt-get install -y git software-properties-common python-pip\n",
+                "apt-add-repository -y ppa:ansible/ansible\n",
+                "apt-get update && apt-get install -y ansible\n",
+                "pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                 "git clone https://github.com/OpenVidu/openvidu-cloud-devops /opt/workdir\n",
                 "pushd /opt/workdir/cloudformation-openvidu\n",
+                "git checkout dev\n",
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
+                "# install docker\n",
+                "ansible-galaxy install geerlingguy.docker\n",
                 "# nginx\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
                 "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/roles/nginx/vars/main.yml\n",
@@ -281,30 +253,50 @@
                 "sed -i \"s/BEGIN RSA PRIVATE KEY/BEGINRSAPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/BEGIN PRIVATE KEY/BEGINPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/END RSA PRIVATE KEY/ENDRSAPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/END PRIVATE KEY/ENDPRIVATEKEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/ /\\n/g\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/BEGINRSAPRIVATEKEY/BEGIN RSA PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/ENDRSAPRIVATEKEY/END RSA PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
+                "sed -i \"s/BEGINPRIVATEKEY/BEGIN PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "sed -i \"s/ENDPRIVATEKEY/END PRIVATE KEY/\" $WORKINGDIR/roles/nginx/files/nginx.key\n",
                 "# OpenVidu\n",
-                "sed -i \"s/OV_VERSION/1.0.0-beta.3/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
-                "# Supervisor\n",
-                "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",                
-                "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-                "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
-                "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n", 
-                "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "OpenViduSecret" }, "/\" $WORKINGDIR/roles/supervisord/vars/main.yml\n",
+                "sed -i \"s/OV_VERSION/2.1.0/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
+                "sed -i \"s/run_ec2: false/run_ec2: true/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
+                "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
+                "sed -i \"s/FREEHTTPACCESTORECORDINGVIDEOS/", { "Ref": "FreeHTTPAccesToRecordingVideos" }, "/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
+                "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
+		            "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "OpenViduSecret" }, "/\" $WORKINGDIR/roles/openvidu/vars/main.yml\n",
                 "# KMS\n",
-                "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n", 
+                "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
                 "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/roles/kms/vars/main.yml\n",
+                "# System shutdown\n",
+                "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/roles/system-shutdown/vars/main.yml\n",
+                "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/roles/system-shutdown/vars/main.yml\n",
+                "sed -i \"s/openvidu_port: 8443/openvidu_port: $OPENVIDU_PORT/\" $WORKINGDIR/roles/system-shutdown/vars/main.yml\n",
                 "# stats\n",
-                "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/roles/stats/vars/main.yml\n", 
+                "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/roles/stats/vars/main.yml\n",
                 "ansible-playbook -i \"localhost,\" -c local play.yml\n",
-                "popd\n"
+                "popd\n",
+                "/usr/local/bin/check_app_ready.sh\n",
+                "/usr/local/bin/cfn-signal -e $? --stack ", {
+                  "Ref": "AWS::StackName"
+                }, " --resource WaitCondition --region ", {
+                  "Ref": "AWS::Region"
+                }, "\n"
               ]
             ]
           }
-        }
+        },
+        "BlockDeviceMappings": [{
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "VolumeType": "io1",
+            "Iops": "200",
+            "DeleteOnTermination": "true",
+            "VolumeSize": "100"
+          }
+        }]
       }
     },
     "MyEIP": {
@@ -319,12 +311,20 @@
         }
       }
     },
+    "WaitCondition": {
+      "Type": "AWS::CloudFormation::WaitCondition",
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Timeout": "PT15M",
+          "Count": "1"
+        }
+      }
+    },
     "WebServerSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
         "GroupDescription": "Full open access",
-        "SecurityGroupIngress": [
-          {
+        "SecurityGroupIngress": [{
             "IpProtocol": "udp",
             "FromPort": "0",
             "ToPort": "65535",
@@ -345,8 +345,7 @@
       "Description": "Use this URL to connect OpenVidu",
       "Value": {
         "Fn::Join": [
-          "",
-          [
+          "", [
             "https://",
             {
               "Fn::GetAtt": [
@@ -354,7 +353,7 @@
                 "PublicDnsName"
               ]
             },
-            ":8443"
+            ":4443"
           ]
         ]
       }
@@ -372,13 +371,12 @@
       "Description": "Use this URL to connect to OpenVidu",
       "Value": {
         "Fn::Join": [
-          "",
-          [
+          "", [
             "https://",
             {
               "Ref": "MyDomainName"
             },
-            ":8443"
+            ":4443"
           ]
         ]
       },
@@ -387,7 +385,7 @@
     "OpenViduSecretOutput": {
       "Description": "OpenVidu secret to generate tokens",
       "Value": {
-          "Ref": "OpenViduSecret"
+        "Ref": "OpenViduSecret"
       }
     },
     "TurnPassword": {
@@ -399,4 +397,4 @@
       }
     }
   }
-} 
+}

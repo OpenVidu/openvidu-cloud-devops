@@ -1,0 +1,5 @@
+---
+- name: restart redis
+  systemd:
+    state: restarted
+    enabled: True
