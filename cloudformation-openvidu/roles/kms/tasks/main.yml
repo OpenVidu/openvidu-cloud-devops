@@ -7,7 +7,7 @@
 
 - name: adding kurento repository
   apt_repository:
-    repo: "deb http://ubuntu.openvidu.io/6.7.0 xenial kms6"
+    repo: "deb http://ubuntu.openvidu.io/6.7.2 xenial kms6"
 
 - name: installing necesary software
   apt:
@@ -30,6 +30,10 @@
     update_cache: yes
   notify: start kms
 
+- name: installing extra packages
+  apt:
+    name: openh264-gst-plugins-bad-1.5
+  
 - name: preconfiguring Kurento Media Server
   template:
     src: "WebRtcEndpoint.conf.ini.j2"

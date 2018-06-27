@@ -5,10 +5,15 @@
     state: "directory"
     mode: 0755
 
-- name: installing necessary software
+- name: installing Java 8
   apt:
     name: openjdk-8-jdk
     update_cache: yes
+
+- name: installing Redis
+  apt:
+    name: redis-server
+  notify: restart redis
 
 - name: download helper
   copy:

@@ -1,8 +1,11 @@
 external-ip={{ aws_public_ip }}
-fingerprint
-user={{ turn_user }}:{{ turn_password }}
+listening-port=3478
 lt-cred-mech
-realm=kurento.org
-log-file=/var/log/turnserver/turnserver.log
+max-port=65535
+min-port=49152
+pidfile="/var/run/turnserver.pid"
+realm=openvidu
 simple-log
+redis-userdb="ip=127.0.0.1 dbname=0 password=turn connect_timeout=30"
+verbose
 

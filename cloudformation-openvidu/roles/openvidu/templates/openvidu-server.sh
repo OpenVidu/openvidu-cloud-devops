@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script will launch OpenVidu Server on your machine
+
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 PUBLIC_HOSTNAME={{ domain_name }}
 {% else %}
