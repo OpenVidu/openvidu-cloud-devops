@@ -10,6 +10,11 @@
     name: openjdk-8-jdk
     update_cache: yes
 
+- name: installing Redis
+  apt:
+    name: redis-server
+  notify: restart redis
+
 - name: download helper
   copy:
     src: download_ov.sh

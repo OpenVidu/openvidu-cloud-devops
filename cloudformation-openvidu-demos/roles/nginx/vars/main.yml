@@ -3,4 +3,5 @@ letsencrypt_email: LETSENCRYPT_EMAIL
 aws_eip: AWS_EIP
 whichcert: selfsigned
 aws_public_hostname: AWS_PUBLIC_HOSTNAME
+openvidu_port: 4443
 

@@ -30,6 +30,10 @@
     update_cache: yes
   notify: start kms
 
+- name: installing extra packages
+  apt:
+    name: openh264-gst-plugins-bad-1.5
+  
 - name: preconfiguring Kurento Media Server
   template:
     src: "WebRtcEndpoint.conf.ini.j2"
