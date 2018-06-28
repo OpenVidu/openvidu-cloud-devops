@@ -1,0 +1,1 @@
+Check the config and run this script on demos to update the platform.
