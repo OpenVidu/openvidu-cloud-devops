@@ -4,6 +4,7 @@ set -eu -o pipefail
 # Vars
 OV_RELEASE=$1
 DEMOS_RELEASE=$2
+OVC_RELEASE=$3
 CF_RELEASE=master
 WORKDIR=$(mktemp -d --suffix .ov)
 TARGETDIR=/var/www/html
@@ -36,7 +37,8 @@ wget https://github.com/OpenVidu/classroom-demo/releases/download/v${DEMOS_RELEA
 
 # Openvidu Call
 mkdir -p $TARGETDIR/openvidu-call
-tar zxf /home/ubuntu/openvidu-call.tar.gz -C $TARGETDIR/openvidu-call
+wget https://github.com/OpenVidu/openvidu-call/releases/download/v${OVC_RELEASE}/openvidu-call-demos-${OV_RELEASE}.js -O $WORKDIR/ovc.tar.gz
+tar zxf $WORKDIR/ovc.tar.gz -C $TARGETDIR/openvidu-call
 
 # Web Page
 git clone https://github.com/OpenVidu/openvidu-cloud-devops
