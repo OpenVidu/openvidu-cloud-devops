@@ -12,7 +12,7 @@
     mode: 0755
     
 - name: creating demos structure
-  shell: /usr/local/bin/openvidu_create_demos_structure.sh {{ ov_release }} {{ demos_release }}
+  shell: /usr/local/bin/openvidu_create_demos_structure.sh {{ ov_release }} {{ demos_release }} {{ ovc_release }}
 
 - name: building basic-webinar
   copy: 
