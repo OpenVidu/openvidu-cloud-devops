@@ -1,0 +1,47 @@
+# Turn Configuration
+turn_user: TURN_USER
+turn_password: TURN_PASSWORD
+
+# Certificate type
+# You can choose:
+# 1. Self Signed (selfsigned) The certificate will be generate within
+# the instance (default)
+# 2. Let's encrypt (letsencrpt) Free SSL certificate provider
+# 3. Your own certificate (owncert) If you own a SSL certificate, use this one.
+# See roles > nginx > files to
+# 
+whichcert: selfsigned
+
+# Your custom domain name i.e. openvidu.example.com
+domain_name: DOMAIN_NAME
+
+# Let's Encrypt email to receive notifications
+letsencrypt_email: LETSENCRYPT_EMAIL
+
+# OpenVidu
+
+# Whisch OpenVidu version to use
+version: OV_VERSION
+
+# Use this to connect to OpenVidu endpoint
+openvidusecret: MY_SECRET
+
+# if true any client can connect to
+# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
+# and access any recorded video file. If false this path will be secured with
+# openvidu.secret param just as OpenVidu Server dashboard at
+# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
+FreeHTTPAccesToRecordingVideos: FREEHTTPACCESTORECORDINGVIDEOS
+openvidu_port: 4443
+
+# Stats: Set to false if you don't wanna share some information with us:
+# Info:
+# - OpenVidu version
+# - AWS Region
+# - AWS Availability zone
+allowsendinfo: true
+
+# AWS Configuration
+aws_public_ip: AWS_EIP
+aws_public_hostname: AWS_PUBLIC_HOSTNAME
+run_ec2: false
