@@ -5,7 +5,7 @@ PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 TURN_USER={{ turn_user }}
 TURN_PASSWORD="{{ turn_password }}"
 
-systemctl stop kurento-media-server-6.0
+systemctl stop kurento-media-server
 systemctl stop coturn
 systemctl stop nginx
 sleep 5
@@ -32,6 +32,6 @@ server {
 EOF
 sleep 5
 systemctl start coturn
-systemctl start kurento-media-server-6.0
+systemctl start kurento-media-server
 systemctl start nginx
 
