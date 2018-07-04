@@ -1,8 +1,8 @@
 ---
 - name: adding ping script
-  copy: 
+  template: 
     src: ping.sh
-    dest: /usr/local/bin
+    dest: /usr/local/bin/ping.sh
     mode: u+rwx
   when: allowsendinfo 
 

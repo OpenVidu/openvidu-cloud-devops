@@ -6,7 +6,7 @@ upstream basic-webinar {
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server {{ domain_name }}:5000;
 {% else %}
-    server {{ aws_eip }}:5000;
+    server {{ aws_public_ip }}:5000;
 {% endif %}
 }
 
@@ -14,7 +14,7 @@ upstream classroom {
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server {{ domain_name }}:5001; 
 {% else %}
-    server {{ aws_eip }}:5001;
+    server {{ aws_public_ip }}:5001;
 {% endif %}
 }
 
@@ -23,7 +23,7 @@ server {
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server_name {{ domain_name }};
 {% else %}
-    server_name {{ aws_eip }};
+    server_name {{ aws_public_ip }};
 {% endif %}
 
 {% if whichcert == "letsencrypt" %}
@@ -34,7 +34,7 @@ server {
 {% endif %}
 
     location / {
-        rewrite ^ https://{{ aws_eip }}$request_uri? permanent;
+        rewrite ^ https://{{ aws_public_ip }}$request_uri? permanent;
     }
 }
 
@@ -43,7 +43,7 @@ server {
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server_name {{ domain_name }};
 {% else %}
-    server_name {{ aws_eip }};
+    server_name {{ aws_public_ip }};
 {% endif %}
 
     ssl on;

@@ -22,7 +22,7 @@
     mode: 0755
 
 - name: downloading OpenVidu Server
-  shell: /usr/local/bin/download_ov.sh {{ version }}
+  shell: /usr/local/bin/download_ov.sh {{ ov_release }}
 
 - name: copying openvidu launch script
   template:
