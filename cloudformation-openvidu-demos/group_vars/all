@@ -33,6 +33,13 @@ openvidu_port: 4443
 # Use this to connect to OpenVidu endpoint
 openvidusecret: MY_SECRET
 
+# if true any client can connect to
+# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
+# and access any recorded video file. If false this path will be secured with
+# openvidu.secret param just as OpenVidu Server dashboard at
+# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
+FreeHTTPAccesToRecordingVideos: false
+
 # Stats: Set to false if you don't wanna share some information with us:
 # Info:
 # - OpenVidu version
