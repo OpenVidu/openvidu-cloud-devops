@@ -30,6 +30,9 @@ ov_release: OV_RELEASE
 # Openvidu port to connect to
 openvidu_port: 4443
 
+# Use this to connect to OpenVidu endpoint
+openvidusecret: MY_SECRET
+
 # Stats: Set to false if you don't wanna share some information with us:
 # Info:
 # - OpenVidu version
