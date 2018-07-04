@@ -36,7 +36,7 @@ server {
     location / {
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
         rewrite ^ https://{{ domain_name }}$request_uri? permanent;
-{% else $}
+{% else %}
         rewrite ^ https://{{ aws_public_ip }}$request_uri? permanent;
 {% endif %}        
     }
