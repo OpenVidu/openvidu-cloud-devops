@@ -5,25 +5,19 @@
     dest: "/usr/local/bin/openvidu_create_demos_structure.sh"
     mode: 0755
 
-- name: copy openvidu call tarball
-  copy: 
-    src: "openvidu-call.tar.gz"
-    dest: "/home/ubuntu"
-    mode: 0755
-    
 - name: creating demos structure
   shell: /usr/local/bin/openvidu_create_demos_structure.sh {{ ov_release }} {{ demos_release }} {{ ovc_release }}
 
-- name: building basic-webinar
-  copy: 
-    src: "basic-webinar/app.sh"
-    dest: "/var/www/html/basic-webinar"
+- name: creating basic-webinar launcher
+  template: 
+    src: "app.sh-basic-webinar.j2"
+    dest: "/var/www/html/basic-webinar/app.sh"
     mode: 0755
 
-- name: configuring classroom demo
+- name: creating classroom demo launcher
   template:
-    src: templates/app.sh.j2
-    dest: /var/www/html/classroom/app.sh
+    src: "templates/app.sh.j2"
+    dest: "/var/www/html/classroom/app.sh"
     mode: 0755
 
 
