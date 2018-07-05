@@ -16,7 +16,7 @@
 
 - name: creating classroom demo launcher
   template:
-    src: "templates/app.sh.j2"
+    src: "templates/app.sh-classroom.j2"
     dest: "/var/www/html/classroom/app.sh"
     mode: 0755
 
