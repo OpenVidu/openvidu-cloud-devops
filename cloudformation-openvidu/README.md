@@ -174,3 +174,4 @@ If your app is not working as expected, there is a few files you should check fo
 */var/log/supervisor/* Contains information about the output of your app.
 
 You can also try to connect to the app directly to the port like: https://AWS_EC2_URL:YOUR_APP_PORT
+
