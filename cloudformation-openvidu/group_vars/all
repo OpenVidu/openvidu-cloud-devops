@@ -42,19 +42,19 @@ OpenviduRecordingNotification: OPENVIDURECORDINGNOTIFICATION
 
 # Maximum video bandwidth sent from clients to OpenVidu Server, in kbps.
 # 0 means unconstrained
-OpenviduStreamsVideoMax-recv-bandwidth: OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH
+OpenviduStreamsVideoMaxRecvBandwidth: OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH
 
 # Minimum video bandwidth sent from clients to OpenVidu Server, in kbps.
 # 0 means unconstrained
-OpenviduStreamsVideoMin-recv-bandwidth: OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH
+OpenviduStreamsVideoMinRecvBandwidth: OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH
 
 # Maximum video bandwidth sent from OpenVidu Server to clients, in kbps.
 # 0 means unconstrained
-OpenviduStreamsVideoMax-send-bandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
+OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 
 # Minimum video bandwidth sent from OpenVidu Server to clients, in kbps.
 # 0 means unconstrained
-OpenviduStreamsVideoMin-send-bandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
+OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
 # Openvidu port to connect to
 openvidu_port: 4443
