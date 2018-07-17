@@ -33,6 +33,29 @@ openvidusecret: MY_SECRET
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
 FreeHTTPAccesToRecordingVideos: FREEHTTPACCESTORECORDINGVIDEOS
 
+# Which users should receive the recording events in the client side
+# (recordingStarted, recordingStopped). Can be all (every user connected to 
+# the session), publisher_moderator (users with role 'PUBLISHER' or 
+# 'MODERATOR'), moderator (only users with role 'MODERATOR') or none 
+# (no user will receive these events)
+OpenviduRecordingNotification: OPENVIDURECORDINGNOTIFICATION
+
+# Maximum video bandwidth sent from clients to OpenVidu Server, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMax-recv-bandwidth: OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH
+
+# Minimum video bandwidth sent from clients to OpenVidu Server, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMin-recv-bandwidth: OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH
+
+# Maximum video bandwidth sent from OpenVidu Server to clients, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMax-send-bandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
+
+# Minimum video bandwidth sent from OpenVidu Server to clients, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMin-send-bandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
+
 # Openvidu port to connect to
 openvidu_port: 4443
 
