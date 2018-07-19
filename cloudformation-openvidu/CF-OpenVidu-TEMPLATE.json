@@ -74,6 +74,32 @@
       "Type": "String",
       "Default": "false",
       "AllowedValues": ["true", "false"]
+    },
+    "OpenviduRecordingNotification": {
+      "Description": "Which users should receive the recording events in the client side (recordingStarted, recordingStopped).",
+      "Type": "String",
+      "Default": "publisher_moderator",
+      "AllowedValues": [ "all", "publisher_moderator", "moderator", "none"]
+    },
+    "OpenviduStreamsVideoMaxRecvBandwidth": {
+      "Description": "Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
+      "Type": "String",
+      "Default": "600"
+    },
+    "OpenviduStreamsVideoMinRecvBandwidth": {
+      "Description": "Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
+      "Type": "String",
+      "Default": "300"
+    },    
+    "OpenviduStreamsVideoMaxSendBandwidth": {
+      "Description": "Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
+      "Type": "String",
+      "Default": "600"
+    },
+    "OpenviduStreamsVideoMinSendBandwidth": {
+      "Description": "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
+      "Type": "String",
+      "Default": "300"
     }
   },
   "Mappings": {
@@ -143,7 +169,12 @@
           },
           "Parameters": [
             "OpenViduSecret",
-            "FreeHTTPAccesToRecordingVideos"
+            "FreeHTTPAccesToRecordingVideos",
+            "OpenviduRecordingNotification",
+            "OpenviduStreamsVideoMaxRecvBandwidth",
+            "OpenviduStreamsVideoMinRecvBandwidth",
+            "OpenviduStreamsVideoMaxSendBandwidth",
+            "OpenviduStreamsVideoMinSendBandwidth"
           ]
         }
       ],
@@ -251,6 +282,11 @@
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/run_ec2: false/run_ec2: true/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDURECORDINGNOTIFICATION/", { "Ref": "OpenviduRecordingNotification" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMaxRecvBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMinRecvBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMaxSendBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMinSendBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "# OwnCerts changes\n",
                 "echo ", { "Ref": "OwnCertCRT" }, " > $WORKINGDIR/roles/nginx/files/nginx.crt\n",
                 "sed -i \"s/BEGIN CERTIFICATE/BEGINCERTIFICATE/\" $WORKINGDIR/roles/nginx/files/nginx.crt\n",
