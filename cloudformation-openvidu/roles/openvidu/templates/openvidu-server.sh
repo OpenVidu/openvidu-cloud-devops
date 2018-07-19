@@ -15,11 +15,11 @@ OPENVIDU_OPTIONS+="-Dserver.ssl.enabled=false "
 OPENVIDU_OPTIONS+="-Dopenvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_port }} "
 OPENVIDU_OPTIONS+="-Dserver.port=5443 "
 OPENVIDU_OPTIONS+="-DMY_UID=$(id -u $USER) "
-OPENVIDU_OPTIONS+="-DOpenviduRecordingNotification={{ OpenviduRecordingNotification }} "
-OPENVIDU_OPTIONS+="-DOpenviduStreamsVideoMax-recv-bandwidth={{ OpenviduStreamsVideoMaxRecvBandwidth }} "
-OPENVIDU_OPTIONS+="-DOpenviduStreamsVideoMin-recv-bandwidth={{ OpenviduStreamsVideoMinRecvBandwidth }} "
-OPENVIDU_OPTIONS+="-DOpenviduStreamsVideoMax-send-bandwidth={{ OpenviduStreamsVideoMaxSendBandwidth }} "
-OPENVIDU_OPTIONS+="-DOpenviduStreamsVideoMin-send-bandwidth={{ OpenviduStreamsVideoMinSendBandwidth }} "
+OPENVIDU_OPTIONS+="-Dopenvidu.recording.notification={{ OpenviduRecordingNotification }} "
+OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-recv-bandwidth={{ OpenviduStreamsVideoMaxRecvBandwidth }} "
+OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-recv-bandwidth={{ OpenviduStreamsVideoMinRecvBandwidth }} "
+OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-send-bandwidth={{ OpenviduStreamsVideoMaxSendBandwidth }} "
+OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-send-bandwidth={{ OpenviduStreamsVideoMinSendBandwidth }} "
 
 java -jar ${OPENVIDU_OPTIONS} /opt/openvidu/openvidu-server.jar
 
