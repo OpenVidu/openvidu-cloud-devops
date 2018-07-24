@@ -63,13 +63,6 @@ OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 # 0 means unconstrained
 OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
-# if true any client can connect to
-# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
-# and access any recorded video file. If false this path will be secured with
-# openvidu.secret param just as OpenVidu Server dashboard at
-# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
-FreeHTTPAccesToRecordingVideos: false
-
 # Stats: Set to false if you don't wanna share some information with us:
 # Info:
 # - OpenVidu version
