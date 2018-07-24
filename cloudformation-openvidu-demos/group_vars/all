@@ -25,13 +25,43 @@ letsencrypt_email: LETSENCRYPT_EMAIL
 # OpenVidu
 
 # Whisch OpenVidu version to use
-ov_release: OV_RELEASE
+ov_release: OV_VERSION
 
 # Openvidu port to connect to
 openvidu_port: 4443
 
 # Use this to connect to OpenVidu endpoint
 openvidusecret: MY_SECRET
+
+# if true any client can connect to
+# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
+# and access any recorded video file. If false this path will be secured with
+# openvidu.secret param just as OpenVidu Server dashboard at
+# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
+FreeHTTPAccesToRecordingVideos: FREEHTTPACCESTORECORDINGVIDEOS
+
+# Which users should receive the recording events in the client side
+# (recordingStarted, recordingStopped). Can be all (every user connected to 
+# the session), publisher_moderator (users with role 'PUBLISHER' or 
+# 'MODERATOR'), moderator (only users with role 'MODERATOR') or none 
+# (no user will receive these events)
+OpenviduRecordingNotification: OPENVIDURECORDINGNOTIFICATION
+
+# Maximum video bandwidth sent from clients to OpenVidu Server, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMaxRecvBandwidth: OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH
+
+# Minimum video bandwidth sent from clients to OpenVidu Server, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMinRecvBandwidth: OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH
+
+# Maximum video bandwidth sent from OpenVidu Server to clients, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
+
+# Minimum video bandwidth sent from OpenVidu Server to clients, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
 # if true any client can connect to
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
@@ -48,8 +78,8 @@ FreeHTTPAccesToRecordingVideos: false
 allowsendinfo: true
 
 # Demos
-demos_release: DEMOS_RELEASE
-ovc_release: OVC_RELEASE
+demos_release: DEMOS_VERSION
+ovc_release: OVC_VERSION
 
 # AWS Configuration
 aws_public_ip: AWS_EIP
