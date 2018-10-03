@@ -37,11 +37,6 @@
       "Description": "In case you want to use Let's Encrypt, the Elastic IP you generated",
       "Type": "String"
     },
-    "OpenViduSecret": {
-      "Description": "Secret to connect to your OpenVidu Server",
-      "Type": "String",
-      "Default": "MY_SECRET"
-    },
     "WhichCert": {
       "Description": "You can choose from the list below which certificate to use",
       "Type": "String",
@@ -79,22 +74,22 @@
     "OpenviduStreamsVideoMaxRecvBandwidth": {
       "Description": "Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "600"
+      "Default": "1000"
     },
     "OpenviduStreamsVideoMinRecvBandwidth": {
       "Description": "Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "300"
+      "Default": "1000"
     },    
     "OpenviduStreamsVideoMaxSendBandwidth": {
       "Description": "Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "600"
+      "Default": "1000"
     },
     "OpenviduStreamsVideoMinSendBandwidth": {
       "Description": "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "300"
+      "Default": "1000"
     }
   },
   "Mappings": {
@@ -164,7 +159,6 @@
             "default": "OpenVidu Configuration"
           },
           "Parameters": [
-            "OpenViduSecret",
             "FreeHTTPAccesToRecordingVideos",
             "OpenviduRecordingNotification",
             "OpenviduStreamsVideoMaxRecvBandwidth",
@@ -268,7 +262,6 @@
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/OV_VERSION/$OPENVIDU_VERSION/\" $WORKINGDIR/group_vars/all\n",
-                "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "OpenViduSecret" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/DEMOS_VERSION/$OPENVIDU_DEMOS_VERSION/\" $WORKINGDIR/group_vars/all\n",                
                 "sed -i \"s/OVC_VERSION/$OPENVIDU_CALL_VERSION/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/group_vars/all\n", 
