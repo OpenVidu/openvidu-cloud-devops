@@ -64,6 +64,32 @@
       "Type": "String",
       "Default": "true",
       "AllowedValues": [ "true", "false" ]
+    },
+    "OpenviduRecordingNotification": {
+      "Description": "Which users should receive the recording events in the client side (recordingStarted, recordingStopped).",
+      "Type": "String",
+      "Default": "publisher_moderator",
+      "AllowedValues": [ "all", "publisher_moderator", "moderator", "none"]
+    },
+    "OpenviduStreamsVideoMaxRecvBandwidth": {
+      "Description": "Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
+      "Type": "String",
+      "Default": "1000"
+    },
+    "OpenviduStreamsVideoMinRecvBandwidth": {
+      "Description": "Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
+      "Type": "String",
+      "Default": "1000"
+    },    
+    "OpenviduStreamsVideoMaxSendBandwidth": {
+      "Description": "Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
+      "Type": "String",
+      "Default": "1000"
+    },
+    "OpenviduStreamsVideoMinSendBandwidth": {
+      "Description": "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
+      "Type": "String",
+      "Default": "1000"
     }
   },
   "Mappings": {
@@ -126,6 +152,19 @@
             "PublicElasticIP",
             "OwnCertCRT",
             "OwnCertKEY"
+          ]
+        },
+        {
+          "Label": {
+            "default": "OpenVidu Configuration"
+          },
+          "Parameters": [
+            "FreeHTTPAccesToRecordingVideos",
+            "OpenviduRecordingNotification",
+            "OpenviduStreamsVideoMaxRecvBandwidth",
+            "OpenviduStreamsVideoMinRecvBandwidth",
+            "OpenviduStreamsVideoMaxSendBandwidth",
+            "OpenviduStreamsVideoMinSendBandwidth"
           ]
         }
       ],
@@ -213,22 +252,27 @@
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
                 "ansible-galaxy install geerlingguy.mysql\n",
-                "OPENVIDU_VERSION=2.2.0\n",
-                "OPENVIDU_DEMOS_VERSION=2.0.0\n",
-                "OPENVIDU_CALL_VERSION=1.0.1\n",
+                "OPENVIDU_VERSION=2.4.0\n",
+                "OPENVIDU_DEMOS_VERSION=2.4.0\n",
+                "OPENVIDU_CALL_VERSION=1.1.0\n",
                 "# Changes in group vars\n",
                 "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/group_vars/all\n",
-                "sed -i \"s/OV_RELEASE/$OPENVIDU_VERSION/\" $WORKINGDIR/group_vars/all\n",               
-                "sed -i \"s/DEMOS_RELEASE/$OPENVIDU_DEMOS_VERSION/\" $WORKINGDIR/group_vars/all\n",                
-                "sed -i \"s/OVC_RELEASE/$OPENVIDU_CALL_VERSION/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OV_VERSION/$OPENVIDU_VERSION/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/DEMOS_VERSION/$OPENVIDU_DEMOS_VERSION/\" $WORKINGDIR/group_vars/all\n",                
+                "sed -i \"s/OVC_VERSION/$OPENVIDU_CALL_VERSION/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/group_vars/all\n", 
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/AWS_PUBLIC_HOSTNAME/$PublicHostname/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/run_ec2: false/run_ec2: true/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDURECORDINGNOTIFICATION/", { "Ref": "OpenviduRecordingNotification" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMaxRecvBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMinRecvBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMaxSendBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMinSendBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "# OWN Cert\n",
                 "echo ", { "Ref": "OwnCertCRT" }, " > $WORKINGDIR/roles/nginx/files/nginx.crt\n",
                 "sed -i \"s/BEGIN CERTIFICATE/BEGINCERTIFICATE/\" $WORKINGDIR/roles/nginx/files/nginx.crt\n",
