@@ -29,7 +29,6 @@ server {
     location / {
         proxy_pass http://${PUBLIC_IP}:5443;
     }
-
 }
 EOF
 sleep 5
