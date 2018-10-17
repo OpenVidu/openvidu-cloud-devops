@@ -2,8 +2,6 @@
 
 PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
-TURN_USER={{ turn_user }}
-TURN_PASSWORD="{{ turn_password }}"
 
 systemctl stop kurento-media-server
 systemctl stop coturn
