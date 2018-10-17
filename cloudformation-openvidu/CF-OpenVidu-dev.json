@@ -266,12 +266,10 @@
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
-                "OPENVIDU_VERSION=2.3.0\n",
+                "OPENVIDU_VERSION=2.5.0\n",
                 "# install docker\n",
                 "ansible-galaxy install geerlingguy.docker\n",
                 "# Changes in group vars\n",
-                "sed -i \"s/TURN_USER/turn_user/\" $WORKINGDIR/group_vars/all\n",
-                "sed -i \"s/TURN_PASSWORD/", { "Fn::Base64": { "Ref": "AWS::StackName" } }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/group_vars/all\n",
@@ -415,14 +413,5 @@
       "Value": {
         "Ref": "OpenViduSecret"
       }
-    },
-    "TurnPassword": {
-      "Description": "Password for the user turn_user",
-      "Value": {
-        "Fn::Base64": {
-          "Ref": "AWS::StackName"
-        }
-      }
     }
-  }
 }
