@@ -1,7 +1,3 @@
-# Turn Configuration
-turn_user: TURN_USER
-turn_password: TURN_PASSWORD
-
 # Certificate type
 # You can choose:
 # 1. Self Signed (selfsigned) The certificate will be generate within

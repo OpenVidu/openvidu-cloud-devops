@@ -12,7 +12,11 @@ sleep 5
 cat /etc/turnserver.conf | grep -v external-ip >/tmp/turnserver.conf
 echo "external-ip=${PUBLIC_IP}" >> /tmp/turnserver.conf
 mv /tmp/turnserver.conf /etc/turnserver.conf
-echo "turnURL=${TURN_USER}:${TURN_PASSWORD}@${PUBLIC_IP}:3478" > /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+
+cat /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini | grep -v stunServerAddress > /tmp/WebRtcEndpoint.conf.ini
+echo stunServerAddress=${PUBLIC_IP} >> /tmp/WebRtcEndpoint.conf.ini
+mv /tmp/WebRtcEndpoint.conf.ini /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+
 cat >/etc/nginx/sites-enabled/kms-ov<<EOF
 server {
     listen {{ openvidu_port }} ssl;
