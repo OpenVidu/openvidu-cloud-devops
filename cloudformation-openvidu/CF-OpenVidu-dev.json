@@ -191,9 +191,6 @@
         "LetsEncryptEmail": {
           "default": "Email"
         },
-        "WantOpenViduSecret": {
-          "default": "Enter your own secret here"
-        },
         "OwnCertCRT": {
           "default": "CRT file"
         },
