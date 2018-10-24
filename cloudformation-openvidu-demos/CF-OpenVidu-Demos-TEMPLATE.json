@@ -79,7 +79,7 @@
     "OpenviduStreamsVideoMinRecvBandwidth": {
       "Description": "Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "1000"
+      "Default": "300"
     },    
     "OpenviduStreamsVideoMaxSendBandwidth": {
       "Description": "Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
@@ -89,7 +89,7 @@
     "OpenviduStreamsVideoMinSendBandwidth": {
       "Description": "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "1000"
+      "Default": "300"
     }
   },
   "Mappings": {
