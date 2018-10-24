@@ -84,7 +84,7 @@
     "OpenviduStreamsVideoMaxRecvBandwidth": {
       "Description": "Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "600"
+      "Default": "1000"
     },
     "OpenviduStreamsVideoMinRecvBandwidth": {
       "Description": "Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
@@ -94,7 +94,7 @@
     "OpenviduStreamsVideoMaxSendBandwidth": {
       "Description": "Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "600"
+      "Default": "1000"
     },
     "OpenviduStreamsVideoMinSendBandwidth": {
       "Description": "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
@@ -190,9 +190,6 @@
         },
         "LetsEncryptEmail": {
           "default": "Email"
-        },
-        "WantOpenViduSecret": {
-          "default": "Enter your own secret here"
         },
         "OwnCertCRT": {
           "default": "CRT file"
