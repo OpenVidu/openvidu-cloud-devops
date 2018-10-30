@@ -24,7 +24,17 @@
             "m4.2xlarge",
             "m4.4xlarge",
             "m4.10xlarge",
-            "m4.16xlarge"
+            "m4.16xlarge",
+            "c5.xlarge",
+            "c5.2xlarge",
+            "c5.4xlarge",
+            "c5.9xlarge",
+            "c5d.xlarge",
+            "c5d.2xlarge",
+            "c4.xlarge",
+            "c4.2xlarge",
+            "c4.4xlarge",
+            "c4.8xlarge"
       ],
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
@@ -84,7 +94,7 @@
     "OpenviduStreamsVideoMaxRecvBandwidth": {
       "Description": "Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "600"
+      "Default": "1000"
     },
     "OpenviduStreamsVideoMinRecvBandwidth": {
       "Description": "Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained",
@@ -94,7 +104,7 @@
     "OpenviduStreamsVideoMaxSendBandwidth": {
       "Description": "Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
       "Type": "String",
-      "Default": "600"
+      "Default": "1000"
     },
     "OpenviduStreamsVideoMinSendBandwidth": {
       "Description": "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
@@ -103,51 +113,54 @@
     }
   },
   "Mappings": {
-    "RegionMap": {
-      "us-east-1": {
-        "AMI1": "ami-cd0f5cb6"
-      },
-      "us-west-1": {
-        "AMI1": "ami-09d2fb69"
-      },
-      "ap-northeast-2": {
-        "AMI1": "ami-d28a53bc"
-      },
-      "ap-northeast-1": {
-        "AMI1": "ami-ea4eae8c"
-      },
-      "sa-east-1": {
-        "AMI1": "ami-10186f7c"
-      },
-      "ap-southeast-1": {
-        "AMI1": "ami-6f198a0c"
-      },
-      "ca-central-1": {
-        "AMI1": "ami-9818a7fc"
-      },
-      "ap-southeast-2": {
-        "AMI1": "ami-e2021d81"
-      },
-      "us-west-2": {
-        "AMI1": "ami-6e1a0117"
-      },
-      "us-east-2": {
-        "AMI1": "ami-10547475"
-      },
-      "ap-south-1": {
-        "AMI1": "ami-099fe766"
-      },
-      "eu-central-1": {
-        "AMI1": "ami-1e339e71"
-      },
-      "eu-west-1": {
-        "AMI1": "ami-785db401"
-      },
-      "eu-west-2": {
-        "AMI1": "ami-996372fd"
-      }
+  "RegionMap": {
+    "ap-south-1": {
+      "AMI1": "ami-0c6c52d7cf1004825"
+    },
+    "eu-west-3": {
+      "AMI1": "ami-0b26151106502588d"
+    },
+    "eu-west-2": {
+      "AMI1": "ami-06f77073d7dc4c48a"
+    },
+    "eu-west-1": {
+      "AMI1": "ami-00b36349b3dba2ec3"
+    },
+    "ap-northeast-2": {
+      "AMI1": "ami-0035936492be04cff"
+    },
+    "ap-northeast-1": {
+      "AMI1": "ami-06317ca3b39714f7e"
+    },
+    "sa-east-1": {
+      "AMI1": "ami-0f7c76bfc85e5b4ea"
+    },
+    "ca-central-1": {
+      "AMI1": "ami-0a5443ed7b0a45901"
+    },
+    "ap-southeast-1": {
+      "AMI1": "ami-0d97809b54a5f01ba"
+    },
+    "ap-southeast-2": {
+      "AMI1": "ami-05162512c82cb460f"
+    },
+    "eu-central-1": {
+      "AMI1": "ami-0dd0be70cc0d493b7"
+    },
+    "us-east-1": {
+      "AMI1": "ami-0735ea082a1534cac"
+    },
+    "us-east-2": {
+      "AMI1": "ami-04c305e118636bc7d"
+    },
+    "us-west-1": {
+      "AMI1": "ami-0f5113ce7686689e9"
+    },
+    "us-west-2": {
+      "AMI1": "ami-01e0cf6e025c036e4"
     }
-  },
+  }
+},
   "Metadata": {
     "AWS::CloudFormation::Interface": {
       "ParameterGroups": [{
@@ -263,7 +276,7 @@
                 "WORKINGDIR=/opt/workdir/cloudformation-openvidu\n",
                 "PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
                 "PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)\n",
-                "OPENVIDU_VERSION=2.5.0\n",
+                "OPENVIDU_VERSION=2.6.0\n",
                 "# install docker\n",
                 "ansible-galaxy install geerlingguy.docker\n",
                 "# Changes in group vars\n",
