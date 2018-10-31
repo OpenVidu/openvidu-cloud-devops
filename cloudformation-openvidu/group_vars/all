@@ -20,7 +20,7 @@ letsencrypt_email: LETSENCRYPT_EMAIL
 version: OV_VERSION
 
 # Use this to connect to OpenVidu endpoint
-openvidusecret: MY_SECRET
+openvidusecret: "MY_SECRET"
 
 # if true any client can connect to
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
