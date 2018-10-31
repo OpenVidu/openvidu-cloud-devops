@@ -47,9 +47,11 @@
       "Type": "String"
     },
     "OpenViduSecret": {
-      "Description": "Secret to connect to your OpenVidu Server",
+      "Description": "Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed",
       "Type": "String",
-      "Default": "MY_SECRET"
+      "Default": "MY_SECRET",
+      "AllowedPattern": "^((?!\")(?! ).)*$",
+      "NoEcho": true
     },
     "WhichCert": {
       "Description": "You can choose from the list below which certificate to use",
@@ -284,7 +286,7 @@
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/LETSENCRYPT_EMAIL/", { "Ref": "LetsEncryptEmail" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/OV_VERSION/$OPENVIDU_VERSION/\" $WORKINGDIR/group_vars/all\n",
-                "sed -i \"s/openvidusecret: MY_SECRET/openvidusecret: ", { "Ref": "OpenViduSecret" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/MY_SECRET/", { "Ref": "OpenViduSecret" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/FREEHTTPACCESTORECORDINGVIDEOS/", { "Ref": "FreeHTTPAccesToRecordingVideos" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/allowsendinfo: true/allowsendinfo: ", { "Ref": "WantToSendInfo" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/AWS_EIP/$PIP/\" $WORKINGDIR/group_vars/all\n",
