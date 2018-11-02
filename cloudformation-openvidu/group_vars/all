@@ -22,6 +22,9 @@ version: OV_VERSION
 # Use this to connect to OpenVidu endpoint
 openvidusecret: "MY_SECRET"
 
+# Openvidu port to connect to
+openvidu_port: 4443
+
 # if true any client can connect to
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
 # and access any recorded video file. If false this path will be secured with
@@ -52,8 +55,19 @@ OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 # 0 means unconstrained
 OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
-# Openvidu port to connect to
-openvidu_port: 4443
+## Demos Section
+
+# Set to yes if you want to deploy OpenVidu examples and Demos
+# which will show you the server functionality
+deploy_demos: WANTDEMOS
+
+# MySQL needed by one of demos.
+mysql_root_pass: egh1erieVi8oph%
+mysql_database: openvidu_sample_app
+
+# Demos versions
+demos_release: DEMOS_VERSION
+ovc_release: OVC_VERSION
 
 # Stats: Set to false if you don't wanna share some information with us:
 # Info:

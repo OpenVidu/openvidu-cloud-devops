@@ -112,6 +112,12 @@
       "Description": "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained",
       "Type": "String",
       "Default": "300"
+    },
+    "WantToDeployDemos": {
+      "Description": "Choose if you want to deploy practical examples of OpenVidu functionality.",
+      "Type": "String",
+      "AllowedValues": [ "true", "false" ],
+      "Default": "false"
     }
   },
   "Mappings": {
@@ -189,36 +195,11 @@
             "OpenviduStreamsVideoMaxRecvBandwidth",
             "OpenviduStreamsVideoMinRecvBandwidth",
             "OpenviduStreamsVideoMaxSendBandwidth",
-            "OpenviduStreamsVideoMinSendBandwidth"
+            "OpenviduStreamsVideoMinSendBandwidth",
+            "WantToDeployDemos"
           ]
         }
-      ],
-      "ParameterLabels": {
-        "WhichCert": {
-          "default": "Type of SSL Certificate"
-        },
-        "MyDomainName": {
-          "default": "Fully qualified domain name"
-        },
-        "PublicElasticIP": {
-          "default": "Elastic IP"
-        },
-        "LetsEncryptEmail": {
-          "default": "Email"
-        },
-        "OwnCertCRT": {
-          "default": "CRT file"
-        },
-        "OwnCertKEY": {
-          "default": "KEY file"
-        },
-        "OpenViduSecret": {
-          "default": "OpenVidu Secret"
-        },
-        "FreeHTTPAccesToRecordingVideos": {
-          "default": "Free HTTP access to recorded videos"
-        }
-      }
+      ]
     }
   },
   "Conditions": {
@@ -296,6 +277,7 @@
                 "sed -i \"s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMinRecvBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMaxSendBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH/", { "Ref": "OpenviduStreamsVideoMinSendBandwidth" }, "/\" $WORKINGDIR/group_vars/all\n",
+                "sed -i \"s/WANTDEMOS/", { "Ref": "WantToDeployDemos" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "# OwnCerts changes\n",
                 "echo ", { "Ref": "OwnCertCRT" }, " > $WORKINGDIR/roles/nginx/files/nginx.crt\n",
                 "sed -i \"s/BEGIN CERTIFICATE/BEGINCERTIFICATE/\" $WORKINGDIR/roles/nginx/files/nginx.crt\n",
