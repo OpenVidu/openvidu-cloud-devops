@@ -261,6 +261,8 @@
                 "OPENVIDU_VERSION=2.6.0\n",
                 "# install docker\n",
                 "ansible-galaxy install geerlingguy.docker\n",
+                "# install mysql\n",
+                "ansible-galaxy install geerlingguy.mysql\n",
                 "# Changes in group vars\n",
                 "sed -i \"s/whichcert: selfsigned/whichcert: ", { "Ref": "WhichCert" }, "/\" $WORKINGDIR/group_vars/all\n",
                 "sed -i \"s/DOMAIN_NAME/", { "Ref": "MyDomainName" }, "/\" $WORKINGDIR/group_vars/all\n",
