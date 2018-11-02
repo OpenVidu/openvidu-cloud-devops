@@ -7,7 +7,7 @@ loglevel=debug
 [program:openvidu-server]
 command=/usr/local/bin/openvidu-server.sh
 
-{% if deploy_demos == "true" %}
+{% if deploy_demos == true %}
 [program:js-java]
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 command=/bin/bash /var/www/html/basic-webinar/app.sh {{ domain_name }}

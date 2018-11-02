@@ -7,7 +7,7 @@
   when: deploy_demos
 
 - name: creating demos structure
-  shell: /usr/local/bin/openvidu_create_demos_structure.sh {{ ov_release }} {{ demos_release }} {{ ovc_release }}
+  shell: /usr/local/bin/openvidu_create_demos_structure.sh {{ version }} {{ demos_release }} {{ ovc_release }}
   when: deploy_demos
 
 - name: creating basic-webinar launcher

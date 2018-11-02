@@ -1,7 +1,7 @@
 - hosts: all
   roles:
     - geerlingguy.docker
-    - { role: geerlingguy.mysql, when deploy_demos == "true" }
+    - { role: geerlingguy.mysql, when deploy_demos == true }
     - nginx
     - kms
     - openvidu
@@ -10,11 +10,11 @@
     - system-shutdown
     - demos
 
-    vars:
-      mysql_root_password_update: no
-      mysql_root_home: /home/ubuntu
-      mysql_root_username: root
-      mysql_root_password: egh1erieVi8oph%
-      mysql_databases: [
-        name: openvidu_sample_app
-      ]
+  vars:
+    mysql_root_password_update: no
+    mysql_root_home: /home/ubuntu
+    mysql_root_username: root
+    mysql_root_password: egh1erieVi8oph%
+    mysql_databases: [
+      name: openvidu_sample_app
+    ]

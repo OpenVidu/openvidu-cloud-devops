@@ -2,7 +2,7 @@ add_header X-Frame-Options SAMEORIGIN;
 add_header X-Content-Type-Options nosniff;
 add_header X-XSS-Protection "1; mode=block";
 
-{% if deploy_demos == "true" %}
+{% if deploy_demos == true %}
 upstream basic-webinar {
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server {{ domain_name }}:5000;
@@ -52,7 +52,7 @@ server {
 
     root /var/www/html;
 
-{% if deploy_demos == "true" %}
+{% if deploy_demos == true %}
     location /basic-webinar {
         rewrite /basic-webinar(.*) /$1 break;
         proxy_pass https://basic-webinar;
