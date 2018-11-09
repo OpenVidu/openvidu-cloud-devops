@@ -1,7 +1,7 @@
 - hosts: all
   roles:
     - geerlingguy.docker
-    - { role: geerlingguy.mysql, when deploy_demos == true }
+    - { role: geerlingguy.mysql, when: "deploy_demos == true" }
     - nginx
     - kms
     - openvidu
