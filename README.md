@@ -25,7 +25,6 @@ You can find old server releases on this urls:
 - https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.3.0.json
 - https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.4.0.json
 - https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.5.0.json
-- https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.5.1.json
 - https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.6.0.json (latest)
 
 **Note**: Please, keep in mind that the stack is complex and it has dependencies outside our control so maybe some of this deployment fail for unknown reasons.
