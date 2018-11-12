@@ -47,7 +47,7 @@
       "Type": "String"
     },
     "OpenViduSecret": {
-      "Description": "Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed",
+      "Description": "Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed. If you deploy the demos the password must be MY_SECRET or the demos won't be able to connect to server.",
       "Type": "String",
       "Default": "MY_SECRET",
       "AllowedPattern": "^((?!\")(?! ).)*$",
@@ -383,15 +383,6 @@
         ]
       }
     },
-    "WebsiteIP": {
-      "Description": "alternatively, you can access througt this IP",
-      "Value": {
-        "Fn::GetAtt": [
-          "WebServerInstance",
-          "PublicIp"
-        ]
-      }
-    },
     "WebsiteURLLE": {
       "Description": "Use this URL to connect to OpenVidu",
       "Value": {
@@ -407,11 +398,38 @@
       },
       "Condition": "NoSelfSigned"
     },
-    "OpenViduSecretOutput": {
-      "Description": "OpenVidu secret to generate tokens",
+    "DemosURL": {
+      "Description": "If you choose to deploy the demos you can access througt this",
       "Value": {
-        "Ref": "OpenViduSecret"
+        "Fn::Join": [
+          "", [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "WebServerInstance",
+                "PublicDnsName"
+              ]
+            }
+          ]
+        ]
       }
+    },
+    "DemosURLLE": {
+      "Description": "If you choose to deploy the demos with your own DNS name you can access througt this",
+      "Value": {
+        "Fn::Join": [
+          "", [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "WebServerInstance",
+                "PublicDnsName"
+              ]
+            }
+          ]
+        ]
+      },
+      "Condition": "NoSelfSigned"
     }
   }
 }
