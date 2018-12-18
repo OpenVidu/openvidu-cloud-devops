@@ -80,7 +80,7 @@ server {
     }
 
     location /classroom {
-	rewrite /classroom(.*) /$1 break;
+	rewrite /classroom(.*) $1 break;
         proxy_pass https://classroom;
     }
 
