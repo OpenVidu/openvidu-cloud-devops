@@ -41,4 +41,4 @@
   file:
     path: /opt/openvidu/recordings
     state: directory
-    mode: 0755
+    mode: 0777
