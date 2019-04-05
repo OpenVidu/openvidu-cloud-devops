@@ -1,0 +1,70 @@
+# Certificate type
+# You can choose:
+# 1. Self Signed (selfsigned) The certificate will be generate within
+# the instance (default)
+# 2. Let's encrypt (letsencrpt) Free SSL certificate provider
+# 3. Your own certificate (owncert) If you own a SSL certificate, use this one.
+# See roles > nginx > files to
+# 
+whichcert: selfsigned
+
+# Your custom domain name i.e. openvidu.example.com
+domain_name: DOMAIN_NAME
+
+# Let's Encrypt email to receive notifications
+letsencrypt_email: LETSENCRYPT_EMAIL
+
+# OpenVidu
+
+# Use this to connect to OpenVidu endpoint
+openvidusecret: "MY_SECRET"
+
+# if true any client can connect to
+# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
+# and access any recorded video file. If false this path will be secured with
+# openvidu.secret param just as OpenVidu Server dashboard at
+# https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
+FreeHTTPAccesToRecordingVideos: FREEHTTPACCESTORECORDINGVIDEOS
+
+# Which users should receive the recording events in the client side
+# (recordingStarted, recordingStopped). Can be all (every user connected to 
+# the session), publisher_moderator (users with role 'PUBLISHER' or 
+# 'MODERATOR'), moderator (only users with role 'MODERATOR') or none 
+# (no user will receive these events)
+OpenviduRecordingNotification: OPENVIDURECORDINGNOTIFICATION
+
+# Maximum video bandwidth sent from clients to OpenVidu Server, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMaxRecvBandwidth: OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH
+
+# Minimum video bandwidth sent from clients to OpenVidu Server, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMinRecvBandwidth: OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH
+
+# Maximum video bandwidth sent from OpenVidu Server to clients, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
+
+# Minimum video bandwidth sent from OpenVidu Server to clients, in kbps.
+# 0 means unconstrained
+OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
+
+# Openvidu port to connect to
+openvidu_port: 4443
+
+# AWS Configuration
+aws_public_ip: AWS_EIP
+aws_public_hostname: AWS_PUBLIC_HOSTNAME
+run_ec2: false
+
+# Turn port config
+turn_min_port: TURN_MIN_PORT
+turn_max_port: TURN_MAX_PORT
+
+# Kurento port config
+kurento_min_port: KURENTO_MIN_PORT
+kurento_max_port: KURENTO_MAX_PORT
+
+# Kibana dashboard configuration
+KibanaUser: KIBANA_USERNAME
+KibanaPassword: "KIBANA_PASSWORD"
