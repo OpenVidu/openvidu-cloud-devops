@@ -1,0 +1,9 @@
+---
+- name: copying supervisor openvidu stanza
+  copy:
+    src: "openvidu.conf"
+    dest: "/etc/supervisor/conf.d/openvidu.conf"
+    mode: "0755"
+  notify:
+    - restart supervisor
+

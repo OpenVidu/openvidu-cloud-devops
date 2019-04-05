@@ -16,14 +16,8 @@ letsencrypt_email: LETSENCRYPT_EMAIL
 
 # OpenVidu
 
-# Which OpenVidu version to use
-version: OV_VERSION
-
 # Use this to connect to OpenVidu endpoint
 openvidusecret: "MY_SECRET"
-
-# Openvidu port to connect to
-openvidu_port: 4443
 
 # if true any client can connect to
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
@@ -55,28 +49,22 @@ OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 # 0 means unconstrained
 OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
-## Demos Section
-
-# Set to yes if you want to deploy OpenVidu examples and Demos
-# which will show you the server functionality
-deploy_demos: WANTDEMOS
-
-# MySQL needed by one of demos.
-mysql_root_pass: egh1erieVi8oph%
-mysql_database: openvidu_sample_app
-
-# Demos versions
-demos_release: DEMOS_VERSION
-ovc_release: OVC_VERSION
-
-# Stats: Set to false if you don't wanna share some information with us:
-# Info:
-# - OpenVidu version
-# - AWS Region
-# - AWS Availability zone
-allowsendinfo: true
+# Openvidu port to connect to
+openvidu_port: 4443
 
 # AWS Configuration
 aws_public_ip: AWS_EIP
 aws_public_hostname: AWS_PUBLIC_HOSTNAME
 run_ec2: false
+
+# Turn port config
+turn_min_port: TURN_MIN_PORT
+turn_max_port: TURN_MAX_PORT
+
+# Kurento port config
+kurento_min_port: KURENTO_MIN_PORT
+kurento_max_port: KURENTO_MAX_PORT
+
+# Kibana dashboard configuration
+KibanaUser: KIBANA_USERNAME
+KibanaPassword: "KIBANA_PASSWORD"
