@@ -11,24 +11,29 @@ Parameters:
   InstanceType:
     Description: "EC2 Instance type"
     Type: String
-    Default: t3.xlarge
+    Default: t2.2xlarge
     AllowedValues: 
-    - t2.medium
     - t2.large
     - t2.xlarge
-    - t3.medium
+    - t2.2xlarge
     - t3.large
     - t3.xlarge
+    - t3.2xlarge
     - m4.large
     - m4.xlarge
+    - m4.2xlarge
     - m5.large
     - m5.xlarge
+    - m5.2xlarge
     - c3.large
     - c3.xlarge
+    - c3.2xlarge
     - c4.large
     - c4.xlarge
+    - c4.2xlarge
     - c5.large
     - c5.xlarge
+    - c5.2xlarge
     ConstraintDescription: "Must be a valid EC2 instance type."
 
   MyDomainName: 
@@ -290,8 +295,38 @@ Metadata:
 
 Mappings:
   RegionMap:
-    us-east-1: 
-      "Openvidu": "ami-08a6b596253b20ded"
+    eu-north-1:
+      AMI: ami-851c95fb
+    ap-south-1:
+      AMI: ami-07c128e60e80e6766
+    eu-west-3:
+      AMI: ami-07eba027bc5ec8e27
+    eu-west-2:
+      AMI: ami-04773891d2d406800
+    eu-west-1:
+      AMI: ami-01bc69b830b49f729
+    ap-northeast-2:
+      AMI: ami-0a8c567c2272f6d79
+    ap-northeast-1:
+      AMI: ami-0b86ca67cb64addcf
+    sa-east-1:
+      AMI: ami-055021d1882c809af
+    ca-central-1:
+      AMI: ami-0066a22261093fc7a
+    ap-southeast-1:
+      AMI: ami-010162ac5374d76d3
+    ap-southeast-2:
+      AMI: ami-09e6fd1e6e5bec813
+    eu-central-1:
+      AMI: ami-083b8eed05b2a7373
+    us-east-1:
+      AMI: ami-06d990a360d7a793c
+    us-east-2:
+      AMI: ami-0c8b8e32659017cc5
+    us-west-1:
+      AMI: ami-0f1d0daf2937d0064
+    us-west-2:
+      AMI: ami-0b4a4b368aa8bd6f0
 
 Conditions: 
   NoSelfSigned:
@@ -350,6 +385,7 @@ Resources:
                 apt-get install -y elasticsearch kibana
                 systemctl enable kibana
                 systemctl enable elasticsearch
+                systemctl start elasticsearch
               mode: "000755"
               owner: "root"
               group: "root"
@@ -388,6 +424,7 @@ Resources:
                 mkdir -p /usr/src/openvidu
                 cd /usr/src/openvidu
                 git clone https://github.com/OpenVidu/openvidu-cloud-devops.git
+                cd openvidu-cloud-devops
                 git checkout dev
               mode: "000755"
               owner: "root"
@@ -395,7 +432,7 @@ Resources:
             "/usr/local/bin/getPublicInfo.sh":
               content: |
                 #!/bin/bash
-                WORKINGDIR=/usr/src/openvidu
+                WORKINGDIR=/usr/src/openvidu/openvidu-cloud-devops/cloudformation-openvidu-pro
                 PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
                 PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
                 sed -i "s/AWS_EIP/$PIP/" $WORKINGDIR/group_vars/all
@@ -406,7 +443,7 @@ Resources:
             "/usr/local/bin/feedGroupVars.sh":
               content: !Sub |
                 #!/bin/bash
-                WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu-pro
+                WORKINGDIR=/usr/src/openvidu/openvidu-cloud-devops/cloudformation-openvidu-pro
                 sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" $WORKINGDIR/group_vars/all
                 sed -i "s/DOMAIN_NAME/${MyDomainName}/" $WORKINGDIR/group_vars/all
                 sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" $WORKINGDIR/group_vars/all
@@ -439,7 +476,7 @@ Resources:
               owner: "root"
               group: "root"
     Properties:
-      ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', Openvidu]
+      ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref InstanceType
       SecurityGroups:
         - !Ref OpenviduServerSecurityGroup
@@ -451,6 +488,10 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           set -eu -o pipefail
+          
+          apt-get update
+          apt-get install -y python-pip
+          pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
 
           cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServer
 
@@ -470,7 +511,7 @@ Resources:
             /usr/local/bin/buildCerts.sh || { echo "[Openvidu] error with the certificate files"; exit 1; }
           fi
           
-          pushd /usr/src/openvidu/cloudformation-openvidu-pro
+          pushd /usr/src/openvidu/openvidu-cloud-devops/cloudformation-openvidu-pro
           ansible-playbook -i "localhost," -c local play.yml
           popd
 
@@ -533,7 +574,7 @@ Resources:
     Type: AWS::CloudFormation::WaitCondition
     CreationPolicy:
       ResourceSignal:
-        Timeout: PT10M
+        Timeout: PT30M
         Count: 1
 
 Outputs:
@@ -559,7 +600,7 @@ Outputs:
     Value: !Join
         - ''
         - - 'https://'
-          - !Ref OpenviduServer.PublicDnsName
+          - !GetAtt OpenviduServer.PublicDnsName
           - '/kibana'
 
   KibanaDashboardLE:
@@ -567,6 +608,6 @@ Outputs:
     Value: !Join
         - ''
         - - 'https://'
-          - !Ref OpenviduServer.PublicDnsName
+          - !Ref MyDomainName
           - '/kibana'
     Condition: NoSelfSigned
