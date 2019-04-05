@@ -469,7 +469,7 @@ Resources:
             "/usr/local/bin/buildCerts.sh":
               content: !Sub |
                 #!/bin/bash
-                WORKINGDIR=/usr/src/openvidu
+                WORKINGDIR=/usr/src/openvidu/openvidu-cloud-devops/cloudformation-openvidu-pro
                 wget -O $WORKINGDIR/roles/nginx/files/nginx.crt ${OwnCertCRT}
                 wget -O $WORKINGDIR/roles/nginx/files/nginx.key ${OwnCertKEY}
               mode: "000755"
