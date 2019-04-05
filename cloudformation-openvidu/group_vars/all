@@ -16,7 +16,7 @@ letsencrypt_email: LETSENCRYPT_EMAIL
 
 # OpenVidu
 
-# Whisch OpenVidu version to use
+# Which OpenVidu version to use
 version: OV_VERSION
 
 # Use this to connect to OpenVidu endpoint
