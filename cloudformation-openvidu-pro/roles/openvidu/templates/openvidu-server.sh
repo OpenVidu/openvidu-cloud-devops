@@ -20,7 +20,6 @@ OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-recv-bandwidth={{ OpenviduStream
 OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-recv-bandwidth={{ OpenviduStreamsVideoMinRecvBandwidth }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-send-bandwidth={{ OpenviduStreamsVideoMaxSendBandwidth }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-send-bandwidth={{ OpenviduStreamsVideoMinSendBandwidth }} "
-OPENVIDU_OPTIONS+="-Dopenvidu.recording.version=2.9.0-SNAPSHOT "
 
 exec java -jar ${OPENVIDU_OPTIONS} /opt/openvidu/openvidu-server.jar
 
