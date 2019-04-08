@@ -287,7 +287,9 @@ Metadata:
       SSHCidr:
         default: SSH Port access Range
       HTTPSPort:
-        default: HTTPS port access Range
+        default: HTTPS (443) access Range
+      HTTPAccess:
+        default: HTTP (80) access Range
       UDPRange:
         default: UDP Port access Range
       TCPRange:
