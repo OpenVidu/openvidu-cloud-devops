@@ -1,3 +1,2 @@
 server:
   host: "localhost"
-  basePath: "/kibana"
