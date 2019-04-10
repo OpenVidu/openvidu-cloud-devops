@@ -64,6 +64,11 @@
   template:
     src: templates/default.j2 
     dest: /etc/nginx/sites-enabled/default
+
+- name: configuring nginx server for kibana
+  template:
+    src: templates/kibana.j2
+    dest: /etc/nginx/sites-enabled/kibana
   notify: restart nginx
 
 - name: copying default index.html
