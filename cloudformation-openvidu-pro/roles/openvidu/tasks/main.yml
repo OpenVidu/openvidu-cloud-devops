@@ -3,10 +3,10 @@
   template:
     src: "openvidu-server.sh"
     dest: "/usr/local/bin"
-    mode: "u+rwx,g+rx,o+rx"
+    mode: "0755"
 
 - name: copying script for aws signal
-  template:
+  copy:
     src: "check_app_ready.sh"
     dest: "/usr/local/bin"
     mode: "0755"
