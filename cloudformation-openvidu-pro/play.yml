@@ -1,9 +1,9 @@
 - hosts: all
   roles:
     - nginx
+    - kibana
     - kms
     - openvidu
-    - kibana
     - supervisord
     - system-shutdown
 
