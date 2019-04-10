@@ -2,6 +2,16 @@
 
 # This script will launch OpenVidu Server on your machine
 
+# Wait for kibana
+while true
+do 
+  HTTP_STATUS=$(curl -I http://localhost:5601/app/kibana | head -n1 | awk '{print $2}')
+  if [ $HTTP_STATUS == 200 ]; then
+    break
+  fi
+  sleep 1
+done
+
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 PUBLIC_HOSTNAME={{ domain_name }}
 {% else %}
