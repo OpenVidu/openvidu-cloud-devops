@@ -1,3 +1,11 @@
+upstream inspector {
+{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
+    server {{ domain_name }}:5443;
+{% else %}
+    server {{ aws_public_ip }}:5443;
+{% endif %}
+}
+
 upstream kibana {
     server localhost:5601;
 }
@@ -23,6 +31,11 @@ server {
     include sites-available/proxy.conf;
 
     root /var/www/html;
+
+    location /inspector {
+        rewrite ^/inspector/(.*)$ /$1 break;
+        proxy_pass http://inspector;
+    }
 
     location /kibana {
         proxy_http_version 1.1;
