@@ -395,7 +395,7 @@ Resources:
               content: |
                 #!/bin/bash
                 set -eu -o pipefail
-                echo "deb http://ubuntu.openvidu.io/6.9.0 xenial kms6" > /etc/apt/sources.list.d/kurento.list
+                echo "deb http://ubuntu.openvidu.io/6.10.0 xenial kms6" > /etc/apt/sources.list.d/kurento.list
                 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5AFA7A83
                 apt-get update
                 apt-get -y install kurento-media-server
@@ -585,7 +585,7 @@ Outputs:
         - ''
         - - 'https://'
           - !GetAtt OpenviduServer.PublicDnsName 
-          - ':4443'
+          - '/inspector/'
   
   WebsiteURLLE:
     Description: "Use this URL to connect to OpenVidu with user and password if you're using Let's Encrypt"
@@ -593,7 +593,7 @@ Outputs:
         - ''
         - - 'https://'
           - !Ref MyDomainName
-          - ':4443'
+          - '/inspector/'
     Condition: NoSelfSigned
 
   KibanaDashboard:
@@ -602,7 +602,7 @@ Outputs:
         - ''
         - - 'https://'
           - !GetAtt OpenviduServer.PublicDnsName
-          - '/'
+          - '/kibana'
 
   KibanaDashboardLE:
     Description: "Check out graph and performance of your OpenVidu installation"
@@ -610,5 +610,5 @@ Outputs:
         - ''
         - - 'https://'
           - !Ref MyDomainName
-          - '/'
+          - '/kibana'
     Condition: NoSelfSigned
