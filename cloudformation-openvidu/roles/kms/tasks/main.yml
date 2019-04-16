@@ -7,7 +7,7 @@
 
 - name: adding kurento repository
   apt_repository:
-    repo: "deb http://ubuntu.openvidu.io/6.9.0 xenial kms6"
+    repo: "deb http://ubuntu.openvidu.io/6.10.0 xenial kms6"
 
 - name: installing necesary software
   apt:
