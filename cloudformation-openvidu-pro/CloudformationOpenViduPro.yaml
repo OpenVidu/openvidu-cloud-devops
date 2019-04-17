@@ -579,7 +579,7 @@ Resources:
         Count: 1
 
 Outputs:
-  WebsiteURL:
+  OpenViduInspector:
     Description: "Use this URL to connect OpenVidu with user and password"
     Value: !Join 
         - ''
@@ -587,7 +587,7 @@ Outputs:
           - !GetAtt OpenviduServer.PublicDnsName 
           - '/inspector/'
   
-  WebsiteURLLE:
+  OpenViduInspectorLE:
     Description: "Use this URL to connect to OpenVidu with user and password if you're using Let's Encrypt"
     Value: !Join
         - ''
@@ -596,7 +596,7 @@ Outputs:
           - '/inspector/'
     Condition: NoSelfSigned
 
-  KibanaDashboard:
+  Kibana:
     Description: "Check out graph and performance of your OpenVidu installation"
     Value: !Join
         - ''
@@ -604,7 +604,7 @@ Outputs:
           - !GetAtt OpenviduServer.PublicDnsName
           - '/kibana'
 
-  KibanaDashboardLE:
+  KibanaLE:
     Description: "Check out graph and performance of your OpenVidu installation"
     Value: !Join
         - ''
