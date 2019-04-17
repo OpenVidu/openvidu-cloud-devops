@@ -50,7 +50,7 @@ server {
 
     location /inspector {
         rewrite ^/inspector/(.*)$ /$1 break;
-        proxy_pass http://inspector;
+        proxy_pass http://inspector/;
     }
 
     location /kibana {

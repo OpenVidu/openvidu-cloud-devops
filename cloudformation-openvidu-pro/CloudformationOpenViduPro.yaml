@@ -585,7 +585,7 @@ Outputs:
         - ''
         - - 'https://'
           - !GetAtt OpenviduServer.PublicDnsName 
-          - '/inspector/'
+          - '/inspector'
   
   OpenViduInspectorLE:
     Description: "Use this URL to connect to OpenVidu with user and password if you're using Let's Encrypt"
@@ -593,7 +593,7 @@ Outputs:
         - ''
         - - 'https://'
           - !Ref MyDomainName
-          - '/inspector/'
+          - '/inspector'
     Condition: NoSelfSigned
 
   Kibana:
