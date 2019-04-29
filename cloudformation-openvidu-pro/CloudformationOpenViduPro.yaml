@@ -448,7 +448,7 @@ Resources:
                 sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" $WORKINGDIR/group_vars/all
                 sed -i "s/DOMAIN_NAME/${MyDomainName}/" $WORKINGDIR/group_vars/all
                 sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" $WORKINGDIR/group_vars/all
-                sed -i "s/openvidusecret: MY_SECRET/openvidusecret: ${OpenViduSecret}/" $WORKINGDIR/group_vars/all
+                sed -i "s/MY_SECRET/${OpenViduSecret}/" $WORKINGDIR/group_vars/all
                 sed -i "s/FREEHTTPACCESTORECORDINGVIDEOS/${FreeHTTPAccesToRecordingVideos}/" $WORKINGDIR/group_vars/all
                 sed -i "s/run_ec2: false/run_ec2: true/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDURECORDINGNOTIFICATION/${OpenviduRecordingNotification}/" $WORKINGDIR/group_vars/all
