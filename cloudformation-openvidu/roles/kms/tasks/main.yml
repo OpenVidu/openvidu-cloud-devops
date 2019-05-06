@@ -9,11 +9,11 @@
   template: 
     src: add-kms-repo.sh
     dest: /usr/local/bin/add-kms-repo.sh
-  mode: 0755
+    mode: 0755
 
 - name: ading kurento repository
   command: /usr/local/bin/add-kms-repo.sh
-  
+
 - name: installing necesary software
   apt:
     name: coturn
