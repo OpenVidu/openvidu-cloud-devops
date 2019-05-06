@@ -11,9 +11,9 @@
     dest: /usr/local/bin/add-kms-repo.sh
   mode: 0755
 
-  apt_repository:
-    repo: "deb http://ubuntu.openvidu.io/6.10.0 xenial kms6"
-
+- name: ading kurento repository
+  command: /usr/local/bin/add-kms-repo.sh
+  
 - name: installing necesary software
   apt:
     name: coturn
