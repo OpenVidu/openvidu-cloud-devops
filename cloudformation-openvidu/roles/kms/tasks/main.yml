@@ -1,4 +1,8 @@
 ---
+- name: installing jq
+  apt:
+    name: jq
+
 - name: adding kurento PGP key
   apt_key: 
     keyserver: keyserver.ubuntu.com
