@@ -5,7 +5,12 @@
     id: 234821A61B67740F89BFD669FC8A16625AFA7A83
     state: present
 
-- name: adding kurento repository
+- name: adding script for kurento repository
+  template: 
+    src: add-kms-repo.sh
+    dest: /usr/local/bin/add-kms-repo.sh
+  mode: 0755
+
   apt_repository:
     repo: "deb http://ubuntu.openvidu.io/6.10.0 xenial kms6"
 
