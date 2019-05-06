@@ -126,36 +126,38 @@ Parameters:
 
 Mappings:
   RegionMap:
+    eu-north-1:
+      AMI: ami-09d25a77
     ap-south-1:
-      AMI1: ami-0c6c52d7cf1004825
+      AMI: ami-0f4ab593bd4e5b352
     eu-west-3:
-      AMI1: ami-0b26151106502588d
+      AMI: ami-0acfe51b617393c70
     eu-west-2:
-      AMI1: ami-06f77073d7dc4c48a
+      AMI: ami-021202ee82d116ad0
     eu-west-1:
-      AMI1: ami-00b36349b3dba2ec3
+      AMI: ami-0e219142c0bee4a6e
     ap-northeast-2:
-      AMI1: ami-0035936492be04cff
+      AMI: ami-04ca5d9535faed24a
     ap-northeast-1:
-      AMI1: ami-06317ca3b39714f7e
+      AMI: ami-097beac0bacfefe65
     sa-east-1:
-      AMI1: ami-0f7c76bfc85e5b4ea
+      AMI: ami-058732e2bf6d7acb4
     ca-central-1:
-      AMI1: ami-0a5443ed7b0a45901
+      AMI: ami-040bf52a85a5b3f6c
     ap-southeast-1:
-      AMI1: ami-0d97809b54a5f01ba
+      AMI: ami-0f9f33c210de47b63
     ap-southeast-2:
-      AMI1: ami-05162512c82cb460f
+      AMI: ami-074a2888bf09cab0a
     eu-central-1:
-      AMI1: ami-0dd0be70cc0d493b7
+      AMI: ami-05710338b6a5013d1
     us-east-1:
-      AMI1: ami-0735ea082a1534cac
+      AMI: ami-028d6461780695a43
     us-east-2:
-      AMI1: ami-04c305e118636bc7d
+      AMI: ami-0dae3d101cd772fae
     us-west-1:
-      AMI1: ami-0f5113ce7686689e9
+      AMI: ami-069339bea0125f50d
     us-west-2:
-      AMI1: ami-01e0cf6e025c036e4
+      AMI: ami-09b42c38b449cfa59
 
 Metadata:
   'AWS::CloudFormation::Interface':
@@ -227,9 +229,9 @@ Resources:
               content: !Sub |
                 #!/bin/bash
                 WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu
-                OPENVIDU_VERSION=2.6.0
-                OPENVIDU_DEMOS_VERSION=2.6.0
-                OPENVIDU_CALL_VERSION=2.6.0
+                OPENVIDU_VERSION=2.9.0
+                OPENVIDU_DEMOS_VERSION=2.9.0
+                OPENVIDU_CALL_VERSION=2.9.0
                 sed -i "s/OV_VERSION/$OPENVIDU_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/DEMOS_VERSION/$OPENVIDU_DEMOS_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/OVC_VERSION/$OPENVIDU_CALL_VERSION/" $WORKINGDIR/group_vars/all
@@ -262,7 +264,7 @@ Resources:
       ImageId: !FindInMap 
         - RegionMap
         - !Ref 'AWS::Region'
-        - AMI1
+        - AMI
       InstanceType: !Ref InstanceType
       SecurityGroups:
         - !Ref WebServerSecurityGroup
@@ -331,12 +333,24 @@ Resources:
           ToPort: 4443
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
           FromPort: 5443
           ToPort: 5443
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 3478
           ToPort: 3478
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5000
+          ToPort: 5000
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5001
+          ToPort: 5001
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 22
