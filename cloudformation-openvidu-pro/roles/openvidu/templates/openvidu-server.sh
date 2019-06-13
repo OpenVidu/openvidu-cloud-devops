@@ -33,5 +33,6 @@ OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-send-bandwidth={{ OpenviduStream
 OPENVIDU_OPTIONS+="-Dopenvidu.pro.kibana.host=http://localhost/kibana "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
 
-exec java -jar ${OPENVIDU_OPTIONS} /opt/openvidu/openvidu-server.jar
+pushd /opt/openvidu
+exec java -jar ${OPENVIDU_OPTIONS} openvidu-server.jar
 
