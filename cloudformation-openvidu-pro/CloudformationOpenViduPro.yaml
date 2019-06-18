@@ -422,7 +422,7 @@ Resources:
                 
                 mkdir -p /opt/openvidu
                 chmod 777 /opt/openvidu
-                curl -o /opt/openvidu/openvidu-server.jar https://s3-eu-west-1.amazonaws.com/openvidu-pro/openvidu-server-pro-latest.jar
+                curl -o /opt/openvidu/openvidu-server.jar https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/openvidu-server-pro-latest.jar
                 mkdir -p /usr/src/openvidu
                 cd /usr/src/openvidu
                 git clone https://github.com/OpenVidu/openvidu-cloud-devops.git

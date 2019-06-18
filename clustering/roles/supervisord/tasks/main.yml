@@ -1,0 +1,13 @@
+---
+- name: installing supervisor
+  apt:
+    name: supervisor
+    update_cache: yes
+
+- name: copying supervisor openvidu stanza
+  template:
+    src: "openvidu.conf.j2"
+    dest: "/etc/supervisor/conf.d/openvidu.conf"
+  notify:
+    - restart supervisor
+

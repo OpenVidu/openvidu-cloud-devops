@@ -1,0 +1,22 @@
+---
+all:
+  hosts:
+    openvidu-server:
+    kurento-server:
+  vars:
+      ansible_become: true
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: /home/nordri/.ssh/nordri-aws-urjc.pem
+  children:
+    kurento:
+      hosts:
+        kurento-server:
+      vars:
+        ansible_host: 34.253.200.150
+    openvidu:
+      hosts:
+        openvidu-server
+      vars: 
+        ansible_host: 34.244.207.197
+        
+  

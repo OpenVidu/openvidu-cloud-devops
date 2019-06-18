@@ -1,0 +1,14 @@
+- hosts: kurento-server
+  roles:
+    - kms
+    
+- hosts: openvidu
+  roles:
+    - geerlingguy.docker
+    - nginx
+    - openvidu
+    - elastic
+    - supervisord
+    - system-shutdown
+    - coturn
+
