@@ -15,9 +15,9 @@
     name: redis-server
   notify: restart redis
 
-- name: copying OpenVidu JAR file
-  copy:
-    src: openvidu-server-pro-latest.jar
+- name: download OpenVidu JAR file
+  get_url:
+    url: https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/openvidu-server-pro-latest.jar
     dest: /opt/openvidu/openvidu-server.jar
     mode: u+rwx
     owner: ubuntu
