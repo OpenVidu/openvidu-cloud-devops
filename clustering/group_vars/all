@@ -57,7 +57,7 @@ OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
 # AWS Configuration
 ov_aws_public_ip: OPENVIDU_INSTANCE_PUBLIC_IP
-kms_aws_public_ip: KURENTO_INSTANCE_PUBLIC_IP
+kms_aws_public_ip: KURENTO_ENDPOINTS
 ov_aws_public_hostname: OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME
 run_ec2: true
 
