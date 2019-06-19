@@ -1,0 +1,20 @@
+---
+- name: Install nginx and additional software
+  apt: 
+    name: [ nginx, apache2-utils, python-passlib]
+    state: latest
+    update_cache: true
+
+- name: configuring nginx
+  copy: 
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+
+- name: Creating user for kibana
+  htpasswd:
+    path: /etc/nginx/conf.d/kms.htpasswd
+    name: "OPENVIDUAPP"
+    password: "{{ openvidusecret }}"
+    owner: root
+    group: www-data
+    mode: 0640
