@@ -6,11 +6,11 @@
     update_cache: true
 
 - name: configuring nginx
-  copy: 
-    src: nginx.conf
-    dest: /etc/nginx/nginx.conf
+  template: 
+    src: default.j2
+    dest: /etc/nginx/sites-enable/default
 
-- name: Creating user for kibana
+- name: Creating user for kms recordings
   htpasswd:
     path: /etc/nginx/conf.d/kms.htpasswd
     name: "OPENVIDUAPP"
