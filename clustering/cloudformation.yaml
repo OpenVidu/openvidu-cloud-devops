@@ -1,4 +1,5 @@
 ---
+AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   KeyName:
     Description: Name of an existing EC2 key pair for SSH access to the EC2 instance.
@@ -232,12 +233,12 @@ Parameters:
     Default: 0
 
   OpenViduCidrBlock:
-    Description: Dedicated VPC for Hazelcast
+    Description: Dedicated VPC for OpenVidu cluster
     Type: String
     Default: 172.16.0.0/16
 
   OpenViduSubnet:
-    Description: Subnet for Hazelcast instances
+    Description: Subnet for OpenVidu cluster
     Type: String
     Default: 172.16.0.0/24
 
@@ -354,6 +355,11 @@ Resources:
     Type: 'AWS::EC2::VPC'
     Properties:
       CidrBlock: !Ref OpenViduCidrBlock
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: OpenViduVPC
 
   OpenViduSubnet1:
     Type: 'AWS::EC2::Subnet'
@@ -371,6 +377,25 @@ Resources:
     Properties:
       VpcId: !Ref OpenViduVPC
       InternetGatewayId: !Ref InternetGateway
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref OpenViduVPC
+
+  PublicSubnet1RouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref OpenViduSubnet1
+
+  InternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachInternetGateway
+    Properties: 
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
 
   DescribeInstancesRole:
     Type: 'AWS::IAM::Role'
@@ -423,13 +448,32 @@ Resources:
           apt-get -y install \
             python \
             git \
-            software-properties-common
+            software-properties-common \
+            awscli \
+            python-apt
 
           apt-add-repository -y ppa:ansible/ansible
           apt-get update 
           apt-get install -y ansible
 
+          export AWS_DEFAULT_REGION=${AWS::Region}
 
+          mkdir -p /usr/src/openvidu
+          cd /usr/src/openvidu
+          git clone https://github.com/OpenVidu/openvidu-cloud-devops.git
+          cd openvidu-cloud-devops/clustering
+
+          OPENVIDU_IP=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PublicIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=server)
+
+          sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$OPENVIDU_IP/" group_vars/all
+
+          cat>play.yaml<<EOF
+          - hosts: all
+            roles:
+              - kms
+          EOF
+
+          ansible-playbook -i "localhost," -c local play.yaml 
 
   KurentoAutoScalingGroup:
     Type: 'AWS::AutoScaling::AutoScalingGroup'
@@ -440,6 +484,8 @@ Resources:
       MinSize: !Ref KurentoAsgSize
       MaxSize: !Ref KurentoAsgSize
       DesiredCapacity: !Ref KurentoAsgSize
+      VPCZoneIdentifier: 
+        - !Ref OpenViduSubnet1
       Tags:
         - Key: Name
           Value: 'Kurento Media Server'
@@ -450,29 +496,132 @@ Resources:
 
   OpenViduServer:
     Type: AWS::EC2::Instance
+    Metadata:
+      Comment: OpenVidu Pro
+      AWS::CloudFormation::Init:
+        config:
+          files:
+            "/usr/local/bin/installSoftware.sh":
+              content: |
+                #!/bin/bash -xe
+                apt-get update
+                apt-get -y install \
+                  python \
+                  python-setuptools \
+                  git \
+                  software-properties-common \
+                  awscli \
+                  ec2-ami-tools
+
+                easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+
+                apt-add-repository -y ppa:ansible/ansible
+                apt-get update 
+                apt-get install -y ansible
+                ansible-galaxy install -p /etc/ansible/roles geerlingguy.docker
+              mode: "000755"
+              owner: "root"
+              group: "root"
+            "/usr/local/bin/getOpenVidu.sh":
+              content: |
+                #!/bin/bash -xe
+                mkdir -p /usr/src/openvidu
+                cd /usr/src/openvidu
+                git clone https://github.com/OpenVidu/openvidu-cloud-devops.git
+              mode: "000755"
+              owner: "root"
+              group: "root"
+            "/usr/local/bin/feedGroupVars.sh":
+              content: !Sub |
+                #!/bin/bash -xe
+                export AWS_DEFAULT_REGION=${AWS::Region}
+                cd /usr/src/openvidu/openvidu-cloud-devops/clustering
+                KMS_IP=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PublicIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
+                PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
+                PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+                
+                sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$PIP/" group_vars/all
+                sed -i "s/AOPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME/$PublicHostname/" group_vars/all
+                sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" group_vars/all
+                sed -i "s/DOMAIN_NAME/${MyDomainName}/" group_vars/all
+                sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" group_vars/all
+                sed -i "s/MY_SECRET/${OpenViduSecret}/" group_vars/all
+                sed -i "s/FREEHTTPACCESTORECORDINGVIDEOS/${FreeHTTPAccesToRecordingVideos}/" group_vars/all
+                sed -i "s/run_ec2: false/run_ec2: true/" group_vars/all
+                sed -i "s/OPENVIDURECORDINGNOTIFICATION/${OpenviduRecordingNotification}/" group_vars/all
+                sed -i "s/OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH/${OpenviduStreamsVideoMaxRecvBandwidth}/" group_vars/all
+                sed -i "s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/${OpenviduStreamsVideoMinRecvBandwidth}/" group_vars/all
+                sed -i "s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/${OpenviduStreamsVideoMaxSendBandwidth}/" group_vars/all
+                sed -i "s/OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH/${OpenviduStreamsVideoMinSendBandwidth}/" group_vars/all
+                MIDDLE=$(( ( ${MinOpenPort} + ${MaxOpenPort} ) / 2 ))
+                MIDDLEPLUSONE=$(( $MIDDLE + 1 ))
+                sed -i "s/TURN_MIN_PORT/${MinOpenPort}/" group_vars/all
+                sed -i "s/TURN_MAX_PORT/$MIDDLE/" group_vars/all
+                sed -i "s/KURENTO_MIN_PORT/$MIDDLEPLUSONE/" group_vars/all
+                sed -i "s/KURENTO_MAX_PORT/${MaxOpenPort}/" group_vars/all
+                sed -i "s/KIBANA_USERNAME/${KibanaUser}/" group_vars/all
+                sed -i "s/KIBANA_PASSWORD/${KibanaPassword}/" group_vars/all
+                sed -i "s/KURENTO_INSTANCE_PUBLIC_IP/$KMS_IP/" group_vars/all
+              mode: "000755"
+              owner: "root"
+              group: "root"
     Properties:
       ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref AwsInstanceType
       KeyName: !Ref KeyName
       IamInstanceProfile: !Ref OpenviduInstancesProfile
-      SecurityGroups:
-        - !Ref OpenViduSecurityGroup
-      UserData:
-        "Fn::Base64": 
-          !Sub |
-            #!/bin/bash -xe
-            apt-get update
-            apt-get -y install python
+      SubnetId: !Ref OpenViduSubnet1
+      SecurityGroupIds:
+        - !GetAtt 'OpenViduSecurityGroup.GroupId'
       Tags:
         - Key: Name
           Value: 'OpenVidu Server'
         - Key: 'ov-cluster-member'
           Value: 'server'
+      UserData:
+        "Fn::Base64": 
+          !Sub |
+            #!/bin/bash -xe
 
+            apt-get update
+            apt-get install -y python-pip
+            pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+
+            cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenViduServer
+
+            /usr/local/bin/installSoftware.sh || { echo "[Openvidu] error installing software"; exit 1; }
+
+            /usr/local/bin/getOpenVidu.sh || { echo "[Openvidu] error installing OpenVidu"; exit 1; }
+
+            /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
+            
+            cd /usr/src/openvidu/openvidu-cloud-devops/clustering            
+
+            cat>play.yaml<<EOF
+            - hosts: all
+              roles:
+                - geerlingguy.docker
+                - nginx
+                - openvidu
+                - elastic
+                - supervisord
+                - system-shutdown
+                - coturn
+            EOF
+
+            ansible-playbook -i "localhost," -c local play.yaml
+
+            # Wait for the app
+            /usr/local/bin/check_app_ready.sh
+
+            # sending the finish call
+            /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource WaitCondition --region ${AWS::Region}
+
+      
   KMSSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      VpcId: vpc-6bf6a10f
+      VpcId: !Ref OpenViduVPC
       GroupDescription: SSH, Proxy and KMS WebRTC Ports
       SecurityGroupIngress:
       - CidrIp: 0.0.0.0/0
@@ -492,6 +641,7 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: SSH, Proxy and OpenVidu WebRTC Ports
+      VpcId: !Ref OpenViduVPC      
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 4443
@@ -530,6 +680,13 @@ Resources:
           ToPort: 65535
           CidrIp: 0.0.0.0/0
   
+  WaitCondition:
+    Type: AWS::CloudFormation::WaitCondition
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT10M
+        Count: 1
+
 Outputs:
   OpenViduIP:
     Value:
