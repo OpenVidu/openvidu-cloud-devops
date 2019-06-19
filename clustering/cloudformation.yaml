@@ -349,6 +349,13 @@ Mappings:
     us-west-2:
       AMI: ami-0375ca3842950ade6
 
+Conditions: 
+  NoSelfSigned:
+    'Fn::Not':
+      - 'Fn::Equals':
+          - Ref: WhichCert
+          - selfsigned
+
 Resources:
 
   OpenViduVPC:
@@ -616,7 +623,14 @@ Resources:
 
             # sending the finish call
             /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource WaitCondition --region ${AWS::Region}
-
+          
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeType: io1
+            Iops: 200
+            DeleteOnTermination: true
+            VolumeSize: 50
       
   KMSSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -624,18 +638,18 @@ Resources:
       VpcId: !Ref OpenViduVPC
       GroupDescription: SSH, Proxy and KMS WebRTC Ports
       SecurityGroupIngress:
-      - CidrIp: 0.0.0.0/0
-        FromPort: '0'
-        ToPort: '65535'
-        IpProtocol: tcp
-      - CidrIp: 0.0.0.0/0
-        FromPort: '0'
-        ToPort: '65535'
-        IpProtocol: udp
-      - CidrIp: 0.0.0.0/0
-        FromPort: '22'
-        IpProtocol: tcp
-        ToPort: '22'
+        - IpProtocol: udp
+          FromPort: !Ref MinOpenPort
+          ToPort: !Ref MaxOpenPort
+          CidrIp: !Ref UDPRange
+        - IpProtocol: tcp
+          FromPort: !Ref MinOpenPort
+          ToPort: !Ref MaxOpenPort
+          CidrIp: !Ref TCPRange
+        - CidrIp: 0.0.0.0/0
+          FromPort: '22'
+          IpProtocol: tcp
+          ToPort: '22'
 
   OpenViduSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -646,39 +660,31 @@ Resources:
         - IpProtocol: tcp
           FromPort: 4443
           ToPort: 4443
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref WebUICidr
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 5443
-          ToPort: 5443
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref HTTPAccess
         - IpProtocol: tcp
           FromPort: 3478
           ToPort: 3478
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 5000
-          ToPort: 5000
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 5001
-          ToPort: 5001
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref CoturnPort
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref SSHCidr
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref HTTPSAccess
         - IpProtocol: udp
-          FromPort: 49152
-          ToPort: 65535
-          CidrIp: 0.0.0.0/0
+          FromPort: !Ref MinOpenPort
+          ToPort: !Ref MaxOpenPort
+          CidrIp: !Ref UDPRange
+        - IpProtocol: tcp
+          FromPort: !Ref MinOpenPort
+          ToPort: !Ref MaxOpenPort
+          CidrIp: !Ref TCPRange
   
   WaitCondition:
     Type: AWS::CloudFormation::WaitCondition
@@ -686,6 +692,13 @@ Resources:
       ResourceSignal:
         Timeout: PT20M
         Count: 1
+
+  MyEIP:
+    Type: AWS::EC2::EIPAssociation
+    Condition: NoSelfSigned
+    Properties:
+      InstanceId: !Ref OpenViduServer
+      EIP: !Ref PublicElasticIP
 
 Outputs:
   OpenViduInspector:
@@ -695,6 +708,15 @@ Outputs:
         - - 'https://'
           - !GetAtt OpenViduServer.PublicDnsName 
           - '/inspector'
+
+  OpenViduInspectorLE:
+    Description: "Use this URL to connect to OpenVidu with user and password if you're using Let's Encrypt"
+    Value: !Join
+        - ''
+        - - 'https://'
+          - !Ref MyDomainName
+          - '/inspector'
+    Condition: NoSelfSigned
   
   Kibana:
     Description: "Check out graph and performance of your OpenVidu installation"
@@ -703,3 +725,12 @@ Outputs:
         - - 'https://'
           - !GetAtt OpenViduServer.PublicDnsName
           - '/kibana'
+
+  KibanaLE:
+    Description: "Check out graph and performance of your OpenVidu installation"
+    Value: !Join
+        - ''
+        - - 'https://'
+          - !Ref MyDomainName
+          - '/kibana'
+    Condition: NoSelfSigned
