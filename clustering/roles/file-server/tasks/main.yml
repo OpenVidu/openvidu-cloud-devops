@@ -8,7 +8,7 @@
 - name: configuring nginx
   template: 
     src: default.j2
-    dest: /etc/nginx/sites-enable/default
+    dest: /etc/nginx/sites-enabled/default
 
 - name: Creating user for kms recordings
   htpasswd:
