@@ -1,6 +1,7 @@
 server {
-	listen {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:80
+	listen {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:80;
 	server_name _;
+
 	root /opt/openvidu;
 
 	location /recordings {
