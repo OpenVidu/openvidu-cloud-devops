@@ -22,7 +22,7 @@ OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-send-bandwidth={{ OpenviduStream
 OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-send-bandwidth={{ OpenviduStreamsVideoMinSendBandwidth }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.pro.kibana.host=http://localhost/kibana "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
-OPENVIDU_OPTIONS+="-Dkms.uris=[\"ws://{{ kms_aws_public_ip }}:8888/kurento\"]"
+OPENVIDU_OPTIONS+="-Dkms.uris=[\"{{ kms_aws_public_ip }}\"]"
 
 pushd /opt/openvidu
 exec java -jar ${OPENVIDU_OPTIONS} /opt/openvidu/openvidu-server.jar
