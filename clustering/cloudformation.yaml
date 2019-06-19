@@ -684,14 +684,22 @@ Resources:
     Type: AWS::CloudFormation::WaitCondition
     CreationPolicy:
       ResourceSignal:
-        Timeout: PT10M
+        Timeout: PT20M
         Count: 1
 
 Outputs:
-  OpenViduIP:
-    Value:
-      !GetAtt OpenViduServer.PublicIp
-  OpenViduDomainName:
-    Value:
-      !GetAtt OpenViduServer.PublicDnsName
-
+  OpenViduInspector:
+    Description: "Use this URL to connect OpenVidu with user and password"
+    Value: !Join 
+        - ''
+        - - 'https://'
+          - !GetAtt OpenViduServer.PublicDnsName 
+          - '/inspector'
+  
+  Kibana:
+    Description: "Check out graph and performance of your OpenVidu installation"
+    Value: !Join
+        - ''
+        - - 'https://'
+          - !GetAtt OpenViduServer.PublicDnsName
+          - '/kibana'
