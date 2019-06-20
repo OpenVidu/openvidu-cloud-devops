@@ -8,6 +8,17 @@ PUBLIC_HOSTNAME={{ domain_name }}
 PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 {% endif %}
 
+{% if run_ec2 == true %}
+KMS_IPs=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PrivateIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
+KMS_ENDPOINTS=$(for IP in $KMS_IPs
+do
+  echo $IP | awk '{ print "\\\\\"ws://" $1 ":8888/kurento\\\\\"" }'
+done
+)
+KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | paste -s - | tr ' ' ,)
+OPENVIDU_OPTIONS+="-Dkms.uris=[${KMS_ENDPOINTS_LINE}] "
+{% endif %}
+
 OPENVIDU_OPTIONS="-Dopenvidu.secret={{ openvidusecret }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording=true "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.public-access={{ FreeHTTPAccesToRecordingVideos }} "

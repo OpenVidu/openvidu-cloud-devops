@@ -11,10 +11,15 @@
     name: "OPENVIDUAPP"
     password: "{{ openvidusecret }}"
     owner: root
-    group: www-data
+    group: kurento
     mode: 0640
 
 - name: configuring nginx
+  copy: 
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+
+- name: configuring nginx default site
   template: 
     src: default.j2
     dest: /etc/nginx/sites-enabled/default
