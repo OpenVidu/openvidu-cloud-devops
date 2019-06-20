@@ -8,17 +8,6 @@ PUBLIC_HOSTNAME={{ domain_name }}
 PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 {% endif %}
 
-{% if run_ec2 == true %}
-KMS_IPs=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PrivateIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
-KMS_ENDPOINTS=$(for IP in $KMS_IPs
-do
-  echo $IP | awk '{ print "\\\\\"ws://" $1 ":8888/kurento\\\\\"" }'
-done
-)
-KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | paste -s - | tr ' ' ,)
-OPENVIDU_OPTIONS+="-Dkms.uris=[${KMS_ENDPOINTS_LINE}] "
-{% endif %}
-
 OPENVIDU_OPTIONS="-Dopenvidu.secret={{ openvidusecret }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording=true "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.public-access={{ FreeHTTPAccesToRecordingVideos }} "
@@ -33,7 +22,17 @@ OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-send-bandwidth={{ OpenviduStream
 OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-send-bandwidth={{ OpenviduStreamsVideoMinSendBandwidth }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.pro.kibana.host=http://localhost/kibana "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
-OPENVIDU_OPTIONS+="-Dkms.uris=[{{ kms_endpoints }}] "
+
+{% if run_ec2 == true %}
+KMS_IPs=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PrivateIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
+KMS_ENDPOINTS=$(for IP in $KMS_IPs
+do
+  echo $IP | awk '{ print "\\\"ws://" $1 ":8888/kurento\\\"" }'
+done
+)
+KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | paste -s - | tr ' ' ,)
+OPENVIDU_OPTIONS+="-Dkms.uris=[${KMS_ENDPOINTS_LINE}] "
+{% endif %}
 
 pushd /opt/openvidu
 exec java -jar ${OPENVIDU_OPTIONS} /opt/openvidu/openvidu-server.jar
