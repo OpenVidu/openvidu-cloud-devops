@@ -22,6 +22,8 @@ OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-send-bandwidth={{ OpenviduStream
 OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-send-bandwidth={{ OpenviduStreamsVideoMinSendBandwidth }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.pro.kibana.host=http://localhost/kibana "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
+OPENVIDU_OPTIONS+="-Dopenvidu.pro.cluster=true "
+OPENVIDU_OPTIONS+="-Dopenvidu.pro.cluster.load.strategy={{ OpenviduClusterLoadStrategy }} "
 
 {% if run_ec2 == true %}
 export AWS_DEFAULT_REGION={{ aws_default_region }}

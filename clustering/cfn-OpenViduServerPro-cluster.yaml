@@ -242,6 +242,18 @@ Parameters:
     Type: String
     Default: 172.16.0.0/24
 
+  OpenviduClusterLoadStrategy:
+    Description: >
+      What parameter should be used to distribute the creation of new sessions 
+      (and therefore distribution of load) among all available KMSs. Can be: [streams, sessions, mediaObjects, cpu]
+    Type: String
+    Default: streams
+    AllowedValues:
+      - streams
+      - sessions
+      - mediaObjects
+      - cpu
+
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -260,6 +272,7 @@ Metadata:
           default: Openvidu Configuration
         Parameters:
         - OpenViduSecret
+        - OpenviduClusterLoadStrategy
         - FreeHTTPAccesToRecordingVideos
         - OpenviduRecordingNotification
         - OpenviduStreamsVideoMaxRecvBandwidth
@@ -554,6 +567,7 @@ Resources:
                 sed -i "s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/${OpenviduStreamsVideoMinRecvBandwidth}/" group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/${OpenviduStreamsVideoMaxSendBandwidth}/" group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH/${OpenviduStreamsVideoMinSendBandwidth}/" group_vars/all
+                sed -i "s/OPENVIDUCLUSTERLOADSTRATEGY/${OpenviduClusterLoadStrategy}/" group_vars/all
                 MIDDLE=$(( ( ${MinOpenPort} + ${MaxOpenPort} ) / 2 ))
                 MIDDLEPLUSONE=$(( $MIDDLE + 1 ))
                 sed -i "s/TURN_MIN_PORT/${MinOpenPort}/" group_vars/all

@@ -32,6 +32,11 @@ openvidu_port: 4443
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
 FreeHTTPAccesToRecordingVideos: FREEHTTPACCESTORECORDINGVIDEOS
 
+# What parameter should be used to distribute the creation of new sessions
+# (and therefore distribution of load) among all available KMSs. 
+# Can be: [streams, sessions, mediaObjects, cpu]",
+OpenviduClusterLoadStrategy: OPENVIDUCLUSTERLOADSTRATEGY
+
 # Which users should receive the recording events in the client side
 # (recordingStarted, recordingStopped). Can be all (every user connected to 
 # the session), publisher_moderator (users with role 'PUBLISHER' or 
