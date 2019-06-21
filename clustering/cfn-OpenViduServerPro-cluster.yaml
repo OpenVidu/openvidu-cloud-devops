@@ -402,7 +402,7 @@ Resources:
               - 'sts:AssumeRole'
       Path: /
       Policies:
-        - PolicyName: HazelcastPolicy
+        - PolicyName: DescribeInstacePolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
