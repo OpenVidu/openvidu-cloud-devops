@@ -24,6 +24,7 @@ OPENVIDU_OPTIONS+="-Dopenvidu.pro.kibana.host=http://localhost/kibana "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
 
 {% if run_ec2 == true %}
+export AWS_DEFAULT_REGION={{ aws_default_region }}
 KMS_IPs=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PrivateIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
 KMS_ENDPOINTS=$(for IP in $KMS_IPs
 do

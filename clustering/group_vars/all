@@ -60,6 +60,7 @@ ov_aws_public_ip: OPENVIDU_INSTANCE_PUBLIC_IP
 kms_endpoints: KURENTO_ENDPOINTS
 ov_aws_public_hostname: OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME
 run_ec2: true
+aws_default_region: AWS_DEFAULT_REGION
 
 # Turn port config
 turn_min_port: 1
