@@ -28,10 +28,10 @@ export AWS_DEFAULT_REGION={{ aws_default_region }}
 KMS_IPs=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PrivateIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
 KMS_ENDPOINTS=$(for IP in $KMS_IPs
 do
-  echo $IP | awk '{ print "\\\"ws://" $1 ":8888/kurento\\\"" }'
+  echo $IP | awk '{ print "\"ws://" $1 ":8888/kurento\"" }'
 done
 )
-KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | paste -s - | tr ' ' ,)
+KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | tr ' ' ,)
 OPENVIDU_OPTIONS+="-Dkms.uris=[${KMS_ENDPOINTS_LINE}] "
 {% endif %}
 
