@@ -10,7 +10,35 @@ Parameters:
     Description: must be the name of an existing AWS Availability Zone
     Default: eu-west-1a
 
-  AwsInstanceType:
+  AwsInstanceTypeOV:
+    Type: String
+    Description: Specifies the EC2 instance type for your OpenVidu instance
+    Default: t2.large
+    AllowedValues: 
+    - t2.large
+    - t2.xlarge
+    - t2.2xlarge
+    - t3.large
+    - t3.xlarge
+    - t3.2xlarge
+    - m4.large
+    - m4.xlarge
+    - m4.2xlarge
+    - m5.large
+    - m5.xlarge
+    - m5.2xlarge
+    - c3.large
+    - c3.xlarge
+    - c3.2xlarge
+    - c4.large
+    - c4.xlarge
+    - c4.2xlarge
+    - c5.large
+    - c5.xlarge
+    - c5.2xlarge
+    ConstraintDescription: "Must be a valid EC2 instance type."
+
+  AwsInstanceTypeKMS:
     Type: String
     Description: Specifies the EC2 instance type for your Kurento instances
     Default: t2.large
@@ -438,7 +466,7 @@ Resources:
     Type: 'AWS::AutoScaling::LaunchConfiguration'
     Properties:
       ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
-      InstanceType: !Ref AwsInstanceType
+      InstanceType: !Ref AwsInstanceTypeKMS
       EbsOptimized: false
       AssociatePublicIpAddress: true
       KeyName: !Ref KeyName
@@ -591,7 +619,7 @@ Resources:
               group: "root"
     Properties:
       ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
-      InstanceType: !Ref AwsInstanceType
+      InstanceType: !Ref AwsInstanceTypeOV
       KeyName: !Ref KeyName
       IamInstanceProfile: !Ref OpenviduInstancesProfile
       SubnetId: !Ref OpenViduSubnet1
