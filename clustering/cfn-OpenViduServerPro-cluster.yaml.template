@@ -500,6 +500,7 @@ Resources:
           cd /usr/src/openvidu
           git clone https://github.com/OpenVidu/openvidu-cloud-devops.git
           cd openvidu-cloud-devops/clustering
+          git checkout @CF_RELEASE@
 
           OPENVIDU_IP=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PublicIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=server)
 
@@ -652,6 +653,7 @@ Resources:
             fi
 
             cd /usr/src/openvidu/openvidu-cloud-devops/clustering            
+            git checkout @CF_RELEASE@
 
             cat>play.yml<<EOF
             - hosts: all
