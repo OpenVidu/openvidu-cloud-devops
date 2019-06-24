@@ -72,7 +72,7 @@ You need to change:
   - `OPENVIDU_SERVER_IP`: Public IP to connect to the instance.
   - `KURENTO_SERVER_IP`: Public IP to connect to the instance.
 
-If you're using more than one Kurento Media Server, the inventory file'll look like:
+If you're using more than one Kurento Media Server, the inventory file will look like:
 
 ```
 ---
@@ -111,7 +111,7 @@ For futher information check out https://openvidu.io/docs/reference-docs/openvid
 
 ### Deployment
 
-First time you connect to a instance through SSH, it will ask you to confirm the instance fingerprint, so try to login into all the instances to accept the fingerprint so Ansible can do the job.
+First time you connect to an instance through SSH, it will ask you to confirm the instance fingerprint, so try to login into all the instances to accept the fingerprint so Ansible can do the job.
 
 `ssh -i /PATH/TO/SSH_public_key USER@INSTANCE`
 
@@ -148,4 +148,4 @@ If you get stuck deploying this playbooks remember we're here to help you. So pl
 - /var/log/cloud-init-output.log
 - /var/log/supervisor/openvidu-server-stdout---supervisor-XXXX.log
 
-XXXX means random characteres.
+XXXX means random characters.
