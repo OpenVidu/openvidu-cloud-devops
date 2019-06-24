@@ -1,10 +1,11 @@
 # Certificate type
 # You can choose:
 # 1. Self Signed (selfsigned) The certificate will be generate within
-# the instance (default)
+#    the instance (default)
 # 2. Let's encrypt (letsencrypt) Free SSL certificate provider
 # 3. Your own certificate (owncert) If you own a SSL certificate, use this one.
-# See roles > nginx > files to provide your own certificate files
+#    You need to provide your certificate files (nginx.key and nginx.crt) and 
+#    put then in roles/nginx/files folder.     
 # 
 whichcert: selfsigned
 
@@ -61,13 +62,24 @@ OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
 # Instances IPs and names
+
+# Should be the same than in the inventory file
 ov_public_ip: OPENVIDU_INSTANCE_PUBLIC_IP
+
+# A comma separate list of IPs from the KMS instnaces
 kms_endpoint_ips: KURENTO_ENDPOINTS
+
+# For selfsigned certificate, type the public domain name
 ov_public_hostname: OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME
 
 # AWS Configuration
 run_ec2: false
 aws_default_region: AWS_DEFAULT_REGION
+
+# Port configuration
+# We divide port range in two, half for coturn server and the other half
+# for OpenVidu Server. Replace according for your needs:
+# i.e. 1024 ~ 32255 for coturn and 32256 ~ 65535 for KMS
 
 # Turn port config
 turn_min_port: TURN_MIN_PORT
@@ -77,6 +89,6 @@ turn_max_port: TURN_MAX_PORT
 kurento_min_port: KURENTO_MIN_PORT
 kurento_max_port: KURENTO_MAX_PORT
 
-# Kibana dashboard configuration
+# Kibana dashboard configuration (Credentials)
 KibanaUser: kibanaadmin
 KibanaPassword: "MY_SECRET"
