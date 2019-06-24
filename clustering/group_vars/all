@@ -2,9 +2,9 @@
 # You can choose:
 # 1. Self Signed (selfsigned) The certificate will be generate within
 # the instance (default)
-# 2. Let's encrypt (letsencrpt) Free SSL certificate provider
+# 2. Let's encrypt (letsencrypt) Free SSL certificate provider
 # 3. Your own certificate (owncert) If you own a SSL certificate, use this one.
-# See roles > nginx > files to
+# See roles > nginx > files to provide your own certificate files
 # 
 whichcert: selfsigned
 
@@ -60,20 +60,22 @@ OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 # 0 means unconstrained
 OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
+# Instances IPs and names
+ov_public_ip: OPENVIDU_INSTANCE_PUBLIC_IP
+kms_endpoint_ips: KURENTO_ENDPOINTS
+ov_public_hostname: OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME
+
 # AWS Configuration
-ov_aws_public_ip: OPENVIDU_INSTANCE_PUBLIC_IP
-kms_endpoints: KURENTO_ENDPOINTS
-ov_aws_public_hostname: OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME
-run_ec2: true
+run_ec2: false
 aws_default_region: AWS_DEFAULT_REGION
 
 # Turn port config
-turn_min_port: 1
-turn_max_port: 32766
+turn_min_port: TURN_MIN_PORT
+turn_max_port: TURN_MAX_PORT
 
 # Kurento port config
-kurento_min_port: 32767
-kurento_max_port: 65535
+kurento_min_port: KURENTO_MIN_PORT
+kurento_max_port: KURENTO_MAX_PORT
 
 # Kibana dashboard configuration
 KibanaUser: kibanaadmin
