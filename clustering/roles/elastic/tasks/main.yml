@@ -29,6 +29,11 @@
     dest: /etc/kibana/kibana.yml
   notify: start kibana
 
+- name: enable kibana at boot time
+  service:
+    name: kibana
+    enabled: true
+
 - name: Start Elasticsearch.
   service:
     name: elasticsearch
