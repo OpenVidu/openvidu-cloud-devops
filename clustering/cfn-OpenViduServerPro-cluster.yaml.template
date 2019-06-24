@@ -506,6 +506,7 @@ Resources:
 
           sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$OPENVIDU_IP/" group_vars/all
           sed -i "s/MY_SECRET/${OpenViduSecret}/" group_vars/all
+          sed -i "s/OPENVIDU_VERSION/@OV_V@/" group_vars/all
 
           cat>play.yml<<EOF
           - hosts: all
@@ -571,6 +572,8 @@ Resources:
                 mkdir -p /usr/src/openvidu
                 cd /usr/src/openvidu
                 git clone https://github.com/OpenVidu/openvidu-cloud-devops.git
+                cd /usr/src/openvidu/openvidu-cloud-devops/clustering            
+                git checkout @CF_RELEASE@
               mode: "000755"
               owner: "root"
               group: "root"
@@ -583,6 +586,7 @@ Resources:
                 PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
                 PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 
+                sed -i "s/OPENVIDU_VERSION/@OV_V@/" group_vars/all
                 sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$PIP/" group_vars/all
                 sed -i "s/AOPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME/$PublicHostname/" group_vars/all
                 sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" group_vars/all
@@ -653,7 +657,6 @@ Resources:
             fi
 
             cd /usr/src/openvidu/openvidu-cloud-devops/clustering            
-            git checkout @CF_RELEASE@
 
             cat>play.yml<<EOF
             - hosts: all

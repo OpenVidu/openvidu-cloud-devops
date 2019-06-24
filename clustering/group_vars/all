@@ -18,7 +18,7 @@ letsencrypt_email: LETSENCRYPT_EMAIL
 # OpenVidu
 
 # Which OpenVidu version to use
-version: 2.10.0
+version: OPENVIDU_VERSION
 
 # Use this to connect to OpenVidu endpoint
 openvidusecret: "MY_SECRET"
