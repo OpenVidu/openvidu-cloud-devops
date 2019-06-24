@@ -11,7 +11,7 @@
 
 - name: Add Elastic repository.
   apt_repository:
-    repo: 'deb https://artifacts.elastic.co/packages/6.x/apt stable main'
+    repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
     state: present
     update_cache: true
 
@@ -27,7 +27,7 @@
   copy: 
     src: kibana.yml
     dest: /etc/kibana/kibana.yml
-  notify: restart kibana
+  notify: start kibana
 
 - name: Start Elasticsearch.
   service:
