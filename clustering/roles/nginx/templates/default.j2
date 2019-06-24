@@ -9,7 +9,7 @@ upstream inspector {
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server {{ domain_name }}:5443;
 {% else %}
-    server {{ ov_aws_public_ip }}:5443;
+    server {{ ov_public_ip }}:5443;
 {% endif %}
 }
 
@@ -33,7 +33,7 @@ server {
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server_name {{ domain_name }};
 {% else %}
-    server_name {{ ov_aws_public_hostname }};
+    server_name {{ ov_public_hostname }};
 {% endif %}
 
     ssl on;
