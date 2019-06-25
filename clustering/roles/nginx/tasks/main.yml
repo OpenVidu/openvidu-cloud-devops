@@ -13,12 +13,9 @@
 
 - name: install apache2-utils
   apt:
-    name: "{{ item }}"
+    name: ['apache2-utils', 'python-passlib']
     state: latest
-  with_items:
-      - apache2-utils
-      - python-passlib
-
+  
 - name: Remove default nginx config
   file: 
     name: /etc/nginx/sites-enabled/default 
