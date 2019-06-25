@@ -12,6 +12,16 @@ PUBLIC_HOSTNAME={{ ov_public_hostname }}
 {% endif %}
 {% endif %}
 
+# Wait for kibana
+while true
+do 
+  HTTP_STATUS=$(curl -I http://localhost:5601/app/kibana | head -n1 | awk '{print $2}')
+  if [ $HTTP_STATUS == 200 ]; then
+    break
+  fi
+  sleep 1
+done
+
 OPENVIDU_OPTIONS="-Dopenvidu.secret={{ openvidusecret }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording=true "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.public-access={{ FreeHTTPAccesToRecordingVideos }} "
