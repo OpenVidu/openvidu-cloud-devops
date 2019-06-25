@@ -30,6 +30,12 @@
     dest: "/etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini"
   notify: restart kms
 
+- name: preconfiguring Kurento Media Server
+  template:
+    src: "BaseRtpEndpoint.conf.ini.j2"
+    dest: "/etc/kurento/modules/kurento/BaseRtpEndpoint.conf.ini"
+  notify: restart kms
+
 - name: Permissions on recordings folder
   file:
     path: /opt/openvidu/recordings
