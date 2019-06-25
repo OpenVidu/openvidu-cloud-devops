@@ -507,6 +507,8 @@ Resources:
           sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$OPENVIDU_IP/" group_vars/all
           sed -i "s/MY_SECRET/${OpenViduSecret}/" group_vars/all
           sed -i "s/OPENVIDU_VERSION/@OV_V@/" group_vars/all
+          MIDDLE=$(( ( ${MinOpenPort} + ${MaxOpenPort} ) / 2 ))
+          MIDDLEPLUSONE=$(( $MIDDLE + 1 ))          
           sed -i "s/KURENTO_MIN_PORT/$MIDDLEPLUSONE/" group_vars/all
           sed -i "s/KURENTO_MAX_PORT/${MaxOpenPort}/" group_vars/all
 
