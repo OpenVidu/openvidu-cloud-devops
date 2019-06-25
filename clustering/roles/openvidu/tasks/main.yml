@@ -34,7 +34,7 @@
     src: "check_app_ready.sh"
     dest: "/usr/local/bin"
     mode: "0755"
-  when: run_ec2
+  when: run_ec2|bool
 
 - name: creating recording directory
   file:
