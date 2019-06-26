@@ -38,6 +38,10 @@ OPENVIDU_OPTIONS+="-Dopenvidu.pro.kibana.host=http://localhost/kibana "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
 OPENVIDU_OPTIONS+="-Dopenvidu.pro.cluster=true "
 OPENVIDU_OPTIONS+="-Dopenvidu.pro.cluster.load.strategy={{ OpenviduClusterLoadStrategy }} "
+OPENVIDU_OPTIONS+="-Dopenvidu.webhook={{ webhook_enabled }} "
+OPENVIDU_OPTIONS+="-Dopenvidu.webhook.endpoint={{ webhook_endpoint }} "
+#OPENVIDU_OPTIONS+="-Dopenvidu.webhook.headers= "
+#OPENVIDU_OPTIONS+="-Dopenvidu.webhook.events= "
 
 {% if run_ec2 == true %}
 export AWS_DEFAULT_REGION={{ aws_default_region }}
