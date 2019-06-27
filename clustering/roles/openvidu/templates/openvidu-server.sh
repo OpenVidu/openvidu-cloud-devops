@@ -27,7 +27,7 @@ OPENVIDU_OPTIONS+="-DMY_UID=$(id -u $USER) "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
 OPENVIDU_OPTIONS+="-Dopenvidu.webhook.endpoint={{ webhook_endpoint }} "
 
-HEADERS=$(echo Authorization: Basic T1BFTlZJRFVBUFA6TVlfU0VDUkVU,X-APP: OpenVidu Pro Cluster | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
+HEADERS=$(echo {{ webhook_headers }} | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
 OPENVIDU_HEADERS="openvidu.webhook.headers=[\\\"${HEADERS}\\\"] "
 echo ${OPENVIDU_HEADERS} >> /opt/openvidu/application.properties
 
