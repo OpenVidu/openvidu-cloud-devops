@@ -40,7 +40,9 @@ OPENVIDU_OPTIONS+="-Dopenvidu.pro.cluster=true "
 OPENVIDU_OPTIONS+="-Dopenvidu.pro.cluster.load.strategy={{ OpenviduClusterLoadStrategy }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.webhook={{ webhook_enabled }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.webhook.endpoint={{ webhook_endpoint }} "
-#OPENVIDU_OPTIONS+="-Dopenvidu.webhook.headers= "
+
+HEADERS=$(echo {{ webhook_headers }} | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
+OPENVIDU_OPTIONS+="-Dopenvidu.webhook.headers=[\"${HEADERS}\"] "
 
 EVENTS_LIST=$(echo {{ webhook_events }} | tr , ' ')
 E=$(for EVENT in ${EVENTS_LIST}

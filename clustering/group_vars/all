@@ -68,6 +68,7 @@ webhook_enabled: WEBHOOK_ENABLED
 webhook_endpoint: WEBHOOK_ENDPOINT
 
 # List of headers that OpenVidu Server Webhook service will attach to HTTP POST messages
+webhook_headers: WEBHOOK_HEADERS
 
 # List of events that will be sent by OpenVidu Server Webhook service
 webhook_events: WEBHOOK_EVENTS
