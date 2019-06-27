@@ -41,7 +41,15 @@ OPENVIDU_OPTIONS+="-Dopenvidu.pro.cluster.load.strategy={{ OpenviduClusterLoadSt
 OPENVIDU_OPTIONS+="-Dopenvidu.webhook={{ webhook_enabled }} "
 OPENVIDU_OPTIONS+="-Dopenvidu.webhook.endpoint={{ webhook_endpoint }} "
 #OPENVIDU_OPTIONS+="-Dopenvidu.webhook.headers= "
-#OPENVIDU_OPTIONS+="-Dopenvidu.webhook.events= "
+
+EVENTS_LIST=$(echo {{ webhook_events }} | tr , ' ')
+E=$(for EVENT in ${EVENTS_LIST}
+do
+	echo $EVENT | awk '{ print "\"" $1 "\"" }'
+done
+)
+EVENTS=$(echo $E | tr ' ' ,)
+OPENVIDU_OPTIONS+="-Dopenvidu.webhook.events=[${EVENTS}] "
 
 {% if run_ec2 == true %}
 export AWS_DEFAULT_REGION={{ aws_default_region }}
