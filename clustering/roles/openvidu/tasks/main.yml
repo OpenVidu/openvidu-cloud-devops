@@ -22,8 +22,8 @@
     mode: u+rwx
     owner: ubuntu
     group: ubuntu
-    username: {{ openvidu_pro_username }}
-    password: {{ openvidu_pro_password }}
+    username: "{{ openvidu_pro_username }}"
+    password: "{{ openvidu_pro_password }}"
 
 - name: copying openvidu launch script
   template:
