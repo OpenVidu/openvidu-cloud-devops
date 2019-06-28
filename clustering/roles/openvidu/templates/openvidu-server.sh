@@ -2,6 +2,8 @@
 
 # This script will launch OpenVidu Server on your machine
 
+OV_PROPERTIES="/opt/openvidu/application.properties"
+
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 PUBLIC_HOSTNAME={{ domain_name }}
 {% else %}
@@ -29,7 +31,10 @@ OPENVIDU_OPTIONS+="-Dopenvidu.webhook.endpoint={{ webhook_endpoint }} "
 
 HEADERS=$(echo {{ webhook_headers }} | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
 OPENVIDU_HEADERS="openvidu.webhook.headers=[\\\"${HEADERS}\\\"] "
-echo ${OPENVIDU_HEADERS} >> /opt/openvidu/application.properties
+if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
+then
+	echo ${OPENVIDU_HEADERS} >> ${OV_PROPERTIES}
+fi
 
 EVENTS_LIST=$(echo {{ webhook_events }} | tr , ' ')
 if [ "x$EVENTS_LIST" != "x" ]; then
