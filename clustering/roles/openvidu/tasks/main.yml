@@ -17,11 +17,13 @@
 
 - name: download OpenVidu JAR file
   get_url:
-    url: https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/openvidu-server-pro-latest.jar
+    url: https://pro.openvidu.io/openvidu-server-pro-latest.jar
     dest: /opt/openvidu/openvidu-server.jar
     mode: u+rwx
     owner: ubuntu
     group: ubuntu
+    username: {{ openvidu_pro_username }}
+    password: {{ openvidu_pro_password }}
 
 - name: copying openvidu launch script
   template:
