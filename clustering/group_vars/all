@@ -37,11 +37,12 @@ openvidu_port: 4443
 # and access any recorded video file. If false this path will be secured with
 # openvidu.secret param just as OpenVidu Server dashboard at
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
+# Values: true | false
 FreeHTTPAccesToRecordingVideos: FREEHTTPACCESTORECORDINGVIDEOS
 
 # What parameter should be used to distribute the creation of new sessions
 # (and therefore distribution of load) among all available KMSs. 
-# Can be: [streams, sessions, mediaObjects, cpu]",
+# Can be: [streams, sessions, mediaObjects, cpu]
 OpenviduClusterLoadStrategy: OPENVIDUCLUSTERLOADSTRATEGY
 
 # Which users should receive the recording events in the client side
@@ -68,15 +69,18 @@ OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
 # true to enable OpenVidu Server Webhook service. false' otherwise
+# Values: true | false
 webhook_enabled: WEBHOOK_ENABLED
 
 # HTTP endpoint where OpenVidu Server will send Webhook HTTP POST messages
+# Must be a valid URL: http(s)://ENDPOINT
 webhook_endpoint: WEBHOOK_ENDPOINT
 
 # List of headers that OpenVidu Server Webhook service will attach to HTTP POST messages
 webhook_headers: "WEBHOOK_HEADERS"
 
 # List of events that will be sent by OpenVidu Server Webhook service
+# Leave blank if all events.
 webhook_events: WEBHOOK_EVENTS
 
 # Instances IPs and names
@@ -84,7 +88,7 @@ webhook_events: WEBHOOK_EVENTS
 # Should be the same than in the inventory file
 ov_public_ip: OPENVIDU_INSTANCE_PUBLIC_IP
 
-# A comma separate list of IPs from the KMS instnaces
+# A comma separate list of IPs from the KMS instances
 kms_endpoint_ips: KURENTO_ENDPOINTS
 
 # For selfsigned certificate, type the public domain name
@@ -96,7 +100,7 @@ aws_default_region: AWS_DEFAULT_REGION
 
 # Port configuration
 # We divide port range in two, half for coturn server and the other half
-# for OpenVidu Server. Replace according for your needs:
+# for OpenVidu Server. Replace according to your needs:
 # i.e. 1024 ~ 32255 for coturn and 32256 ~ 65535 for KMS
 
 # Turn port config
