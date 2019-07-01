@@ -538,13 +538,13 @@ Resources:
           cd /usr/src/openvidu
           git clone https://github.com/OpenVidu/openvidu-cloud-devops.git
           cd openvidu-cloud-devops/clustering
-          git checkout @CF_RELEASE@
+          git checkout master
 
           OPENVIDU_IP=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PublicIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=server)
 
           sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$OPENVIDU_IP/" group_vars/all
           sed -i "s/MY_SECRET/${OpenViduSecret}/" group_vars/all
-          sed -i "s/OPENVIDU_VERSION/@OV_V@/" group_vars/all
+          sed -i "s/OPENVIDU_VERSION/2.10.0/" group_vars/all
           MIDDLE=$(( ( ${MinOpenPort} + ${MaxOpenPort} ) / 2 ))
           MIDDLEPLUSONE=$(( $MIDDLE + 1 ))          
           sed -i "s/KURENTO_MIN_PORT/$MIDDLEPLUSONE/" group_vars/all
@@ -614,7 +614,7 @@ Resources:
                 cd /usr/src/openvidu
                 git clone https://github.com/OpenVidu/openvidu-cloud-devops.git
                 cd /usr/src/openvidu/openvidu-cloud-devops/clustering            
-                git checkout @CF_RELEASE@
+                git checkout master
               mode: "000755"
               owner: "root"
               group: "root"
@@ -627,7 +627,7 @@ Resources:
                 PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
                 PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 
-                sed -i "s/OPENVIDU_VERSION/@OV_V@/" group_vars/all
+                sed -i "s/OPENVIDU_VERSION/2.10.0/" group_vars/all
                 sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$PIP/" group_vars/all
                 sed -i "s/OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME/$PublicHostname/" group_vars/all
                 sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" group_vars/all
