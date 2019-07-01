@@ -75,6 +75,16 @@ done
 KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | tr ' ' ,)
 OPENVIDU_OPTIONS+="-Dkms.uris=[${KMS_ENDPOINTS_LINE}] "
 
+# Wait for KMS
+for IP in ${KMS_IPs}
+do
+	while ! nc -z $IP 8888; do
+		echo "Waiting for Kurento Media Server (${IP}) to be available"
+    	sleep 10
+    done
+done
+
+
 pushd /opt/openvidu
 exec java -jar ${OPENVIDU_OPTIONS} /opt/openvidu/openvidu-server.jar
 
