@@ -17,7 +17,7 @@
 
 - name: download OpenVidu JAR file
   get_url:
-    url: https://pro.openvidu.io/openvidu-server-{{ version }}.jar
+    url: https://pro.openvidu.io/openvidu-server-pro-{{ version }}.jar
     dest: /opt/openvidu/openvidu-server.jar
     mode: u+rwx
     owner: ubuntu
@@ -29,6 +29,12 @@
   template:
     src: "openvidu-server.sh"
     dest: "/usr/local/bin"
+    mode: "u+rwx"
+
+- name: copying openvidu application.properties
+  template:
+    src: "application.properties.j2"
+    dest: "/opt/openvidu"
     mode: "u+rwx"
 
 - name: copying script for aws signal

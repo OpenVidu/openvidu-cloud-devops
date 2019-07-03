@@ -1,0 +1,19 @@
+openvidu.secret={{ openvidusecret }}
+server.ssl.enabled=false
+server.port=5443
+
+openvidu.recording=true
+openvidu.recording.public-access={{ FreeHTTPAccesToRecordingVideos }}
+openvidu.recording.notification={{ OpenviduRecordingNotification }}
+
+openvidu.streams.video.max-recv-bandwidth={{ OpenviduStreamsVideoMaxRecvBandwidth }}
+openvidu.streams.video.min-recv-bandwidth={{ OpenviduStreamsVideoMinRecvBandwidth }}
+openvidu.streams.video.max-send-bandwidth={{ OpenviduStreamsVideoMaxSendBandwidth }}
+openvidu.streams.video.min-send-bandwidth={{ OpenviduStreamsVideoMinSendBandwidth }}
+
+openvidu.pro.kibana.host=http://localhost/kibana
+openvidu.pro.cluster=true
+openvidu.pro.cluster.load.strategy={{ OpenviduClusterLoadStrategy }}
+
+openvidu.webhook={{ webhook_enabled }}
+openvidu.webhook.endpoint={{ webhook_endpoint }}
