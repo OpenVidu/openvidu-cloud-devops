@@ -28,7 +28,7 @@ OPENVIDU_OPTIONS+="-Dopenvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_p
 OPENVIDU_OPTIONS+="-DMY_UID=$(id -u $USER) "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
 
-HEADERS={{ webhook_headers }}
+HEADERS="{{ webhook_headers }}"
 if [ "x${HEADERS}" != "x" ]; then
 	H=$(echo ${HEADERS} | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
 	OPENVIDU_HEADERS="openvidu.webhook.headers=[\\\"${H}\\\"] "
