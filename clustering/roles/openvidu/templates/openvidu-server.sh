@@ -64,7 +64,7 @@ do
 done
 )
 KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | tr ' ' ,)
-sed -i "s#kms.urid=.*#kms.uris=[${KMS_ENDPOINTS_LINE}]#" ${OV_PROPERTIES}
+sed -i "s#kms.uris=.*#kms.uris=[${KMS_ENDPOINTS_LINE}]#" ${OV_PROPERTIES}
 
 # Wait for KMS
 for IP in ${KMS_IPs}
