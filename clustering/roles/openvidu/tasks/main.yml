@@ -34,7 +34,7 @@
 - name: copying openvidu application.properties
   template:
     src: "application.properties.j2"
-    dest: "/opt/openvidu"
+    dest: "/opt/openvidu/application.properties"
     mode: "u+rwx"
 
 - name: copying script for aws signal
