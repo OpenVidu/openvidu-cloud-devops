@@ -24,9 +24,9 @@ do
   sleep 1
 done
 
-OPENVIDU_OPTIONS+="-Dopenvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_port }} "
-OPENVIDU_OPTIONS+="-DMY_UID=$(id -u $USER) "
-OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
+sed -i "s#openvidu.publicurl=.*#openvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_port }}#" ${OV_PROPERTIES}
+sed -i "s/MY_UID=.*/MY_UID=$(id -u $USER)/" ${OV_PROPERTIES}
+sed -i "s#openvidu.recording.composed-url=.*#openvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/#" ${OV_PROPERTIES}
 
 HEADERS="{{ webhook_headers }}"
 if [ "x${HEADERS}" != "x" ]; then
@@ -64,7 +64,7 @@ do
 done
 )
 KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | tr ' ' ,)
-OPENVIDU_OPTIONS+="-Dkms.uris=[${KMS_ENDPOINTS_LINE}] "
+sed -i "s#kms.urid=.*#kms.uris=[${KMS_ENDPOINTS_LINE}]#" ${OV_PROPERTIES}
 
 # Wait for KMS
 for IP in ${KMS_IPs}
@@ -76,5 +76,5 @@ do
 done
 
 pushd /opt/openvidu
-exec java -jar ${OPENVIDU_OPTIONS} -Dspring.config.additional-location=${OV_PROPERTIES} /opt/openvidu/openvidu-server.jar
+exec java -jar -Dspring.config.additional-location=${OV_PROPERTIES} /opt/openvidu/openvidu-server.jar
 
