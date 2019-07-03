@@ -28,11 +28,14 @@ OPENVIDU_OPTIONS+="-Dopenvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_p
 OPENVIDU_OPTIONS+="-DMY_UID=$(id -u $USER) "
 OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
 
-HEADERS=$(echo {{ webhook_headers }} | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
-OPENVIDU_HEADERS="openvidu.webhook.headers=[\\\"${HEADERS}\\\"] "
-if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
-then
-	echo ${OPENVIDU_HEADERS} >> ${OV_PROPERTIES}
+HEADERS={{ webhook_headers }}
+if [ "x${HEADERS}" != "x" ]; then
+	H=$(echo ${HEADERS} | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
+	OPENVIDU_HEADERS="openvidu.webhook.headers=[\\\"${H}\\\"] "
+	if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
+	then
+		echo ${OPENVIDU_HEADERS} >> ${OV_PROPERTIES}
+	fi
 fi
 
 EVENTS_LIST=$(echo {{ webhook_events }} | tr , ' ')
@@ -43,7 +46,10 @@ if [ "x$EVENTS_LIST" != "x" ]; then
 	done
 	)
 	EVENTS=$(echo $E | tr ' ' ,)
-	OPENVIDU_OPTIONS+="-Dopenvidu.webhook.events=[${EVENTS}] "
+	if ! grep -Fq "openvidu.webhook.events" ${OV_PROPERTIES}
+	then
+		echo "openvidu.webhook.events=[${EVENTS}]" >> ${OV_PROPERTIES}
+	fi
 fi
 
 {% if run_ec2 == true %}
