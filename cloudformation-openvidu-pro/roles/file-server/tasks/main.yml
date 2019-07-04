@@ -1,0 +1,27 @@
+---
+- name: Install nginx and additional software
+  apt: 
+    name: [ nginx, apache2-utils, python-passlib]
+    state: latest
+    update_cache: true
+
+- name: Creating user for kms recordings
+  htpasswd:
+    path: /etc/nginx/conf.d/kms.htpasswd
+    name: "OPENVIDUAPP"
+    password: "{{ openvidusecret }}"
+    owner: root
+    group: kurento
+    mode: 0640
+
+- name: configuring nginx
+  copy: 
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+
+- name: configuring nginx default site
+  template: 
+    src: default.j2
+    dest: /etc/nginx/sites-enabled/default
+  notify:
+    restart nginx
