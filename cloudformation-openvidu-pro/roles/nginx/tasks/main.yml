@@ -1,12 +1,35 @@
 ---
+- name: Install nginx
+  apt: 
+    name: nginx 
+    state: latest
+    update_cache: true
+
+- name: install letsencrypt
+  apt: 
+    name: letsencrypt
+    state: latest
+  when: whichcert == "letsencrypt"
+
+- name: install apache2-utils
+  apt:
+    name: ['apache2-utils', 'python-passlib']
+    state: latest
+
 - name: Remove default nginx config
-  file: name=/etc/nginx/sites-enabled/default state=absent
+  file: 
+    name: /etc/nginx/sites-enabled/default 
+    state: absent
 
 - name: configuring nginx
-  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  copy: 
+    src: nginx.conf 
+    dest: /etc/nginx/nginx.conf
 
 - name: adding default proxy behaviour
-  copy: src=proxy.conf dest=/etc/nginx/sites-available/proxy.conf
+  copy: 
+    src: proxy.conf 
+    dest: /etc/nginx/sites-available/proxy.conf
 
 - name: Install nginx site for letsencrypt requests
   template:
@@ -29,13 +52,15 @@
   when: whichcert != "letsencrypt"
 
 - name: generating self signed certificated
-  command: openssl req -new -nodes -x509 -subj "/CN={{ aws_public_hostname }}" -days 3650 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca
+  command: openssl req -new -nodes -x509 -subj "/CN={{ ov_public_hostname }}" -days 3650 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca
   args:
     creates: /etc/nginx/ssl/nginx.crt
   when: whichcert == "selfsigned"
 
 - name: copying user certificates
-  copy: src={{ item }} dest=/etc/nginx/ssl
+  copy: 
+    src: "{{ item }}"
+    dest: /etc/nginx/ssl
   with_items:
     - nginx.key
     - nginx.crt

@@ -1,14 +1,28 @@
 ---
-- name: preconfiguring coturn
-  template:
-    src: "coturn.j2"
-    dest: "/etc/default/coturn"
+- name: installing jq
+  apt:
+    name: jq
 
-- name: preconfiguring turnserver
-  template:
-    src: "turnserver.conf.j2"
-    dest: "/etc/turnserver.conf"
-  notify: restart coturn
+- name: adding kurento PGP key
+  apt_key: 
+    keyserver: keyserver.ubuntu.com
+    id: 234821A61B67740F89BFD669FC8A16625AFA7A83
+    state: present
+
+- name: adding script for kurento repository
+  template: 
+    src: add-kms-repo.sh
+    dest: /usr/local/bin/add-kms-repo.sh
+    mode: 0755
+
+- name: ading kurento repository
+  command: /usr/local/bin/add-kms-repo.sh
+
+- name: installing Kurento Media Server
+  apt:
+    name: "kurento-media-server"
+    update_cache: yes
+  notify: start kms
 
 - name: preconfiguring Kurento Media Server
   template:
@@ -21,3 +35,11 @@
     src: "BaseRtpEndpoint.conf.ini.j2"
     dest: "/etc/kurento/modules/kurento/BaseRtpEndpoint.conf.ini"
   notify: restart kms
+
+- name: Permissions on recordings folder
+  file:
+    path: /opt/openvidu/recordings
+    state: directory
+    mode: '0755'
+    owner: kurento
+    group: kurento

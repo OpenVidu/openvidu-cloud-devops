@@ -15,7 +15,7 @@
   apt:
     name: ['apache2-utils', 'python-passlib']
     state: latest
-  
+
 - name: Remove default nginx config
   file: 
     name: /etc/nginx/sites-enabled/default 

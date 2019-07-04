@@ -1,9 +1,11 @@
 - hosts: all
   roles:
+    - geerlingguy.docker
     - nginx
-    - kibana
+    - elastic
     - kms
     - openvidu
     - supervisord
     - system-shutdown
+    - coturn
 

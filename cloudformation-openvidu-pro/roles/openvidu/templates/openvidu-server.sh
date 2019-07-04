@@ -2,6 +2,18 @@
 
 # This script will launch OpenVidu Server on your machine
 
+OV_PROPERTIES="/opt/openvidu/application.properties"
+
+{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
+PUBLIC_HOSTNAME={{ domain_name }}
+{% else %}
+{% if run_ec2 == true %}
+PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+{% else %}
+PUBLIC_HOSTNAME={{ ov_public_hostname }}
+{% endif %}
+{% endif %}
+
 # Wait for kibana
 while true
 do 
@@ -12,27 +24,61 @@ do
   sleep 1
 done
 
-{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
-PUBLIC_HOSTNAME={{ domain_name }}
+sed -i "s#openvidu.publicurl=.*#openvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_port }}#" ${OV_PROPERTIES}
+sed -i "s/MY_UID=.*/MY_UID=$(id -u $USER)/" ${OV_PROPERTIES}
+sed -i "s#openvidu.recording.composed-url=.*#openvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/#" ${OV_PROPERTIES}
+
+HEADERS="{{ webhook_headers }}"
+if [ "x${HEADERS}" != "x" ]; then
+	H=$(echo ${HEADERS} | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
+	OPENVIDU_HEADERS="openvidu.webhook.headers=[\\\"${H}\\\"] "
+	if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
+	then
+		echo ${OPENVIDU_HEADERS} >> ${OV_PROPERTIES}
+	fi
+fi
+
+EVENTS_LIST=$(echo {{ webhook_events }} | tr , ' ')
+if [ "x$EVENTS_LIST" != "x" ]; then
+	E=$(for EVENT in ${EVENTS_LIST}
+	do
+		echo $EVENT | awk '{ print "\"" $1 "\"" }'
+	done
+	)
+	EVENTS=$(echo $E | tr ' ' ,)
+	if ! grep -Fq "openvidu.webhook.events" ${OV_PROPERTIES}
+	then
+		echo "openvidu.webhook.events=[${EVENTS}]" >> ${OV_PROPERTIES}
+	fi
+fi
+
+{% if kms_run_cluster == true %}
+{% if run_ec2 == true %}
+export AWS_DEFAULT_REGION={{ aws_default_region }}
+KMS_IPs=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PrivateIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
 {% else %}
-PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+KMS_IPs=$(echo {{ kms_endpoint_ips }} | tr , ' ')
+{% endif %}
+KMS_ENDPOINTS=$(for IP in $KMS_IPs
+do
+  echo $IP | awk '{ print "\"ws://" $1 ":8888/kurento\"" }'
+done
+)
+KMS_ENDPOINTS_LINE=$(echo $KMS_ENDPOINTS | tr ' ' ,)
+sed -i "s#kms.uris=.*#kms.uris=[${KMS_ENDPOINTS_LINE}]#" ${OV_PROPERTIES}
+
+# Wait for KMS
+for IP in ${KMS_IPs}
+do
+	while ! nc -z $IP 8888; do
+		echo "Waiting for Kurento Media Server (${IP}) to be available"
+    	sleep 10
+    done
+done
+{% else %}
+sed -i "s#kms.uris=.*##" ${OV_PROPERTIES}
 {% endif %}
 
-OPENVIDU_OPTIONS="-Dopenvidu.secret={{ openvidusecret }} "
-OPENVIDU_OPTIONS+="-Dopenvidu.recording=true "
-OPENVIDU_OPTIONS+="-Dopenvidu.recording.public-access={{ FreeHTTPAccesToRecordingVideos }} "
-OPENVIDU_OPTIONS+="-Dserver.ssl.enabled=false "
-OPENVIDU_OPTIONS+="-Dopenvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_port }} "
-OPENVIDU_OPTIONS+="-Dserver.port=5443 "
-OPENVIDU_OPTIONS+="-DMY_UID=$(id -u $USER) "
-OPENVIDU_OPTIONS+="-Dopenvidu.recording.notification={{ OpenviduRecordingNotification }} "
-OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-recv-bandwidth={{ OpenviduStreamsVideoMaxRecvBandwidth }} "
-OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-recv-bandwidth={{ OpenviduStreamsVideoMinRecvBandwidth }} "
-OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.max-send-bandwidth={{ OpenviduStreamsVideoMaxSendBandwidth }} "
-OPENVIDU_OPTIONS+="-Dopenvidu.streams.video.min-send-bandwidth={{ OpenviduStreamsVideoMinSendBandwidth }} "
-OPENVIDU_OPTIONS+="-Dopenvidu.pro.kibana.host=http://localhost/kibana "
-OPENVIDU_OPTIONS+="-Dopenvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/ "
-
 pushd /opt/openvidu
-exec java -jar ${OPENVIDU_OPTIONS} openvidu-server.jar
+exec java -jar -Dspring.config.additional-location=${OV_PROPERTIES} /opt/openvidu/openvidu-server.jar
 

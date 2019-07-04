@@ -1,6 +1,0 @@
----
-- name: adding kibana conf
-  copy: 
-    src: kibana.yml
-    dest: /etc/kibana/kibana.yml
-  notify: restart kibana

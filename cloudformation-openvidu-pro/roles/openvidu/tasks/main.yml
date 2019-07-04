@@ -1,25 +1,51 @@
 ---
+- name: creating working dir
+  file:
+    path: "/opt/openvidu"
+    state: "directory"
+    mode: 0755
+
+- name: installing Java 8
+  apt:
+    name: openjdk-8-jdk
+    update_cache: yes
+
+- name: installing Redis
+  apt:
+    name: redis-server
+  notify: restart redis
+
+- name: download OpenVidu JAR file
+  get_url:
+    url: https://pro.openvidu.io/openvidu-server-pro-{{ version }}.jar
+    dest: /opt/openvidu/openvidu-server.jar
+    mode: u+rwx
+    owner: ubuntu
+    group: ubuntu
+    username: "{{ openvidu_pro_username }}"
+    password: "{{ openvidu_pro_password }}"
+
 - name: copying openvidu launch script
   template:
     src: "openvidu-server.sh"
     dest: "/usr/local/bin"
-    mode: "0755"
+    mode: "u+rwx"
+
+- name: copying openvidu application.properties
+  template:
+    src: "application.properties.j2"
+    dest: "/opt/openvidu/application.properties"
+    mode: "u+rwx"
 
 - name: copying script for aws signal
   copy:
     src: "check_app_ready.sh"
     dest: "/usr/local/bin"
     mode: "0755"
-  when: run_ec2
+  when: run_ec2|bool
 
 - name: creating recording directory
   file:
     path: /opt/openvidu/recordings
-    state: directory
-    mode: 0777
-
-- name: creating custom-layout directory
-  file:
-    path: /opt/openvidu/custom-layout
     state: directory
     mode: 0777
