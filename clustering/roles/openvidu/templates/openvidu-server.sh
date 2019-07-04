@@ -33,7 +33,7 @@ if [ "x${HEADERS}" != "x" ]; then
 	OPENVIDU_HEADERS="openvidu.webhook.headers=[\"${HEADERS}\"] "
 	if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
 	then
-		echo ${OPENVIDU_HEADERS} >> ${OV_PROPERTIES}
+		echo "${OPENVIDU_HEADERS}" >> ${OV_PROPERTIES}
 	fi
 fi
 
