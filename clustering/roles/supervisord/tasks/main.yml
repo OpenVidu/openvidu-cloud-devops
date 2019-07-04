@@ -6,7 +6,7 @@
 
 - name: copying supervisor openvidu stanza
   copy:
-    src: "openvidu.conf.j2"
+    src: "openvidu.conf"
     dest: "/etc/supervisor/conf.d/openvidu.conf"
   notify:
     - restart supervisor

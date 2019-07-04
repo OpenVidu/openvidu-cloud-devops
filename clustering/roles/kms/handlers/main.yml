@@ -7,4 +7,5 @@
 - name: start kms
   service: 
     name: kurento-media-server
-    state: started enabled=true
+    state: started 
+    enabled: true

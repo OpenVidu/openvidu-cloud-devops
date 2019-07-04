@@ -49,3 +49,8 @@
     path: /opt/openvidu/recordings
     state: directory
     mode: 0777
+
+- name: registering who i am
+  copy:
+    src: "openvidu-cluster-member"
+    dest: "/opt/openvidu"

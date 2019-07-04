@@ -1,19 +1,24 @@
 #!/bin/bash
 
-PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+{% if run_ec2 == true %}
 PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
+PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+{% else %}
+PUBLIC_IP={{ ov_public_ip }}
+PUBLIC_HOSTNAME={{ ov_public_hostname }}
+{% endif %}
 
-systemctl stop kurento-media-server
-systemctl stop coturn
-systemctl stop nginx
-sleep 5
-cat /etc/turnserver.conf | grep -v external-ip >/tmp/turnserver.conf
-echo "external-ip=${PUBLIC_IP}" >> /tmp/turnserver.conf
-mv /tmp/turnserver.conf /etc/turnserver.conf
+CLUSTER_MEMBER=$(cat /opt/openvidu/openvidu-cluster-member)
 
-cat /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini | grep -v stunServerAddress > /tmp/WebRtcEndpoint.conf.ini
-echo stunServerAddress=${PUBLIC_IP} >> /tmp/WebRtcEndpoint.conf.ini
-mv /tmp/WebRtcEndpoint.conf.ini /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+if [ "${CLUSTER_MEMBER}" == "server" ]; then
+    systemctl stop coturn
+    systemctl stop nginx
+
+    sleep 5
+
+    cat /etc/turnserver.conf | grep -v external-ip >/tmp/turnserver.conf
+    echo "external-ip=${PUBLIC_IP}" >> /tmp/turnserver.conf
+    mv /tmp/turnserver.conf /etc/turnserver.conf
 
 cat >/etc/nginx/sites-enabled/kms-ov<<EOF
 server {
@@ -31,8 +36,89 @@ server {
     }
 }
 EOF
-sleep 5
-systemctl start coturn
-systemctl start kurento-media-server
-systemctl start nginx
+
+cat >/etc/nginx/sites-enabled/default<<EOF
+add_header X-Frame-Options SAMEORIGIN;
+add_header X-Content-Type-Options nosniff;
+
+upstream kibana {
+    server localhost:5601;
+}
+
+upstream inspector {
+    server ${PUBLIC_IP}:5443;
+}
+
+server {
+    listen 127.0.0.1:80;
+    server_name _;
+
+    location /kibana {
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
+        rewrite ^/kibana/(.*)$ /\$1 break;
+        proxy_pass http://kibana/;
+    }
+}
+
+server {
+    listen 443 ssl default deferred;
+    server_name ${PUBLIC_HOSTNAME};
+
+    ssl on;
+    ssl_certificate /etc/nginx/ssl/nginx.crt;
+    ssl_certificate_key /etc/nginx/ssl/nginx.key;
+
+    include sites-available/proxy.conf;
+
+    root /var/www/html;
+
+    location /inspector {
+        rewrite ^/inspector/(.*)$ /\$1 break;
+        proxy_pass http://inspector/;
+    }
+
+    location /kibana {
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
+        rewrite ^/kibana/(.*)$ /\$1 break;
+        proxy_pass http://kibana/;
+        auth_basic "Openvidu Monitoring";
+        auth_basic_user_file /etc/nginx/conf.d/kibana.htpasswd;
+    }
+}
+EOF
+    
+    sleep 5
+    systemctl start coturn
+    systemctl start nginx
+else
+    systemctl stop kurento-media-server
+
+    sleep 5
+
+    cat /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini | grep -v stunServerAddress > /tmp/WebRtcEndpoint.conf.ini
+    echo stunServerAddress=${PUBLIC_IP} >> /tmp/WebRtcEndpoint.conf.ini
+    mv /tmp/WebRtcEndpoint.conf.ini /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+
+    sleep 5
+
+    systemctl start kurento-media-server
+fi
+
+
+
+
+
+
+
+
+
+
 

@@ -43,3 +43,8 @@
     mode: '0755'
     owner: kurento
     group: kurento
+
+- name: registering who i am
+  copy:
+    src: "openvidu-cluster-member"
+    dest: "/opt/openvidu"
