@@ -2,10 +2,10 @@
   roles:
     - geerlingguy.docker
     - nginx
-    - elastic
+    - supervisord    
     - kms
     - openvidu
-    - supervisord
+    - elastic
     - system-shutdown
     - coturn
 
