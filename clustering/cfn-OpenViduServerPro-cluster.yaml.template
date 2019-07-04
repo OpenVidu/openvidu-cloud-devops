@@ -1,9 +1,12 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
+Description: "Openvidu Server Pro CloudFormation template."
+
 Parameters:
   KeyName:
-    Description: Name of an existing EC2 key pair for SSH access to the EC2 instance.
+    Description: "Name of an existing EC2 KeyPair to enable SSH access to the instance."
     Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: "must be the name of an existing EC2 KeyPair."
   
   KurentoAvailabilityZone:
     Type: String
@@ -541,10 +544,11 @@ Resources:
           git checkout @CF_RELEASE@
 
           OPENVIDU_IP=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PublicIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=server)
+          OV_VERSION=@OV_V@
 
           sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$OPENVIDU_IP/" group_vars/all
           sed -i "s/MY_SECRET/${OpenViduSecret}/" group_vars/all
-          sed -i "s/OPENVIDU_VERSION/@OV_V@/" group_vars/all
+          sed -i "s/OPENVIDU_VERSION/$OV_VERSION/" group_vars/all
           MIDDLE=$(( ( ${MinOpenPort} + ${MaxOpenPort} ) / 2 ))
           MIDDLEPLUSONE=$(( $MIDDLE + 1 ))          
           sed -i "s/KURENTO_MIN_PORT/$MIDDLEPLUSONE/" group_vars/all
@@ -626,8 +630,9 @@ Resources:
                 
                 PIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
                 PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+                OV_VERSION=@OV_V@
 
-                sed -i "s/OPENVIDU_VERSION/@OV_V@/" group_vars/all
+                sed -i "s/OPENVIDU_VERSION/$OV_VERSION/" group_vars/all
                 sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$PIP/" group_vars/all
                 sed -i "s/OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME/$PublicHostname/" group_vars/all
                 sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" group_vars/all
