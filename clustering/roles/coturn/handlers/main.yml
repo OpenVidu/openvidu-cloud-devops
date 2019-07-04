@@ -1,10 +1,4 @@
 ---
-- name: restart kms
-  service: name=kurento-media-server state=restarted
-
-- name: start kms
-  service: name=kurento-media-server state=started enabled=true
-
 - name: restart coturn
   service: name=coturn state=restarted
 

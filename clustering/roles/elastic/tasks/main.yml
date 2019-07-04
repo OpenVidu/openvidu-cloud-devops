@@ -1,27 +1,24 @@
 ---
-- name: Ensure dependency is installed (Ubuntu).
+- name: ensure dependency is installed (ubuntu)
   apt: 
     name: apt-transport-https
     state: present
 
-- name: Add Elastic apt key.
+- name: add elastic apt key
   apt_key:
     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
 
-- name: Add Elastic repository.
+- name: add elastic repository
   apt_repository:
     repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
     state: present
     update_cache: true
 
-- name: Install Elastic's Packages.
+- name: install elastic's packages
   package:
-    name: "{{ item }}"
-    state: "present"
-  with_items:
-    - elasticsearch
-    - kibana
+    name: ['elasticsearch', 'kibana']
+    state: present
 
 - name: adding kibana conf
   copy: 
@@ -29,7 +26,7 @@
     dest: /etc/kibana/kibana.yml
   notify: start kibana
 
-- name: Start Elasticsearch.
+- name: start elasticsearch
   service:
     name: elasticsearch
     state: started

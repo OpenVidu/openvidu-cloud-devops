@@ -1,7 +1,7 @@
 ---
 - name: Install nginx and additional software
   apt: 
-    name: [ nginx, apache2-utils, python-passlib]
+    name: ['nginx', 'apache2-utils', 'python-passlib']
     state: latest
     update_cache: true
 

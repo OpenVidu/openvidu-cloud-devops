@@ -1,10 +1,16 @@
 ---
 - name: stop supervisor
-  service: name=supervisor state=stopped
+  service: 
+    name: supervisor 
+    state: stopped
 
 - name: start supervisor
-  service: name=supervisor state=started
+  service: 
+    name: supervisor 
+    state: started
 
 - name: restart supervisor
-  service: name=supervisor state=restarted
+  service: 
+    name: supervisor 
+    state: restarted
 
