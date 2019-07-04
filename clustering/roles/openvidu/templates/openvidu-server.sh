@@ -31,7 +31,7 @@ sed -i "s#openvidu.recording.composed-url=.*#openvidu.recording.composed-url=htt
 HEADERS="{{ webhook_headers }}"
 if [ "x${HEADERS}" != "x" ]; then
 	H=$(echo ${HEADERS} | sed -e 's/[^a-zA-Z0-9,._+@%/-]/\\&/g; 1{$s/^$/""/}; 1!s/^/"/; $!s/$/"/')
-	OPENVIDU_HEADERS="openvidu.webhook.headers=[\\\"${H}\\\"] "
+	OPENVIDU_HEADERS="openvidu.webhook.headers=[\"${H}\"] "
 	if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
 	then
 		echo ${OPENVIDU_HEADERS} >> ${OV_PROPERTIES}
