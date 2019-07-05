@@ -37,6 +37,8 @@ if [ "x${HEADERS}" != "x" ]; then
 	fi
 fi
 
+sleep 60
+
 EVENTS_LIST=$(echo {{ webhook_events }} | tr , ' ')
 if [ "x$EVENTS_LIST" != "x" ]; then
 	E=$(for EVENT in ${EVENTS_LIST}
