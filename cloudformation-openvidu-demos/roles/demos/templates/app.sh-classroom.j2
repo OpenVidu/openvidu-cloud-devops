@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# Launcher for classroom demo
-
-java -Djava.security.egd=file:/dev/./urandom -Dspring.datasource.password={{ mysql_root_pass }} -Dspring.datasource.url=jdbc:mysql://127.0.0.1/{{ mysql_database }} -Dopenvidu.url=https://$1:{{ openvidu_port }} -Dserver.port=5001 -jar /var/www/html/classroom/classroom-demo.jar
-
