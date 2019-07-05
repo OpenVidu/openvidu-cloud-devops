@@ -30,6 +30,12 @@
     dest: "/usr/local/bin"
     mode: "u+rwx"
 
+- name: copying openvidu application.properties
+  template:
+    src: "application.properties.j2"
+    dest: "/opt/openvidu/application.properties"
+    mode: "u+rwx"
+
 - name: copying script for aws signal
   template:
     src: "check_app_ready.sh"
