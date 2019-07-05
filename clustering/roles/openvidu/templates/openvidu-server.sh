@@ -28,17 +28,6 @@ sed -i "s#openvidu.publicurl=.*#openvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{
 sed -i "s/MY_UID=.*/MY_UID=$(id -u $USER)/" ${OV_PROPERTIES}
 sed -i "s#openvidu.recording.composed-url=.*#openvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/#" ${OV_PROPERTIES}
 
-HEADERS="{{ webhook_headers }}"
-if [ "x${HEADERS}" != "x" ]; then
-	OPENVIDU_HEADERS="openvidu.webhook.headers=[\"${HEADERS}\"] "
-	if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
-	then
-		echo "${OPENVIDU_HEADERS}" >> ${OV_PROPERTIES}
-	fi
-fi
-
-sleep 60
-
 EVENTS_LIST=$(echo {{ webhook_events }} | tr , ' ')
 if [ "x$EVENTS_LIST" != "x" ]; then
 	E=$(for EVENT in ${EVENTS_LIST}
@@ -50,6 +39,15 @@ if [ "x$EVENTS_LIST" != "x" ]; then
 	if ! grep -Fq "openvidu.webhook.events" ${OV_PROPERTIES}
 	then
 		echo "openvidu.webhook.events=[${EVENTS}]" >> ${OV_PROPERTIES}
+	fi
+fi
+
+HEADERS="{{ webhook_headers }}"
+if [ "x${HEADERS}" != "x" ]; then
+	OPENVIDU_HEADERS="[\"${HEADERS}\"]"
+	if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
+	then
+		echo "openvidu.webhook.headers=${OPENVIDU_HEADERS}" >> ${OV_PROPERTIES}
 	fi
 fi
 
