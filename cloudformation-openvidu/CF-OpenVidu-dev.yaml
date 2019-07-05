@@ -38,7 +38,7 @@ Parameters:
       - c4.8xlarge
     ConstraintDescription: must be a valid EC2 instance type.
 
-  MyDomainName: 
+  MyDomainName:
     Description: "Valid DNS record name like mycompany.com."
     Type: String
     Default: openvidu.mycompany.com
@@ -151,6 +151,14 @@ Parameters:
       - false
     Default: false
 
+  OpenViduWebhook:
+    Description: "true to enable OpenVidu Server Webhook service. false otherwise."
+    Type: String
+    Default: false
+    AllowedValues:
+    - false
+    - true
+
   OpenViduWebhookEndpoint:
     Description: "HTTP endpoint where OpenVidu Server will send Webhook HTTP POST messages."
     Type: String
@@ -259,6 +267,8 @@ Resources:
               content: |
                 #!/bin/bash
                 git clone https://github.com/OpenVidu/openvidu-cloud-devops /usr/src/openvidu
+                cd /usr/src/openvidu/cloudformation-openvidu
+                git checkout master
               mode: "000755"
               owner: "root"
               group: "root"
@@ -277,9 +287,9 @@ Resources:
               content: !Sub |
                 #!/bin/bash
                 WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu
-                OPENVIDU_VERSION=2.9.0
-                OPENVIDU_DEMOS_VERSION=2.9.0
-                OPENVIDU_CALL_VERSION=2.9.0
+                OPENVIDU_VERSION=2.10.0
+                OPENVIDU_DEMOS_VERSION=2.10.0
+                OPENVIDU_CALL_VERSION=2.10.0
                 sed -i "s/OV_VERSION/$OPENVIDU_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/DEMOS_VERSION/$OPENVIDU_DEMOS_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/OVC_VERSION/$OPENVIDU_CALL_VERSION/" $WORKINGDIR/group_vars/all
@@ -349,6 +359,9 @@ Resources:
           pushd /usr/src/openvidu/cloudformation-openvidu
           ansible-playbook -i "localhost," -c local play.yml
           popd
+
+          # Wait for the app
+          /usr/local/bin/check_app_ready.sh
 
           # sending the finish call
           /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource WaitCondition --region ${AWS::Region}

@@ -2,10 +2,12 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Deploying OpenVidu Server over AWS
 
 Parameters:
+
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: 'AWS::EC2::KeyPair::KeyName'
     ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
   InstanceType:
     Description: Demos Machine EC2 instance type
     Type: String
@@ -35,12 +37,25 @@ Parameters:
       - c4.4xlarge
       - c4.8xlarge
     ConstraintDescription: must be a valid EC2 instance type.
+
   MyDomainName:
-    Description: "For example: openvidu.io"
+    Description: "Valid DNS record name like mycompany.com."
     Type: String
+    Default: openvidu.mycompany.com
+    AllowedPattern: >-
+      ^(?:_?(?>[a-z\d][a-z\d-]{0,61}[a-z\d]|[a-z\d])\.)*(?:_?(?>[a-z\d][a-z\d-]{0,61}[a-z\d]|[a-z\d]))\.?$
+    ConstraintDescription: >-
+      Must be a valid DNS name. Like myapp.example.com
+
   PublicElasticIP:
-    Description: "In case you want to use Let's Encrypt, the Elastic IP you generated"
+    Description: "Valid AWS elastic IP for using with Let's Encrypt or OwnCertificate."
     Type: String
+    Default: 1.0.2.0
+    AllowedPattern: >-
+      ^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$
+    ConstraintDescription: >-
+      Must be a valid IP address. A valid IP address must be in the form of xxx.xxx.xxx.xxx, where xxx is a number from 0-255.
+
   OpenViduSecret:
     Description: >-
       Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed. 
@@ -49,6 +64,7 @@ Parameters:
     Default: MY_SECRET
     AllowedPattern: ^((?!")(?! ).)*$
     NoEcho: true
+
   WhichCert:
     Description: You can choose from the list below which certificate to use
     Type: String
@@ -57,15 +73,19 @@ Parameters:
       - selfsigned
       - letsencrypt
       - owncert
+
   LetsEncryptEmail:
     Description: Email necesary for Let's Encrypt notifications
     Type: String
+
   OwnCertCRT:
     Description: URL to the CRT file
     Type: String
+
   OwnCertKEY:
     Description: URL to the KEY file
     Type: String
+
   WantToSendInfo:
     Description: Do you agree to send anonymous information to OpenVidu Team for statistics
     Type: String
@@ -73,6 +93,7 @@ Parameters:
     AllowedValues:
       - 'true'
       - 'false'
+
   FreeHTTPAccesToRecordingVideos:
     Description: Do you want your recordings to be access publicly?
     Type: String
@@ -80,6 +101,7 @@ Parameters:
     AllowedValues:
       - 'true'
       - 'false'
+
   OpenviduRecordingNotification:
     Description: >-
       Which users should receive the recording events in the client side
@@ -91,30 +113,35 @@ Parameters:
       - publisher_moderator
       - moderator
       - none
+
   OpenviduStreamsVideoMaxRecvBandwidth:
     Description: >-
       Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0
       means unconstrained
     Type: String
     Default: '1000'
+
   OpenviduStreamsVideoMinRecvBandwidth:
     Description: >-
       Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0
       means unconstrained
     Type: String
     Default: '300'
+
   OpenviduStreamsVideoMaxSendBandwidth:
     Description: >-
       Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0
       means unconstrained
     Type: String
     Default: '1000'
+
   OpenviduStreamsVideoMinSendBandwidth:
     Description: >-
       Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0
       means unconstrained
     Type: String
     Default: '300'
+
   WantToDeployDemos:
     Description: >-
       Choose if you want to deploy practical examples of OpenVidu functionality.
@@ -124,40 +151,64 @@ Parameters:
       - false
     Default: false
 
+  OpenViduWebhook:
+    Description: "true to enable OpenVidu Server Webhook service. false otherwise."
+    Type: String
+    Default: false
+    AllowedValues:
+    - false
+    - true
+
+  OpenViduWebhookEndpoint:
+    Description: "HTTP endpoint where OpenVidu Server will send Webhook HTTP POST messages."
+    Type: String
+    Default: http://my.endpoint.com
+
+  OpenViduWebhookHeaders:
+    Description: "List of headers that OpenVidu Server Webhook service will attach to HTTP POST messages. JUST one header at the moment"
+    Type: String
+
+  OpenViduWebhookEvents:
+    Description: >-
+      Comma separate list of events that will be sent by OpenVidu Server Webhook service. Check out all the events
+       here: https://openvidu.io/docs/reference-docs/openvidu-server-cdr/
+    Type: String
+    Default: "sessionCreated,sessionDestroyed,participantJoined,participantLeft,webrtcConnectionCreated,webrtcConnectionDestroyed,recordingStatusChanged"
+
 Mappings:
   RegionMap:
     eu-north-1:
-      AMI: ami-09d25a77
+      AMI: ami-4bd45f35
     ap-south-1:
-      AMI: ami-0f4ab593bd4e5b352
+      AMI: ami-03dcedc81ea3e7e27
     eu-west-3:
-      AMI: ami-0acfe51b617393c70
+      AMI: ami-080d4d4c37b0aa206
     eu-west-2:
-      AMI: ami-021202ee82d116ad0
+      AMI: ami-0cbe2951c7cd54704
     eu-west-1:
-      AMI: ami-0e219142c0bee4a6e
+      AMI: ami-03746875d916becc0
     ap-northeast-2:
-      AMI: ami-04ca5d9535faed24a
+      AMI: ami-0a25005e83c56767a
     ap-northeast-1:
-      AMI: ami-097beac0bacfefe65
+      AMI: ami-096c57cee908da809
     sa-east-1:
-      AMI: ami-058732e2bf6d7acb4
+      AMI: ami-09beb384ba644b754
     ca-central-1:
-      AMI: ami-040bf52a85a5b3f6c
+      AMI: ami-0eb3e12d3927c36ef
     ap-southeast-1:
-      AMI: ami-0f9f33c210de47b63
+      AMI: ami-04613ff1fdcd2eab1
     ap-southeast-2:
-      AMI: ami-074a2888bf09cab0a
+      AMI: ami-000c2343cf03d7fd7
     eu-central-1:
-      AMI: ami-05710338b6a5013d1
+      AMI: ami-0085d4f8878cddc81
     us-east-1:
-      AMI: ami-028d6461780695a43
+      AMI: ami-0cfee17793b08a293
     us-east-2:
-      AMI: ami-0dae3d101cd772fae
+      AMI: ami-0f93b5fd8f220e428
     us-west-1:
-      AMI: ami-069339bea0125f50d
+      AMI: ami-09eb5e8a83c7aa890
     us-west-2:
-      AMI: ami-09b42c38b449cfa59
+      AMI: ami-0b37e9efc396e4c38
 
 Metadata:
   'AWS::CloudFormation::Interface':
@@ -182,6 +233,10 @@ Metadata:
           - OpenviduStreamsVideoMaxSendBandwidth
           - OpenviduStreamsVideoMinSendBandwidth
           - WantToDeployDemos
+          - OpenViduWebhook
+          - OpenViduWebhookEndpoint
+          - OpenViduWebhookHeaders
+          - OpenViduWebhookEvents
 
 Conditions:
   NoSelfSigned: !Not 
@@ -190,6 +245,7 @@ Conditions:
       - selfsigned
 
 Resources:
+
   OpenviduServer:
     Type: 'AWS::EC2::Instance'
     Metadata:
@@ -250,6 +306,10 @@ Resources:
                 sed -i "s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/${OpenviduStreamsVideoMinRecvBandwidth}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/${OpenviduStreamsVideoMaxSendBandwidth}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH/${OpenviduStreamsVideoMinSendBandwidth}/" $WORKINGDIR/group_vars/all
+                sed -i "s/WEBHOOK_ENABLED/${OpenViduWebhook}/" $WORKINGDIR/group_vars/all
+                sed -i "s#WEBHOOK_ENDPOINT#${OpenViduWebhookEndpoint}#" $WORKINGDIR/group_vars/all
+                sed -i "s/WEBHOOK_HEADERS/${OpenViduWebhookHeaders}/" $WORKINGDIR/group_vars/all
+                sed -i "s/WEBHOOK_EVENTS/${OpenViduWebhookEvents}/" $WORKINGDIR/group_vars/all
               mode: "000755"
               owner: "root"
               group: "root"
@@ -299,6 +359,9 @@ Resources:
           pushd /usr/src/openvidu/cloudformation-openvidu
           ansible-playbook -i "localhost," -c local play.yml
           popd
+
+          # Wait for the app
+          /usr/local/bin/check_app_ready.sh
 
           # sending the finish call
           /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource WaitCondition --region ${AWS::Region}
