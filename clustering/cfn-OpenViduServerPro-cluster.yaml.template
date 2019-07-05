@@ -191,7 +191,7 @@ Parameters:
   
   UDPRange:
     Description: >-
-      UDP Range that's permitted from port 1024 to 65535 for TCP of the instance,
+      UDP Range that's permitted from port 1024 to 65535 for UDP of the instance,
       e.g. ALL 0.0.0.0/0
     Type: String
     Default: 192.168.1.100/32
