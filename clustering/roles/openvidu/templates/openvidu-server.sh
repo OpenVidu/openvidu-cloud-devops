@@ -75,5 +75,5 @@ do
 done
 
 pushd /opt/openvidu
-# exec java -jar -Dspring.config.additional-location=${OV_PROPERTIES} /opt/openvidu/openvidu-server.jar
+exec java -jar -Dspring.config.additional-location=${OV_PROPERTIES} /opt/openvidu/openvidu-server.jar
 
