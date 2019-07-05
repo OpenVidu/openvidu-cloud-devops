@@ -55,6 +55,21 @@ OpenviduStreamsVideoMaxSendBandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 # 0 means unconstrained
 OpenviduStreamsVideoMinSendBandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
+# true to enable OpenVidu Server Webhook service. false' otherwise
+# Values: true | false
+webhook_enabled: WEBHOOK_ENABLED
+
+# HTTP endpoint where OpenVidu Server will send Webhook HTTP POST messages
+# Must be a valid URL: http(s)://ENDPOINT
+webhook_endpoint: WEBHOOK_ENDPOINT
+
+# List of headers that OpenVidu Server Webhook service will attach to HTTP POST messages
+webhook_headers: "WEBHOOK_HEADERS"
+
+# List of events that will be sent by OpenVidu Server Webhook service
+# Leave blank if all events.
+webhook_events: WEBHOOK_EVENTS
+
 ## Demos Section
 
 # Set to yes if you want to deploy OpenVidu examples and Demos
