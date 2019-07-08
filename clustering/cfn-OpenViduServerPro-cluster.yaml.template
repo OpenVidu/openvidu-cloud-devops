@@ -1,5 +1,5 @@
 ---
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: "2010-09-09"
 Description: "Openvidu Server Pro CloudFormation template."
 
 Parameters:
@@ -299,12 +299,17 @@ Parameters:
   OpenViduCidrBlock:
     Description: Dedicated VPC for OpenVidu cluster
     Type: String
-    Default: 172.16.0.0/16
+    Default: 10.192.0.0/16
 
-  OpenViduSubnet:
-    Description: Subnet for OpenVidu cluster
+  OpenViduSubnetCIDR:
+    Description: Subnet for OpenVidu server
     Type: String
-    Default: 172.16.0.0/24
+    Default: 10.192.10.0/24
+
+  KMSSubnetCIDR:
+    Description: Subnet for KMS cluster
+    Type: String
+    Default: 10.192.20.0/24
 
   OpenviduClusterLoadStrategy:
     Description: >
@@ -373,7 +378,8 @@ Metadata:
           default: Networking Info
         Parameters:
         - OpenViduCidrBlock
-        - OpenViduSubnet
+        - OpenViduSubnetCIDR
+        - KMSSubnetCIDR
         - KurentoAvailabilityZone
       - 
         Label:
@@ -435,41 +441,89 @@ Resources:
         - Key: Name
           Value: OpenViduVPC
 
-  OpenViduSubnet1:
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: OpenViduInternetGateway
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref OpenViduVPC
+
+  OpenViduPublicSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
-      CidrBlock: !Ref OpenViduSubnet
+      CidrBlock: !Ref OpenViduSubnetCIDR
       VpcId: !Ref OpenViduVPC
       AvailabilityZone: !Ref KurentoAvailabilityZone
-      MapPublicIpOnLaunch: 'true'
+      MapPublicIpOnLaunch: true
 
-  InternetGateway:
-    Type: 'AWS::EC2::InternetGateway'
-
-  AttachInternetGateway:
-    Type: 'AWS::EC2::VPCGatewayAttachment'
+  KMSPrivateSubnet:
+    Type: 'AWS::EC2::Subnet'
     Properties:
+      CidrBlock: !Ref KMSSubnetCIDR
       VpcId: !Ref OpenViduVPC
-      InternetGatewayId: !Ref InternetGateway
+      AvailabilityZone: !Ref KurentoAvailabilityZone
+      MapPublicIpOnLaunch: false
 
-  RouteTable:
+  NatGatewayEIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGatewayEIP.AllocationId
+      SubnetId: !Ref OpenViduPublicSubnet
+
+  PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref OpenViduVPC
+      Tags:
+        - Key: Name
+          Value: OpenVidu Public Routes
 
-  PublicSubnet1RouteTableAssociation:
-    Type: 'AWS::EC2::SubnetRouteTableAssociation'
-    Properties:
-      RouteTableId: !Ref RouteTable
-      SubnetId: !Ref OpenViduSubnet1
-
-  InternetRoute:
+  DefaultPublicRoute:
     Type: AWS::EC2::Route
-    DependsOn: AttachInternetGateway
-    Properties: 
-      RouteTableId: !Ref RouteTable
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref OpenViduPublicSubnet
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref OpenViduVPC
+      Tags:
+        - Key: Name
+          Value: OpenVidu Private Routes
+
+  DefaultPrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PrivateSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref KMSPrivateSubnet
 
   DescribeInstancesRole:
     Type: 'AWS::IAM::Role'
@@ -510,7 +564,7 @@ Resources:
       ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref AwsInstanceTypeKMS
       EbsOptimized: false
-      AssociatePublicIpAddress: true
+      AssociatePublicIpAddress: false
       KeyName: !Ref KeyName
       IamInstanceProfile: !Ref OpenviduInstancesProfile
       SecurityGroups:
@@ -574,7 +628,7 @@ Resources:
       MaxSize: !Ref KurentoAsgSize
       DesiredCapacity: !Ref KurentoAsgSize
       VPCZoneIdentifier: 
-        - !Ref OpenViduSubnet1
+        - !Ref KMSPrivateSubnet
       Tags:
         - Key: Name
           Value: 'Kurento Media Server'
@@ -681,7 +735,7 @@ Resources:
       InstanceType: !Ref AwsInstanceTypeOV
       KeyName: !Ref KeyName
       IamInstanceProfile: !Ref OpenviduInstancesProfile
-      SubnetId: !Ref OpenViduSubnet1
+      SubnetId: !Ref OpenViduPublicSubnet
       SecurityGroupIds:
         - !GetAtt 'OpenViduSecurityGroup.GroupId'
       Tags:
