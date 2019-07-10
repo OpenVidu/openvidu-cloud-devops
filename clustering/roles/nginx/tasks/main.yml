@@ -52,7 +52,7 @@
   when: whichcert != "letsencrypt"
 
 - name: generating self signed certificated
-  command: openssl req -new -nodes -x509 -subj "/CN={{ ov_public_hostname }}" -days 365 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca
+  command: openssl req -new -nodes -x509 -subj "/CN={{ openvidu_publicurl }}" -days 365 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca
   args:
     creates: /etc/nginx/ssl/nginx.crt
   when: whichcert == "selfsigned"
@@ -79,8 +79,8 @@
 - name: Creating user for kibana
   htpasswd:
     path: /etc/nginx/conf.d/kibana.htpasswd
-    name: "{{ KibanaUser }}"
-    password: "{{ KibanaPassword }}"
+    name: "{{ kibana_user }}"
+    password: "{{ kibana_password }}"
     owner: root
     group: www-data
     mode: 0640

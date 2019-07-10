@@ -10,7 +10,7 @@ PUBLIC_HOSTNAME={{ domain_name }}
 {% if run_ec2 == true %}
 PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 {% else %}
-PUBLIC_HOSTNAME={{ ov_public_hostname }}
+PUBLIC_HOSTNAME={{ openvidu_publicurl }}
 {% endif %}
 {% endif %}
 
@@ -24,11 +24,11 @@ do
   sleep 1
 done
 
-sed -i "s#openvidu.publicurl=.*#openvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_port }}#" ${OV_PROPERTIES}
+sed -i "s#openvidu.publicurl=.*#openvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_server_port }}#" ${OV_PROPERTIES}
 sed -i "s/MY_UID=.*/MY_UID=$(id -u $USER)/" ${OV_PROPERTIES}
 sed -i "s#openvidu.recording.composed-url=.*#openvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/#" ${OV_PROPERTIES}
 
-EVENTS_LIST=$(echo {{ webhook_events }} | tr , ' ')
+EVENTS_LIST=$(echo {{ openvidu_webhook_events }} | tr , ' ')
 if [ "x$EVENTS_LIST" != "x" ]; then
 	E=$(for EVENT in ${EVENTS_LIST}
 	do
@@ -42,7 +42,7 @@ if [ "x$EVENTS_LIST" != "x" ]; then
 	fi
 fi
 
-HEADERS="{{ webhook_headers }}"
+HEADERS="{{ openvidu_webhook_headers }}"
 if [ "x${HEADERS}" != "x" ]; then
 	OPENVIDU_HEADERS="[\"${HEADERS}\"]"
 	if ! grep -Fq "openvidu.webhook.headers" ${OV_PROPERTIES}
@@ -55,7 +55,7 @@ fi
 export AWS_DEFAULT_REGION={{ aws_default_region }}
 KMS_IPs=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PrivateIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
 {% else %}
-KMS_IPs=$(echo {{ kms_endpoint_ips }} | tr , ' ')
+KMS_IPs=$(echo {{ kms.uris }} | tr , ' ')
 {% endif %}
 KMS_ENDPOINTS=$(for IP in $KMS_IPs
 do

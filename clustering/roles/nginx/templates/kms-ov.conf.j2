@@ -1,9 +1,9 @@
 server {
-    listen {{ openvidu_port }} ssl;
+    listen {{ openvidu_server_port }} ssl;
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
     server_name {{ domain_name }};
 {% else %}
-    server_name {{ ov_public_hostname }};
+    server_name {{ openvidu_publicurl }};
 {% endif %}
 
     ssl on;
@@ -28,6 +28,6 @@ server {
     include sites-available/proxy.conf;
 
     location / {
-        proxy_pass http://{{ ov_public_ip }}:5443;
+        proxy_pass http://{{ openvidu_public_ip }}:5443;
     }
 }

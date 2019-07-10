@@ -636,7 +636,7 @@ Resources:
                 sed -i "s/OPENVIDU_VERSION/$OV_VERSION/" group_vars/all
                 sed -i "s/OPENVIDU_INSTANCE_PUBLIC_IP/$PIP/" group_vars/all
                 sed -i "s/OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME/$PublicHostname/" group_vars/all
-                sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" group_vars/all
+                sed -i "s/selfsigned/${WhichCert}/" group_vars/all
                 sed -i "s/DOMAIN_NAME/${MyDomainName}/" group_vars/all
                 sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" group_vars/all
                 sed -i "s/MY_SECRET/${OpenViduSecret}/" group_vars/all

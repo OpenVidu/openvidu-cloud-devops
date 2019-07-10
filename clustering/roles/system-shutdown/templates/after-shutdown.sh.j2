@@ -5,7 +5,7 @@ PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 {% else %}
 PUBLIC_IP={{ ov_public_ip }}
-PUBLIC_HOSTNAME={{ ov_public_hostname }}
+PUBLIC_HOSTNAME={{ openvidu_publicurl }}
 {% endif %}
 
 CLUSTER_MEMBER=$(cat /opt/openvidu/openvidu-cluster-member)
@@ -22,7 +22,7 @@ if [ "${CLUSTER_MEMBER}" == "server" ]; then
 
 cat >/etc/nginx/sites-enabled/kms-ov<<EOF
 server {
-    listen {{ openvidu_port }} ssl;
+    listen {{ openvidu_server_port }} ssl;
     server_name ${PUBLIC_HOSTNAME};
 
     ssl on;

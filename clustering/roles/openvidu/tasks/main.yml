@@ -17,7 +17,7 @@
 
 - name: download OpenVidu JAR file
   get_url:
-    url: https://pro.openvidu.io/openvidu-server-pro-{{ version }}.jar
+    url: https://pro.openvidu.io/openvidu-server-pro-{{ openvidu_version }}.jar
     dest: /opt/openvidu/openvidu-server.jar
     mode: u+rwx
     owner: ubuntu

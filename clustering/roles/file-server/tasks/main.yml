@@ -9,7 +9,7 @@
   htpasswd:
     path: /etc/nginx/conf.d/kms.htpasswd
     name: "OPENVIDUAPP"
-    password: "{{ openvidusecret }}"
+    password: "{{ openvidu_secret }}"
     owner: root
     group: kurento
     mode: 0640
