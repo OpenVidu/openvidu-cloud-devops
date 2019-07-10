@@ -10,7 +10,16 @@ openvidu_pro_password: OPENVIDU_PRO_PASSWORD
 # See https://openvidu.io/docs/reference-docs/openvidu-server-params
 
 # Which OpenVidu version to use
+# Check out https://github.com/OpenVidu/openvidu/releases
 openvidu_version: OPENVIDU_VERSION
+
+# Parameter "server.port"
+# Openvidu port to connect to
+openvidu_server_port: 4443
+
+# Parameter "kms.uris"
+# A comma separate list of IPs from the KMS instances
+kms_uris: KURENTO_ENDPOINTS
 
 # Parameter "openvidu.secret"
 # Use this to connect to OpenVidu endpoint
@@ -20,14 +29,6 @@ openvidu_secret: "MY_SECRET"
 # For selfsigned certificate, type the public domain name
 # We use this value to access OpenVidu Inspector and Kibana Dashboard
 openvidu_publicurl: OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME
-
-# Parameter "server.port"
-# Openvidu port to connect to
-openvidu_server_port: 4443
-
-# Parameter "kms.uris"
-# A comma separate list of IPs from the KMS instances
-kms_uris: KURENTO_ENDPOINTS
 
 # Parameter "openvidu.recording.public-access"
 # if true any client can connect to
