@@ -36,7 +36,7 @@ kms_uris: KURENTO_ENDPOINTS
 # openvidu.secret param just as OpenVidu Server dashboard at
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT
 # Values: true | false
-openvidu_recording_public-access: FREEHTTPACCESTORECORDINGVIDEOS
+openvidu_recording_public_access: FREEHTTPACCESTORECORDINGVIDEOS
 
 # Parameter "openvidu.recording.notification"
 # Which users should receive the recording events in the client side
@@ -49,22 +49,22 @@ openvidu_recording_notification: OPENVIDURECORDINGNOTIFICATION
 # Parameter "openvidu.streams.video.max-recv-bandwidth"
 # Maximum video bandwidth sent from clients to OpenVidu Server, in kbps.
 # 0 means unconstrained
-openvidu_streams_video_max-recv-bandwidth: OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH
+openvidu_streams_video_max_recv_bandwidth: OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH
 
 # Parameter "openvidu.streams.video.min-recv-bandwidth"
 # Minimum video bandwidth sent from clients to OpenVidu Server, in kbps.
 # 0 means unconstrained
-openvidu_streams_video_min-recv-bandwidth: OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH
+openvidu_streams_video_min_recv_bandwidth: OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH
 
 # Parameter "openvidu.streams.video.max-send-bandwidth"
 # Maximum video bandwidth sent from OpenVidu Server to clients, in kbps.
 # 0 means unconstrained
-openvidu_streams_video_max-send-bandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
+openvidu_streams_video_max_send_bandwidth: OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH
 
 # Parameter "openvidu.streams.video.min-send-bandwidth"
 # Minimum video bandwidth sent from OpenVidu Server to clients, in kbps.
 # 0 means unconstrained
-openvidu_streams_video_min-send-bandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
+openvidu_streams_video_min_send_bandwidth: OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH
 
 # Parameter "openvidu.webhook"
 # true to enable OpenVidu Server Webhook service. false' otherwise
