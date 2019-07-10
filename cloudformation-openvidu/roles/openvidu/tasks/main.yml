@@ -22,7 +22,7 @@
     mode: u+rwx
 
 - name: downloading release OpenVidu Server
-  shell: /usr/local/bin/download_ov.sh {{ version }}
+  shell: /usr/local/bin/download_ov.sh {{ openvidu_secret }}
 
 - name: copying openvidu launch script
   template:

@@ -17,7 +17,7 @@ mv /tmp/WebRtcEndpoint.conf.ini /etc/kurento/modules/kurento/WebRtcEndpoint.conf
 
 cat >/etc/nginx/sites-enabled/kms-ov<<EOF
 server {
-    listen {{ openvidu_port }} ssl;
+    listen {{ openvidu_server_port }} ssl;
     server_name ${PUBLIC_HOSTNAME};
 
     ssl on;

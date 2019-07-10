@@ -294,7 +294,7 @@ Resources:
                 sed -i "s/DEMOS_VERSION/$OPENVIDU_DEMOS_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/OVC_VERSION/$OPENVIDU_CALL_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/WANTDEMOS/${WantToDeployDemos}/" $WORKINGDIR/group_vars/all
-                sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" $WORKINGDIR/group_vars/all
+                sed -i "s/selfsigned/${WhichCert}/" $WORKINGDIR/group_vars/all
                 sed -i "s/DOMAIN_NAME/${MyDomainName}/" $WORKINGDIR/group_vars/all
                 sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" $WORKINGDIR/group_vars/all
                 sed -i "s/MY_SECRET/${OpenViduSecret}/" $WORKINGDIR/group_vars/all
