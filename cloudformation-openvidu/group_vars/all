@@ -20,11 +20,6 @@ kms_uris: KURENTO_ENDPOINTS
 # Use this to connect to OpenVidu endpoint
 openvidu_secret: "MY_SECRET"
 
-# Parameter "openvidu.publicurl"
-# For selfsigned certificate, type the public domain name
-# We use this value to access OpenVidu Inspector and Kibana Dashboard
-openvidu_publicurl: OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME
-
 # Parameter "openvidu.recording.public-access"
 # if true any client can connect to
 # https://OPENVIDU_SERVER_IP:OPENVIDU_PORT/recordings/any_session_file.mp4
