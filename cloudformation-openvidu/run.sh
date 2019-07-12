@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 
 apt-add-repository -y ppa:ansible/ansible
-apt-get update && apt-get install -y ansible
+apt-get update && apt-get install -y ansible jq
 ansible-galaxy install -p /etc/ansible/roles geerlingguy.docker
 ansible-galaxy install -p /etc/ansible/roles geerlingguy.mysql
 
@@ -13,6 +13,17 @@ PIP=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/in
 PublicHostname=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-04-02" | jq --raw-output '.compute | .name + "." + .location + ".cloudapp.azure.com"')
 sed -i "s/AWS_EIP/$PIP/" group_vars/all
 sed -i "s/AWS_PUBLIC_HOSTNAME/$PublicHostname/" group_vars/all
+
+# wait for parameters file
+while true
+do
+    if [ -f /opt/openvidu/parameters.sh ]; then
+        break
+    else
+        sleep 1
+    fi
+done
+
 
 source /opt/openvidu/parameters.sh
 
