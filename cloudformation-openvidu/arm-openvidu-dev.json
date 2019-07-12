@@ -1,0 +1,224 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"VmSize": {
+			"type": "string",
+			"defaultValue": "Standard_A2_v2"
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+              "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+            },
+            "defaultValue": "https://raw.githubusercontent.com/OpenVidu/openvidu-cloud-devops/azure/cloudformation-openvidu/"
+        },
+        "SSHPublicKey": {
+			"type": "securestring"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "metadata": {
+              "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+            },
+            "defaultValue": ""
+        },
+		"SSHLocation": {
+			"type": "string",
+			"minLength": 9,
+			"maxLength": 18,
+			"defaultValue": "0.0.0.0/0"
+		}
+	},
+	"variables": {
+		"resourcePrefix": "ov_",
+		"VNetPrefix": "10.0.0.0/16",
+		"VNetSubnet1Name": "OpenViduSubnet",
+		"VNetSubnet1Prefix": "10.0.0.0/24",
+		"VMNicVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'OpenViduNetwork')]",
+		"VMNicSubnetRef": "[concat(variables('VMNicVnetID'), '/subnets/', variables('VNetSubnet1Name'))]",
+		"VMNicPIPName": "OpenViduPublicIP",
+
+		"ImageReferenceId": "/subscriptions/802df257-6032-4b50-884c-55cb9f074928/resourceGroups/clckwrkhackresources/providers/Microsoft.Compute/images/TestDriveImage10",
+		"VMNicName": "VMNic",
+		"VMNicPIPDnsName": "openvidu",
+
+		"AdminUsername": "ubuntu",
+		
+		"_extensionScript": "run.sh",
+		"vmExtensionName": "[concat(variables('resourcePrefix'), 'Init')]"
+	},
+	"resources": [{
+			"name": "OpenViduNetwork",
+			"type": "Microsoft.Network/virtualNetworks",
+			"location": "[resourceGroup().location]",
+			"apiVersion": "2016-03-30",
+			"dependsOn": [],
+			"tags": {
+				"displayName": "OpenViduNetwork"
+			},
+			"properties": {
+				"addressSpace": {
+					"addressPrefixes": [
+						"[variables('VNetPrefix')]"
+					]
+				},
+				"subnets": [{
+					"name": "[variables('VNetSubnet1Name')]",
+					"properties": {
+						"addressPrefix": "[variables('VNetSubnet1Prefix')]"
+					}
+				}]
+			}
+		},
+		{
+			"name": "[variables('VMNicName')]",
+			"type": "Microsoft.Network/networkInterfaces",
+			"location": "[resourceGroup().location]",
+			"apiVersion": "2016-03-30",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/virtualNetworks', 'OpenViduNetwork')]",
+				"[resourceId('Microsoft.Network/publicIPAddresses', variables('VMNicPIPName'))]"
+			],
+			"tags": {
+				"displayName": "VMNic"
+			},
+			"properties": {
+				"ipConfigurations": [{
+					"name": "ipconfig1",
+					"properties": {
+						"privateIPAllocationMethod": "Dynamic",
+						"subnet": {
+							"id": "[variables('VMNicSubnetRef')]"
+						},
+						"publicIPAddress": {
+							"id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('VMNicPIPName'))]"
+						}
+					}
+				}]
+			}
+		},
+		{
+			"name": "[variables('VMNicPIPName')]",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"location": "[resourceGroup().location]",
+			"apiVersion": "2016-03-30",
+			"dependsOn": [],
+			"tags": {
+				"displayName": "VMNicPIP"
+			},
+			"properties": {
+				"publicIPAllocationMethod": "Dynamic",
+				"dnsSettings": {
+					"domainNameLabel": "[variables('VMNicPIPDnsName')]"
+				}
+			}
+		},
+		{
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"name": "VMSecurityGroup",
+			"location": "[resourceGroup().location]",
+			"tags": {
+				"displayName": "OpenViduSecurityGroup"
+			},
+			"properties": {
+				"securityRules": [{
+					"name": "ssh-rule",
+					"properties": {
+						"description": "Allow SSH",
+						"protocol": "Tcp",
+						"sourcePortRange": "*",
+						"destinationPortRange": "22",
+						"sourceAddressPrefix": "[parameters('SSHLocation')]",
+						"destinationAddressPrefix": "*",
+						"access": "Allow",
+						"priority": 100,
+						"direction": "Inbound"
+					}
+				}]
+			}
+		},
+		{
+			"name": "[variables('VMNicPIPDnsName')]",
+
+			"type": "Microsoft.Compute/virtualMachines",
+			"location": "[resourceGroup().location]",
+			"apiVersion": "2016-04-30-preview",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/networkInterfaces','VMNic')]"
+			],
+			"tags": {
+				"displayName": "[variables('VMNicPIPDnsName')]"
+			},
+			"properties": {
+				"hardwareProfile": {
+					"vmSize": "[parameters('VMSize')]"
+				},
+				"osProfile": {
+					"computerName": "[variables('VMNicPIPDnsName')]",
+					"adminUsername": "[variables('AdminUsername')]",
+					"customData": "[base64(concat('#cloud-config\n\nwrite_files:\n -  encoding: gzip\n    content: !!binary |\n        H4sIAMBmKF0AA5VSPW/CMBDd+RWtukMCswdjH41FYkf2kTTTCUQoSBRQAlJ/fg0o0CZqUSdL977s53t5Hiw2u8FiXq97vfLzsK+OTyYFnSk5owysU0azYT8M+kEHlpAY94gkeBy3OQ0pKUiahCtNmifAmnE6G8dKEMTcoT9VyjquDoQFZOFw1EB5pEREAiyyutyu6s37rlw2YAzoCLSwRYoEPjG+W+b6oiLhlZ3hFIrbMOcafbCWpPTEsNV8W5cNNrEAFCGmxIUA5wgNWRDGSqVfyV8ZjGPH6lR2XnJnaYNqogTHc1OH02K7qddlRR/7ZVnNj/uqWwJa4Im72lPC385mGY25lrmSGLEwCLof0lL58luq0WORj7oU8e+olupb1KVd35qENDbFdbd+dnyzzWEcGTP9G/XfLVOjNHaXp2FEwKVfzN8JkIFGx74ApWzfoSQDAAA=\n    path: /opt/openvidu/parameters.sh\n    permissions: \"0744\"\n\n'))]",
+					"linuxConfiguration": {
+						"disablePasswordAuthentication": true,
+						"ssh": {
+							"publicKeys": [{
+								"path": "[concat('/home/',variables('AdminUsername'),'/.ssh/authorized_keys')]",
+								"keyData": "[parameters('SSHPublicKey')]"
+							}]
+						}
+					}
+				},
+				"storageProfile": {
+					"imageReference": {
+						"publisher": "Canonical",
+						"offer": "UbuntuServer",
+						"sku": "16.04.0-LTS",
+						"version": "latest"
+					},
+					"osDisk": {
+						"name": "[concat('ov_', 'disk')]",
+						"createOption": "FromImage"
+					}
+				},
+
+				"networkProfile": {
+					"networkInterfaces": [{
+						"id": "[resourceId('Microsoft.Network/networkInterfaces', 'VMNic')]"
+					}]
+				}
+            },
+            "resources": [
+                {
+                    "type": "extensions",
+                    "name": "[variables('vmExtensionName')]",
+                    "apiVersion": "2017-03-30",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                      "[resourceId('Microsoft.Compute/virtualMachines', variables('VMNicPIPDnsName'))]"
+                    ],
+                    "properties": {
+                      "publisher": "Microsoft.Azure.Extensions",
+                      "type": "CustomScript",
+                      "typeHandlerVersion": "2.0",
+                      "autoUpgradeMinorVersion": true,
+                      "settings": {
+                        "fileUris": [
+                          "[uri(parameters('_artifactsLocation'), concat(variables('_extensionScript'), parameters('_artifactsLocationSasToken')))]"
+                        ]
+                      },
+                      "protectedSettings": {
+                        "commandToExecute": "sh run.sh"
+                      }
+                    }
+                }
+                ]
+        }
+    ],
+    "outputs": {
+		"PublicDNS ": {
+			"value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('VMNicPIPName'))).dnsSettings.fqdn]",
+			"type": "string"
+		}
+    }
+}
