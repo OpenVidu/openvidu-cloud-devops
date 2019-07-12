@@ -14,29 +14,28 @@ PublicHostname="openvidu.westeurope.cloudapp.azure.com"
 sed -i "s/AWS_EIP/$PIP/" group_vars/all
 sed -i "s/AWS_PUBLIC_HOSTNAME/$PublicHostname/" group_vars/all
 
-OPENVIDU_VERSION=2.10.0
-OPENVIDU_DEMOS_VERSION=2.10.0
-OPENVIDU_CALL_VERSION=2.10.0
-sed -i "s/OPENVIDU_VERSION/$OPENVIDU_VERSION/" group_vars/all
-sed -i "s/DEMOS_VERSION/$OPENVIDU_DEMOS_VERSION/" group_vars/all
-sed -i "s/OVC_VERSION/$OPENVIDU_CALL_VERSION/" group_vars/all
-sed -i "s/WANTDEMOS/false/" group_vars/all
-sed -i "s/selfsigned/selfsigned/" group_vars/all
-sed -i "s/DOMAIN_NAME/${MyDomainName}/" group_vars/all
-sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" group_vars/all
-sed -i "s/MY_SECRET/MY_SECRET/" group_vars/all
+source /usr/src/openvidu/parameters.sh
+
+sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/" group_vars/all
+sed -i "s/DEMOS_VERSION/${OPENVIDU_DEMOS_VERSION}/" group_vars/all
+sed -i "s/OVC_VERSION/${OPENVIDU_CALL_VERSION}/" group_vars/all
+sed -i "s/WANTDEMOS/${WANT_TO_DEPLOY_DEMOS}/" group_vars/all
+sed -i "s/selfsigned/${WHICH_CERT}/" group_vars/all
+sed -i "s/DOMAIN_NAME/${MY_DOMAIN_NAME}/" group_vars/all
+sed -i "s/LETSENCRYPT_EMAIL/${LETS_ENCRYPT_EMAIL}/" group_vars/all
+sed -i "s/MY_SECRET/${OPENVIDU_SECRET}/" group_vars/all
 sed -i "s/run_ec2: false/run_ec2: false/" group_vars/all
-sed -i "s/allowsendinfo: true/allowsendinfo: false/" group_vars/all             
-sed -i "s/FREEHTTPACCESTORECORDINGVIDEOS/false/" group_vars/all
-sed -i "s/OPENVIDURECORDINGNOTIFICATION/publisher_moderator/" group_vars/all
-sed -i "s/OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH/0/" group_vars/all
-sed -i "s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/0/" group_vars/all
-sed -i "s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/0/" group_vars/all
-sed -i "s/OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH/0/" group_vars/all
-sed -i "s/WEBHOOK_ENABLED/false/" group_vars/all
-sed -i "s#WEBHOOK_ENDPOINT#123#" group_vars/all
-sed -i "s/WEBHOOK_HEADERS/123/" group_vars/all
-sed -i "s/WEBHOOK_EVENTS/123/" group_vars/all
+sed -i "s/allowsendinfo: true/allowsendinfo: ${WANT_SEND_INFO}/" group_vars/all             
+sed -i "s/FREEHTTPACCESTORECORDINGVIDEOS/${FREE_HTTP_ACCESS_TO_RECORDING_VIDEOS}/" group_vars/all
+sed -i "s/OPENVIDURECORDINGNOTIFICATION/${OPENVIDU_RECORDING_NOTIFICATION}/" group_vars/all
+sed -i "s/OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH/${OPENVIDU_STREAMS_VIDEO_MAX_RECV_BANDWIDTH}/" group_vars/all
+sed -i "s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/${OPENVIDU_STREAMS_VIDEO_MIN_RECV_BANDWIDTH}/" group_vars/all
+sed -i "s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/${OPENVIDU_STREAMS_VIDEO_MAX_SEND_BANDWIDTH}/" group_vars/all
+sed -i "s/OPENVIDUSTREAMSVIDEOMIN-SEND-BANDWIDTH/${OPENVIDU_STREAMS_VIDEO_MIN_SEND_BANDWIDTH}/" group_vars/all
+sed -i "s/WEBHOOK_ENABLED/${OPENVIDU_WEBHOOK}/" group_vars/all
+sed -i "s#WEBHOOK_ENDPOINT#${OPENVIDU_WEBHOOK_ENDPOINT}#" group_vars/all
+sed -i "s/WEBHOOK_HEADERS/${OPENVIDU_WEBHOOK_HEADERS}/" group_vars/all
+sed -i "s/WEBHOOK_EVENTS/${OPENVIDU_WEBHOOK_EVENTS}/" group_vars/all
 
 source /home/ubuntu/.bashrc
 export HOME=/home/ubuntu
