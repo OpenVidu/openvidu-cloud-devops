@@ -23,7 +23,7 @@ do
         sleep 1
     fi
 done
-source /opt/openvidu/parameters.sh
+
 . /opt/openvidu/parameters.sh
 
 
@@ -48,12 +48,9 @@ sed -i "s#WEBHOOK_ENDPOINT#${OPENVIDU_WEBHOOK_ENDPOINT}#" group_vars/all
 sed -i "s/WEBHOOK_HEADERS/${OPENVIDU_WEBHOOK_HEADERS}/" group_vars/all
 sed -i "s/WEBHOOK_EVENTS/${OPENVIDU_WEBHOOK_EVENTS}/" group_vars/all
 
-source /home/ubuntu/.bashrc
 export HOME=/home/ubuntu
 
-pushd /usr/src/openvidu/cloudformation-openvidu
 ansible-playbook -i "localhost," -c local play.yml
-popd
 
 # Wait for the app
 #/usr/local/bin/check_app_ready.sh
