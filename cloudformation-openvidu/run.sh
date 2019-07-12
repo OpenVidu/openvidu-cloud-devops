@@ -10,11 +10,11 @@ cd /usr/src/openvidu/cloudformation-openvidu
 git checkout azure
 
 PIP=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-08-01&format=text")
-PublicHostname="openvidu.westeurope.cloudapp.azure.com"
+PublicHostname=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-04-02" | jq --raw-output '.compute | .name + "." + .location + ".cloudapp.azure.com"')
 sed -i "s/AWS_EIP/$PIP/" group_vars/all
 sed -i "s/AWS_PUBLIC_HOSTNAME/$PublicHostname/" group_vars/all
 
-source /usr/src/openvidu/parameters.sh
+source /opt/openvidu/parameters.sh
 
 sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/" group_vars/all
 sed -i "s/DEMOS_VERSION/${OPENVIDU_DEMOS_VERSION}/" group_vars/all
@@ -45,4 +45,4 @@ ansible-playbook -i "localhost," -c local play.yml
 popd
 
 # Wait for the app
-/usr/local/bin/check_app_ready.sh
+#/usr/local/bin/check_app_ready.sh

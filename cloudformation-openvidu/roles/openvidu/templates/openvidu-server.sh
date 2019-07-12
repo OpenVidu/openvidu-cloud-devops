@@ -7,7 +7,11 @@ OV_PROPERTIES="/opt/openvidu/application.properties"
 {% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 PUBLIC_HOSTNAME={{ domain_name }}
 {% else %}
+{% if run_ec2 == true %}
 PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+{% else %}
+PUBLIC_HOSTNAME=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-04-02" | jq --raw-output '.compute | .name + "." + .location + ".cloudapp.azure.com"')
+{% endif %}
 {% endif %}
 
 sed -i "s#openvidu.publicurl=.*#openvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_server_port }}#" ${OV_PROPERTIES}
