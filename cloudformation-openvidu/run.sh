@@ -23,9 +23,9 @@ do
         sleep 1
     fi
 done
-
-
 source /opt/openvidu/parameters.sh
+. /opt/openvidu/parameters.sh
+
 
 sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/" group_vars/all
 sed -i "s/DEMOS_VERSION/${OPENVIDU_DEMOS_VERSION}/" group_vars/all
