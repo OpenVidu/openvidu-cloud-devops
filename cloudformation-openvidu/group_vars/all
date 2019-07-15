@@ -100,7 +100,7 @@ openvidu_call_release: OVC_VERSION
 # You can choose:
 # 1. Self Signed (selfsigned) The certificate will be generate within
 # the instance (default)
-# 2. Let's encrypt (letsencrpt) Free SSL certificate provider
+# 2. Let's encrypt (letsencrypt) Free SSL certificate provider
 # 3. Your own certificate (owncert) If you own a SSL certificate, use this one.
 # See roles > nginx > files to
 # 
