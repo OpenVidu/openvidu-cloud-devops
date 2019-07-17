@@ -55,7 +55,7 @@ fi
 export AWS_DEFAULT_REGION={{ aws_default_region }}
 KMS_IPs=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[PrivateIpAddress]' --output text --filters Name=instance-state-name,Values=running Name=tag:ov-cluster-member,Values=kms)
 {% else %}
-KMS_IPs=$(echo {{ kms.uris }} | tr , ' ')
+KMS_IPs=$(echo {{ kms_uris }} | tr , ' ')
 {% endif %}
 KMS_ENDPOINTS=$(for IP in $KMS_IPs
 do
