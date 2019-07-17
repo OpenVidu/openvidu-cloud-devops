@@ -1,3 +1,6 @@
+###########################
+# OpenVidu PRO Credentials
+###########################
 # Credentials needed to download the jar file from https://pro.openvidu.io
 # Please contact openvidu@gmail.com to request one
 openvidu_pro_username: OPENVIDU_PRO_USERNAME
@@ -19,6 +22,7 @@ openvidu_server_port: 4443
 
 # Parameter "kms.uris"
 # A comma separate list of IPs from the KMS instances
+# i.e. 192.168.0.5,192.168.0.6
 kms_uris: KURENTO_ENDPOINTS
 
 # Parameter "openvidu.secret"
@@ -28,6 +32,7 @@ openvidu_secret: "MY_SECRET"
 # Parameter "openvidu.publicurl"
 # For selfsigned certificate, type the public domain name
 # We use this value to access OpenVidu Inspector and Kibana Dashboard
+# i.e. openvidu.example.com
 openvidu_publicurl: OPENVIDU_INSTANCE_PUBLIC_DOMAIN_NAME
 
 # Parameter "openvidu.recording.public-access"
@@ -86,14 +91,15 @@ openvidu_webhook_headers: "WEBHOOK_HEADERS"
 # Leave blank if all events.
 openvidu_webhook_events: WEBHOOK_EVENTS
 
-######################################
-# OpenVidu PRO specific configuration 
-######################################
+#############################################
+# OpenVidu Server PRO specific configuration 
+#############################################
 
 # See https://openvidu.io/docs/reference-docs/openvidu-server-params#extra-configuration-parameters-for-openvidu-server-pro
 
 # Parameter "openvidu.pro.cluster"
 # Is running in cluster?
+# Values: true | false
 openvidu_pro_cluster: KMS_RUN_CLUSTER
 
 # Parameter "openvidu.pro.cluster.load.strategy"
@@ -102,9 +108,9 @@ openvidu_pro_cluster: KMS_RUN_CLUSTER
 # Can be: [streams, sessions, mediaObjects, cpu]
 openvidu_pro_cluster_load_strategy: OPENVIDUCLUSTERLOADSTRATEGY
 
-##########################
-# Instances IPs and names
-##########################
+#####################################
+# Instances IPs,names and networking
+#####################################
 
 # Should be the same than in the inventory file
 # We use this value for proxying
@@ -127,14 +133,9 @@ domain_name: DOMAIN_NAME
 # Let's Encrypt email to receive notifications
 letsencrypt_email: LETSENCRYPT_EMAIL
 
-# AWS Configuration
-# If you're working outside AWS ignore this section
-run_ec2: false
-aws_default_region: AWS_DEFAULT_REGION
-
 # Port configuration
-# We divide port range in two, half for coturn server and the other half
-# for Coturn Server. Replace according to your needs:
+# We divide port range in two, half for Coturn Server and the other half
+# for Kurento Server. Replace according to your needs:
 # i.e. 1024 ~ 32255 for coturn and 32256 ~ 65535 for KMS
 
 # Turn port config
@@ -144,6 +145,18 @@ turn_max_port: TURN_MAX_PORT
 # Kurento port config
 kurento_min_port: KURENTO_MIN_PORT
 kurento_max_port: KURENTO_MAX_PORT
+
+####################
+# AWS Configuration
+####################
+
+# If you're working outside AWS ignore this section
+run_ec2: false
+aws_default_region: AWS_DEFAULT_REGION
+
+#######################
+# Kibana Configuration
+#######################
 
 # Kibana dashboard configuration (Credentials)
 kibana_user: kibanaadmin

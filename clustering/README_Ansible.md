@@ -2,6 +2,13 @@
 
 ## Prerequisites
 
+### Clone the repo
+
+```
+$ git clone https://github.com/openvidu/openvidu-cloud-devops
+$ cd openvidu-cloud-devops/clustering
+```
+
 ### Local Machine
 
 You need Ansible installed on your laptop or wherever you are running this playbook. To install Ansible run the following commnads:
@@ -14,7 +21,7 @@ $ sudo apt-get install -y ansible
 
 ## Instances
 
-You need 1 instance for OpenVidu Server and at least 1 more for Kurento Media Server with a minimum of 2 cpus and 8gigs of RAM. All instances should be accesible by SSH from your laptop.
+You need 1 instance for OpenVidu Server and at least 1 more for Kurento Media Server with a minimum of 2 cpus and 8gigs of RAM. All instances should be accesible by SSH from your laptop. We use Ubuntu 16.04 Xenial.
 
 The instances (all of then) need Python to be installed.
 
@@ -121,11 +128,40 @@ Replace the parameters by the apropiates values. Then you maybe want to check th
 
 This command will perform a _ping_ command in the instances, so we're now sure you have access to the instances and the inventory file is fine.
 
+```
+kurento-server-1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+openvidu-server | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+```
+
 Once you have completed all the information and parameters you can launch the playbook by running:
 
-`ansible-playbook -i inventory.yml play.yaml`
+`ansible-playbook -i inventory.yml play.yml`
 
-We'll know the deployment is ready checking the app's log in the OpenVidu server. Should show something like:
+We'll know the deployment is ready checking the app's log in the OpenVidu server. So, first, connect to the instance:
+
+`ssh -i /PATH/TO/SSH_public_key USER@OPENVIDU_INSTANCE`
+
+And then, check the logs:
+
+```
+$ sudo -s
+# cd /var/log/supervisor
+# tail -f openvidu-server-stdout---supervisor-XXXX.log
+```
+
+XXXX means random characters. It should show something like:
 
 ```
 [INFO] 2019-06-21 15:40:10,777 [main] org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer (start) - Tomcat started on port(s): 5443 (http)
