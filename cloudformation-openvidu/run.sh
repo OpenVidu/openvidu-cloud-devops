@@ -26,7 +26,6 @@ done
 
 . /opt/openvidu/parameters.sh
 
-
 sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/" group_vars/all
 sed -i "s/DEMOS_VERSION/${OPENVIDU_DEMOS_VERSION}/" group_vars/all
 sed -i "s/OVC_VERSION/${OPENVIDU_CALL_VERSION}/" group_vars/all

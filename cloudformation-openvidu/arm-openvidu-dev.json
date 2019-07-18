@@ -5,29 +5,32 @@
 		"VmSize": {
 			"type": "string",
 			"defaultValue": "Standard_A2_v2"
-        },
-        "_artifactsLocation": {
-            "type": "string",
-            "metadata": {
-              "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
-            },
-            "defaultValue": "https://raw.githubusercontent.com/OpenVidu/openvidu-cloud-devops/azure/cloudformation-openvidu/"
-        },
-        "SSHPublicKey": {
+    },
+		"_artifactsLocation": {
+			"type": "string",
+			"metadata": {
+					"description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+				},
+			"defaultValue": "https://raw.githubusercontent.com/OpenVidu/openvidu-cloud-devops/azure/cloudformation-openvidu/"
+		},
+		"SSHPublicKey": {
 			"type": "securestring"
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "metadata": {
-              "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
-            },
-            "defaultValue": ""
-        },
+		},
+		"_artifactsLocationSasToken": {
+			"type": "securestring",
+			"metadata": {
+				"description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+				},
+			"defaultValue": ""
+		},
 		"SSHLocation": {
 			"type": "string",
 			"minLength": 9,
 			"maxLength": 18,
 			"defaultValue": "0.0.0.0/0"
+		},
+		"OpenViduParameters": {
+			"type": "string"
 		}
 	},
 	"variables": {
@@ -108,7 +111,7 @@
 				"displayName": "VMNicPIP"
 			},
 			"properties": {
-				"publicIPAllocationMethod": "Dynamic",
+				"publicIPAllocationMethod": "Static",
 				"dnsSettings": {
 					"domainNameLabel": "[variables('VMNicPIPDnsName')]"
 				}
@@ -158,7 +161,7 @@
 				"osProfile": {
 					"computerName": "[variables('VMNicPIPDnsName')]",
 					"adminUsername": "[variables('AdminUsername')]",
-					"customData": "[base64(concat('#cloud-config\n\nwrite_files:\n -  encoding: gzip\n    content: !!binary |\n        H4sIAMBmKF0AA5VSPW/CMBDd+RWtukMCswdjH41FYkf2kTTTCUQoSBRQAlJ/fg0o0CZqUSdL977s53t5Hiw2u8FiXq97vfLzsK+OTyYFnSk5owysU0azYT8M+kEHlpAY94gkeBy3OQ0pKUiahCtNmifAmnE6G8dKEMTcoT9VyjquDoQFZOFw1EB5pEREAiyyutyu6s37rlw2YAzoCLSwRYoEPjG+W+b6oiLhlZ3hFIrbMOcafbCWpPTEsNV8W5cNNrEAFCGmxIUA5wgNWRDGSqVfyV8ZjGPH6lR2XnJnaYNqogTHc1OH02K7qddlRR/7ZVnNj/uqWwJa4Im72lPC385mGY25lrmSGLEwCLof0lL58luq0WORj7oU8e+olupb1KVd35qENDbFdbd+dnyzzWEcGTP9G/XfLVOjNHaXp2FEwKVfzN8JkIFGx74ApWzfoSQDAAA=\n    path: /opt/openvidu/parameters.sh\n    permissions: \"0744\"\n\n'))]",
+					"customData": "[base64(concat('#cloud-config\n\nwrite_files:\n -  encoding: gzip\n    content: !!binary |\n        ', parameters('OpenViduParameters'), '\n    path: /opt/openvidu/parameters.sh\n    permissions: \"0744\"\n\n'))]",
 					"linuxConfiguration": {
 						"disablePasswordAuthentication": true,
 						"ssh": {
