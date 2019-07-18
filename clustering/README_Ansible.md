@@ -19,6 +19,10 @@ $ sudo apt-get update
 $ sudo apt-get install -y ansible
 ```
 
+Besides, you need to install this role:
+
+`ansible-galaxy install -p /etc/ansible/roles geerlingguy.docker`
+
 ## Instances
 
 You need 1 instance for OpenVidu Server and at least 1 more for Kurento Media Server with a minimum of 2 cpus and 8gigs of RAM. All instances should be accesible by SSH from your laptop. We use Ubuntu 16.04 Xenial.
