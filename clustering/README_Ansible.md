@@ -21,7 +21,7 @@ $ sudo apt-get install -y ansible
 
 Besides, you need to install this role:
 
-`ansible-galaxy install -p /etc/ansible/roles geerlingguy.docker`
+`$ sudo ansible-galaxy install -p /etc/ansible/roles geerlingguy.docker`
 
 ## Instances
 
