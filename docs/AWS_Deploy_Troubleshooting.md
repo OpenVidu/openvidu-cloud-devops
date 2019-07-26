@@ -33,12 +33,11 @@ Well, this is not a file but we need to know what parameters do you set up durin
 
 ## How to connect to the instance
 
-When you filled up the form one of the parameters was an rsa key to grant you access to the instance. Now, you’ll need that key and the instance’ IP address. For example, if you key file is called mi-key.pem and the instance has an IP address like 12.13.14.15 you need to run this command from the shell
+When you filled up the form one of the parameters was an rsa key to grant you access to the instance. Now, you’ll need that key and the instance’ IP address. For example, if you key file is called `mi-key.pem` and the instance has an IP address like `12.13.14.15` you need to run this command from the shell
 
 `ssh -i mi-key.pem ubuntu@12.13.14.15`
 
 and then you will see something like this:
-
 
 ```
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-1077-aws x86_64)
