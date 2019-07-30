@@ -12,10 +12,6 @@ openvidu_version: OPENVIDU_VERSION
 # Openvidu port to connect to
 openvidu_server_port: 4443
 
-# Parameter "kms.uris"
-# A comma separate list of IPs from the KMS instances
-kms_uris: KURENTO_ENDPOINTS
-
 # Parameter "openvidu.secret"
 # Use this to connect to OpenVidu endpoint
 openvidu_secret: "MY_SECRET"
