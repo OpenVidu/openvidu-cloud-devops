@@ -285,12 +285,12 @@ Resources:
               group: "root"
             '/usr/local/bin/feedGroupVars.sh':
               content: !Sub |
-                #!/bin/bash
+                #!/bin/bash -x
                 WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu
                 OPENVIDU_VERSION=@OV_V@
                 OPENVIDU_DEMOS_VERSION=@OVD_V@
                 OPENVIDU_CALL_VERSION=@OVC_V@
-                sed -i "s/OV_VERSION/$OPENVIDU_VERSION/" $WORKINGDIR/group_vars/all
+                sed -i "s/OPENVIDU_VERSION/$OPENVIDU_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/DEMOS_VERSION/$OPENVIDU_DEMOS_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/OVC_VERSION/$OPENVIDU_CALL_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/WANTDEMOS/${WantToDeployDemos}/" $WORKINGDIR/group_vars/all
