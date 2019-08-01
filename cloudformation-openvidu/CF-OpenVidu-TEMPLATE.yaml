@@ -144,7 +144,7 @@ Parameters:
 
   WantToDeployDemos:
     Description: >-
-      Choose if you want to deploy practical examples of OpenVidu functionality.
+      Choose if you want to deploy practical examples of OpenVidu functionality. If set to true, then parameter OpenViduSecret must be MY_SECRET for the demos to work.
     Type: String
     AllowedValues:
       - true
