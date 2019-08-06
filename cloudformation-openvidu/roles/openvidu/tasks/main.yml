@@ -48,3 +48,9 @@
     path: /opt/openvidu/recordings
     state: directory
     mode: 0777
+
+- name: copying script for update
+  copy:
+    src: openvidu_update_stack.sh
+    dest: /usr/local/bin
+    mode: "0755"
