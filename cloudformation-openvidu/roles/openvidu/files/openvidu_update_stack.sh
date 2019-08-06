@@ -20,6 +20,11 @@ fi
 # Stopping openvidu 
 supervisorctl stop openvidu-server
 
+# Setting updating in process web page
+cd /opt/openvidu/update
+python -m SimpleHTTPServer 5443 &
+WEB_PID=$!
+
 # Changing source list for Kurento Media Server
 echo deb [arch=amd64] http://ubuntu.openvidu.io/${KURENTO_NEW_VERSION} xenial kms6 > /etc/apt/sources.list.d/kurento.list
 
@@ -38,4 +43,5 @@ systemctl start kurento-media-server
 wget -O /opt/openvidu/openvidu-server.jar https://github.com/OpenVidu/openvidu/releases/download/v${OV_NEW_VERSION}/openvidu-server-${OV_NEW_VERSION}.jar
 supervisorctl start openvidu-server
 
+kill -9 ${WEB_PID}
 echo ${OPENVIDU_NEW_VERSION} > /opt/openvidu/version
