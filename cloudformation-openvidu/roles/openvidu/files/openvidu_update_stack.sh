@@ -38,3 +38,4 @@ systemctl start kurento-media-server
 wget -O /opt/openvidu/openvidu-server.jar https://github.com/OpenVidu/openvidu/releases/download/v${OV_NEW_VERSION}/openvidu-server-${OV_NEW_VERSION}.jar
 supervisorctl start openvidu-server
 
+echo ${OPENVIDU_NEW_VERSION} > /opt/openvidu/version
