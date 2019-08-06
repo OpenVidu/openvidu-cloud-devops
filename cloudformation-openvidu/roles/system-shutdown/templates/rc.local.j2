@@ -11,8 +11,12 @@
 #
 # By default this script does nothing.
 
+{% if whichcert == "selfsigned" %}
 /usr/local/bin/cfn-hup -v
 /usr/local/bin/after-shutdown.sh
+{% else %}
+/usr/local/bin/cfn-hup -v
+{% endif %}
 
 exit 0
 

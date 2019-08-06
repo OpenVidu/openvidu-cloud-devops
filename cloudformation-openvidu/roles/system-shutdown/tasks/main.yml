@@ -7,9 +7,9 @@
   when: whichcert == "selfsigned"
 
 - name: enabling that script at boot time
-  copy:
-    src: rc.local
+  template:
+    src: rc.local.j2
     dest: /etc
     mode: 0755
-  when: whichcert == "selfsigned"
+
 
