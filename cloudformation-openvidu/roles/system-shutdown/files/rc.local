@@ -11,6 +11,7 @@
 #
 # By default this script does nothing.
 
+/usr/local/bin/cfn-hup -v
 /usr/local/bin/after-shutdown.sh
 
 exit 0
