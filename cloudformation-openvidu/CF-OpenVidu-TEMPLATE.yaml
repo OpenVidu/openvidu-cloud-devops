@@ -175,6 +175,11 @@ Parameters:
     Type: String
     Default: "sessionCreated,sessionDestroyed,participantJoined,participantLeft,webrtcConnectionCreated,webrtcConnectionDestroyed,recordingStatusChanged"
 
+  OpenViduVersion:
+    Description: OpenVidu Server version. This parameter is only for updating the stack
+    Type: String
+    Default: 2.10.0
+
 Mappings:
   RegionMap:
     eu-north-1:
@@ -225,6 +230,7 @@ Metadata:
       - Label:
           default: OpenVidu Configuration
         Parameters:
+          - OpenViduVersion
           - OpenViduSecret
           - FreeHTTPAccesToRecordingVideos
           - OpenviduRecordingNotification
@@ -253,6 +259,26 @@ Resources:
       AWS::CloudFormation::Init:
         config:
           files:
+            '/etc/cfn/cfn-hup.conf':
+              content: !Sub |
+                [main]
+                stack=${AWS::StackId}
+                region=${AWS::Region}
+                verbose=true
+                interval=5
+              mode: '000400'
+              owner: root
+              group: root
+            '/etc/cfn/hooks.d/cfn-auto-reloader.conf':
+              content: !Sub |
+                [cfn-auto-reloader-hook]
+                triggers=post.update
+                path=Resources.OpenviduServer.Metadata.AWS::CloudFormation::Init
+                action=/usr/local/bin/openvidu_update_stack.sh
+                runas=root
+              mode: '000400'
+              owner: root
+              group: root
             '/usr/local/bin/installAnsible.sh':
               content: !Sub |
                 #!/bin/bash
@@ -322,6 +348,12 @@ Resources:
               mode: "000755"
               owner: "root"
               group: "root"
+            "/opt/openvidu/version":
+              content: !Sub |
+                ${OpenViduVersion}
+              mode: "000644"
+              owner: "root"
+              group: "root"
     Properties:
       ImageId: !FindInMap 
         - RegionMap
@@ -336,13 +368,16 @@ Resources:
           Value: !Ref 'AWS::StackName'
       UserData:
         Fn::Base64: !Sub |
-          #!/bin/bash
+          #!/bin/bash -x
           set -eu -o pipefail
 
           apt-get update
           apt-get install -y git software-properties-common python-pip
 
           pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+
+          # Set the version
+          OPENVIDU_VERSION=${OpenViduVersion}
 
           cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServer
 
@@ -362,6 +397,9 @@ Resources:
 
           # Wait for the app
           /usr/local/bin/check_app_ready.sh
+
+          # Start up the cfn-hup daemon to listen for changes to the Web Server metadata
+          /usr/local/bin/cfn-hup -v || { echo "[Openvidu] Failed to start cfn-hup"; exit 1; }
 
           # sending the finish call
           /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource WaitCondition --region ${AWS::Region}
