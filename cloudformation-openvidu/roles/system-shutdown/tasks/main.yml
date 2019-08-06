@@ -9,7 +9,7 @@
 - name: enabling that script at boot time
   template:
     src: rc.local.j2
-    dest: /etc
+    dest: /etc/rc.local
     mode: 0755
 
 
