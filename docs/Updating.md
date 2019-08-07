@@ -23,7 +23,7 @@ To stop the services:
 
 `$ sudo systemctl stop kurento-media-server`
 
-#### 2.2 Stop OpenVidu
+#### 2.2 OpenVidu
 
 `$ sudo supervisorctl stop openvidu-server`
 
@@ -57,7 +57,7 @@ And install Kurento Media Server
 
 `$ sudo apt-get install --yes -o Dpkg::Options::="--force-confold" kurento-media-server`
 
-`force-confold` is an option to keep the local config files if the new ones have changes, thoug, dpkg won't ask you if you want to keep the local ones or install the new ones.
+`force-confold` is an option to keep the local config files if the new ones have changes, though, dpkg won't ask you if you want to keep the local ones or install the new ones.
 
 ### 4. Update OpenVidu Server
 
