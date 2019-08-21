@@ -28,6 +28,6 @@ server {
     include sites-available/proxy.conf;
 
     location / {
-        proxy_pass http://{{ aws_public_ip }}:5443;
+        proxy_pass http://localhost:5443;
     }
 }
