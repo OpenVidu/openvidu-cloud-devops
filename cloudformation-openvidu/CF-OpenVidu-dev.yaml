@@ -313,9 +313,9 @@ Resources:
               content: !Sub |
                 #!/bin/bash -x
                 WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu
-                OPENVIDU_VERSION=2.10.0
-                OPENVIDU_DEMOS_VERSION=2.10.0
-                OPENVIDU_CALL_VERSION=2.10.0
+                OPENVIDU_VERSION=2.11.0
+                OPENVIDU_DEMOS_VERSION=2.11.0
+                OPENVIDU_CALL_VERSION=2.11.0
                 sed -i "s/OPENVIDU_VERSION/$OPENVIDU_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/DEMOS_VERSION/$OPENVIDU_DEMOS_VERSION/" $WORKINGDIR/group_vars/all
                 sed -i "s/OVC_VERSION/$OPENVIDU_CALL_VERSION/" $WORKINGDIR/group_vars/all
