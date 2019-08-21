@@ -23,7 +23,7 @@
   when: whichcert == "letsencrypt"
 
 - name: Create letsencrypt certificate
-  shell: letsencrypt certonly -n --webroot -w /var/www/html -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
+  shell: letsencrypt certonly -n --webroot -w /var/www/html --agree-tos -d {{ domain_name }}
   args:
     creates: /etc/letsencrypt/live/{{ domain_name }}
   when: whichcert == "letsencrypt"
