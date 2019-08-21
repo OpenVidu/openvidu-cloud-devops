@@ -464,7 +464,11 @@ Resources:
           ToPort: 22
           CidrIp: 0.0.0.0/0
         - IpProtocol: udp
-          FromPort: 49152
+          FromPort: 40000
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 40000
           ToPort: 65535
           CidrIp: 0.0.0.0/0
 
