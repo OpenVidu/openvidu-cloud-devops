@@ -30,7 +30,7 @@ server {
     include sites-available/proxy.conf;
 
     location / {
-        proxy_pass http://${PUBLIC_IP}:5443;
+        proxy_pass http://localhost:5443;
     }
 }
 EOF
