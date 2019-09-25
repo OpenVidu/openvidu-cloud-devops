@@ -75,7 +75,7 @@
     - "kms-elements-dbg"
     - "kms-filters-dbg"
     - "kurento-media-server-dbg"
-    notify: restart kms
+  notify: restart kms
 
 - name: preconfiguring Kurento Media Server
   template:
