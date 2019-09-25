@@ -39,10 +39,26 @@
     update_cache: yes
   notify: start kms
 
+- name: add ubuntu 'dbgsym' repository sources
+  apt_repository:
+    repo: "{{ item }}" 
+    state: present
+  loop:
+    - "deb http://ddebs.ubuntu.com ${DISTRIB_CODENAME} main restricted universe multiverse"
+    - "deb http://ddebs.ubuntu.com ${DISTRIB_CODENAME}-updates main restricted universe multiverse"
+    - "deb http://ddebs.ubuntu.com ${DISTRIB_CODENAME}-proposed main restricted universe multiverse"
+
+- name: dbgsym key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: F2EDC64DC5AEE1F6B9C621F0C8CAB6595FDFF622
+    state: present
+
 - name: installing Kurento Debug Symbols
   apt:
     name: "{{ item }}"
     state: "present"
+    update_cache: yes
   loop:
     - "libc6-dbg"
     - "libc6-dbgsym"
@@ -76,6 +92,7 @@
     - "kms-filters-dbg"
     - "kurento-media-server-dbg"
   notify: restart kms
+  ignore_errors: yes
 
 - name: preconfiguring Kurento Media Server
   template:
