@@ -66,3 +66,9 @@
     src: index.html
     dest: /opt/openvidu/update
     mode: "0644"
+
+- name: creating custom-layout directory
+  file:
+    path: /opt/openvidu/custom-layout
+    state: directory
+    mode: 0755
