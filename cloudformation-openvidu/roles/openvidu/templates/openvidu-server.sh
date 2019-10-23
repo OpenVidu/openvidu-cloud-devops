@@ -12,7 +12,6 @@ PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 
 sed -i "s#openvidu.publicurl=.*#openvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_server_port }}#" ${OV_PROPERTIES}
 sed -i "s/MY_UID=.*/MY_UID=$(id -u $USER)/" ${OV_PROPERTIES}
-sed -i "s#openvidu.recording.composed-url=.*#openvidu.recording.composed-url=https://${PUBLIC_HOSTNAME}/inspector/#" ${OV_PROPERTIES}
 
 EVENTS_LIST=$(echo {{ openvidu_webhook_events }} | tr , ' ')
 if [ "x$EVENTS_LIST" != "x" ]; then
