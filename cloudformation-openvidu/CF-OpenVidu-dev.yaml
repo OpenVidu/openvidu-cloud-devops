@@ -423,7 +423,7 @@ Resources:
     Type: 'AWS::CloudFormation::WaitCondition'
     CreationPolicy:
       ResourceSignal:
-        Timeout: PT15M
+        Timeout: PT30M
         Count: '1'
   
   WebServerSecurityGroup:
