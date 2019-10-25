@@ -10,7 +10,7 @@ OV_NEW_VERSION=$(cat /var/lib/cloud/instance/scripts/part-001 | grep OPENVIDU_VE
 OV_KURENTO_VERSIONS=$(curl --silent https://oudzlg0y3m.execute-api.eu-west-1.amazonaws.com/v1/ov_kms_matrix?ov=${OV_NEW_VERSION})
 
 if [ "${OV_KURENTO_VERSIONS}" == "Not found" ]; then
-  echo "ERROR: wrong value for variable {OV_NEW_VERSION}"
+  echo "ERROR: wrong value for variable ${OV_NEW_VERSION}"
   exit 1
 else
   KURENTO_NEW_VERSION=$(jq --raw-output '.[0] | .kms' <<< "${OV_KURENTO_VERSIONS}")
