@@ -4,12 +4,12 @@ Description: Deploying OpenVidu Server over AWS
 Parameters:
 
   KeyName:
-    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Description: "Name of an existing EC2 KeyPair to enable SSH access to the instance"
     Type: 'AWS::EC2::KeyPair::KeyName'
-    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+    ConstraintDescription: "must be the name of an existing EC2 KeyPair."
 
   InstanceType:
-    Description: Demos Machine EC2 instance type
+    Description: "Specifies the EC2 instance type for your OpenVidu instance"
     Type: String
     Default: t2.xlarge
     AllowedValues:
@@ -36,7 +36,7 @@ Parameters:
       - c4.2xlarge
       - c4.4xlarge
       - c4.8xlarge
-    ConstraintDescription: must be a valid EC2 instance type.
+    ConstraintDescription: "must be a valid EC2 instance type."
 
   MyDomainName:
     Description: "Valid DNS record name like mycompany.com."
@@ -66,7 +66,7 @@ Parameters:
     NoEcho: true
 
   WhichCert:
-    Description: You can choose from the list below which certificate to use
+    Description: "You can choose from the list below which certificate to use"
     Type: String
     Default: selfsigned
     AllowedValues:
@@ -75,19 +75,19 @@ Parameters:
       - owncert
 
   LetsEncryptEmail:
-    Description: Email necesary for Let's Encrypt notifications
+    Description: "Email necesary for Let's Encrypt notifications"
     Type: String
 
   OwnCertCRT:
-    Description: URL to the CRT file
+    Description: "URL to the CRT file"
     Type: String
 
   OwnCertKEY:
-    Description: URL to the KEY file
+    Description: "URL to the KEY file"
     Type: String
 
   WantToSendInfo:
-    Description: Do you agree to send anonymous information to OpenVidu Team for statistics
+    Description: "Do you agree to send anonymous information to OpenVidu Team for statistics"
     Type: String
     Default: 'true'
     AllowedValues:
@@ -95,7 +95,7 @@ Parameters:
       - 'false'
 
   FreeHTTPAccesToRecordingVideos:
-    Description: Do you want your recordings to be access publicly?
+    Description: "Do you want your recordings to be access publicly?"
     Type: String
     Default: 'false'
     AllowedValues:
@@ -144,7 +144,8 @@ Parameters:
 
   WantToDeployDemos:
     Description: >-
-      Choose if you want to deploy practical examples of OpenVidu functionality. If set to true, then parameter OpenViduSecret must be MY_SECRET for the demos to work.
+      Choose if you want to deploy practical examples of OpenVidu functionality. 
+      If set to true, then parameter OpenViduSecret must be MY_SECRET for the demos to work.
     Type: String
     AllowedValues:
       - true
@@ -183,37 +184,37 @@ Parameters:
 Mappings:
   RegionMap:
     eu-north-1:
-      AMI: ami-4bd45f35
+      AMI: ami-06723d9a4e8d77741
     ap-south-1:
-      AMI: ami-03dcedc81ea3e7e27
+      AMI: ami-0a943aa1c727d4c63
     eu-west-3:
-      AMI: ami-080d4d4c37b0aa206
+      AMI: ami-0220349d77ba2e87d
     eu-west-2:
-      AMI: ami-0cbe2951c7cd54704
+      AMI: ami-00b21efcf155178c4
     eu-west-1:
-      AMI: ami-03746875d916becc0
+      AMI: ami-0c224e30f7a997d9f
     ap-northeast-2:
-      AMI: ami-0a25005e83c56767a
+      AMI: ami-0f6a0c2e905062388
     ap-northeast-1:
-      AMI: ami-096c57cee908da809
+      AMI: ami-0cca812282dd2fc0d
     sa-east-1:
-      AMI: ami-09beb384ba644b754
+      AMI: ami-0f227e142db829b50
     ca-central-1:
-      AMI: ami-0eb3e12d3927c36ef
+      AMI: ami-0b632b55517980f65
     ap-southeast-1:
-      AMI: ami-04613ff1fdcd2eab1
+      AMI: ami-0568159dd0c65b9b6
     ap-southeast-2:
-      AMI: ami-000c2343cf03d7fd7
+      AMI: ami-05b67b91e1f703ebf
     eu-central-1:
-      AMI: ami-0085d4f8878cddc81
+      AMI: ami-0fd4fe10cea7264a7
     us-east-1:
-      AMI: ami-0cfee17793b08a293
+      AMI: ami-092546daafcc8bc0d
     us-east-2:
-      AMI: ami-0f93b5fd8f220e428
+      AMI: ami-02073f7bb66c4c56f
     us-west-1:
-      AMI: ami-09eb5e8a83c7aa890
+      AMI: ami-0bc498f1207abb85c
     us-west-2:
-      AMI: ami-0b37e9efc396e4c38
+      AMI: ami-017e1dd35b94fb074
 
 Metadata:
   'AWS::CloudFormation::Interface':
@@ -244,6 +245,52 @@ Metadata:
           - OpenViduWebhookHeaders
           - OpenViduWebhookEvents
 
+    ParameterLabels:
+      KeyName:
+        default: "Key name"
+      InstanceType:
+        default: "Instance type"
+      MyDomainName:
+        default: "My domain name"
+      PublicElasticIP:
+        default: "Public elastic IP (EIP)"
+      OpenViduSecret:
+        default: "OpenVidu secret"
+      WhichCert: 
+        default: "Choose the certificate"
+      LetsEncryptEmail:
+        default: "Email address for Let's Encrypt certification authority"
+      OwnCertCRT:
+        default: "URL to the CRT file"
+      OwnCertKEY:
+        default: "URL to the key file"
+      WantToSendInfo:
+        default: "Do you want to send info to OpenVidu?"
+      FreeHTTPAccesToRecordingVideos:
+        default: "Video Recording Access"
+      OpenviduRecordingNotification:
+        default: "Recording Notifications"
+      OpenviduStreamsVideoMaxRecvBandwidth: 
+        default: "OpenVidu Streams Video Max Recv Bandwidth"
+      OpenviduStreamsVideoMinRecvBandwidth:
+        default: "OpenVidu Streams Video Min Recv Bandwidth"
+      OpenviduStreamsVideoMaxSendBandwidth: 
+        default: "OpenVidu Streams Video Max Send Bandwidth"
+      OpenviduStreamsVideoMinSendBandwidth:
+        default: "OpenVidu Streams Video Min Send Bandwidth"
+      WantToDeployDemos:
+        default: "Do you want to deploy demos?"
+      OpenViduWebhook:
+        default: "Do you want to enable OpenVidu webhook?"
+      OpenViduWebhookEndpoint:
+        default: "Endpoint for Openvidu webhook"
+      OpenViduWebhookHeaders:
+        default: "Headers for OpenVidu webhook"
+      OpenViduWebhookEvents:
+        default: "Events for OpenVidu webhook"
+      OpenViduVersion:
+        default: "OpenVidu version"
+
 Conditions:
   NoSelfSigned: !Not 
     - !Equals 
@@ -270,7 +317,7 @@ Resources:
               owner: root
               group: root
             '/etc/cfn/hooks.d/cfn-auto-reloader.conf':
-              content: !Sub |
+              content: |
                 [cfn-auto-reloader-hook]
                 triggers=post.update
                 path=Resources.OpenviduServer.Metadata.AWS::CloudFormation::Init
@@ -280,7 +327,7 @@ Resources:
               owner: root
               group: root
             '/usr/local/bin/installAnsible.sh':
-              content: !Sub |
+              content: |
                 #!/bin/bash
                 apt-add-repository -y ppa:ansible/ansible
                 apt-get update && apt-get install -y ansible
@@ -294,7 +341,7 @@ Resources:
                 #!/bin/bash
                 git clone https://github.com/OpenVidu/openvidu-cloud-devops /usr/src/openvidu
                 cd /usr/src/openvidu/cloudformation-openvidu
-                git checkout v@CF_V@
+                git checkout master
               mode: "000755"
               owner: "root"
               group: "root"
@@ -408,9 +455,9 @@ Resources:
         - DeviceName: /dev/sda1
           Ebs:
             VolumeType: io1
-            Iops: '200'
-            DeleteOnTermination: 'true'
-            VolumeSize: '100'
+            Iops: 200
+            DeleteOnTermination: true
+            VolumeSize: 100
   
   MyEIP:
     Type: 'AWS::EC2::EIPAssociation'
@@ -423,7 +470,7 @@ Resources:
     Type: 'AWS::CloudFormation::WaitCondition'
     CreationPolicy:
       ResourceSignal:
-        Timeout: PT15M
+        Timeout: PT30M
         Count: '1'
   
   WebServerSecurityGroup:
@@ -468,7 +515,11 @@ Resources:
           ToPort: 22
           CidrIp: 0.0.0.0/0
         - IpProtocol: udp
-          FromPort: 49152
+          FromPort: 40000
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 40000
           ToPort: 65535
           CidrIp: 0.0.0.0/0
 
