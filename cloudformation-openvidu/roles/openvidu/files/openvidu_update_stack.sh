@@ -17,7 +17,7 @@ else
   echo "Updating to OpenVidu ${OV_NEW_VERSION}"
 fi
 
-# Stopping openvidu 
+# Stopping openvidu
 supervisorctl stop openvidu-server
 
 # Setting updating in process web page
@@ -26,7 +26,7 @@ python -m SimpleHTTPServer 5443 &
 WEB_PID=$!
 
 # Changing source list for Kurento Media Server
-echo deb [arch=amd64] http://ubuntu.openvidu.io/${KURENTO_NEW_VERSION} xenial kms6 > /etc/apt/sources.list.d/kurento.list
+echo deb [arch=amd64] http://ubuntu.openvidu.io/${KURENTO_NEW_VERSION} {{ codename }} kms6 > /etc/apt/sources.list.d/kurento.list
 
 apt-get update
 

@@ -58,7 +58,7 @@ Parameters:
 
   OpenViduSecret:
     Description: >-
-      Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed. 
+      Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed.
       If you deploy the demos the password must be MY_SECRET or the demos won't be able to connect to server.
     Type: String
     Default: MY_SECRET
@@ -144,7 +144,7 @@ Parameters:
 
   WantToDeployDemos:
     Description: >-
-      Choose if you want to deploy practical examples of OpenVidu functionality. 
+      Choose if you want to deploy practical examples of OpenVidu functionality.
       If set to true, then parameter OpenViduSecret must be MY_SECRET for the demos to work.
     Type: String
     AllowedValues:
@@ -184,37 +184,37 @@ Parameters:
 Mappings:
   RegionMap:
     eu-north-1:
-      AMI: ami-06723d9a4e8d77741
+      AMI: ami-017ad30b324faed9b
     ap-south-1:
-      AMI: ami-0a943aa1c727d4c63
+      AMI: ami-0c28d7c6dd94fb3a7
     eu-west-3:
-      AMI: ami-0220349d77ba2e87d
+      AMI: ami-051ebe9615b416c15
     eu-west-2:
-      AMI: ami-00b21efcf155178c4
+      AMI: ami-0a590332f9f499197
     eu-west-1:
-      AMI: ami-0c224e30f7a997d9f
+      AMI: ami-0f630a3f40b1eb0b8
     ap-northeast-2:
-      AMI: ami-0f6a0c2e905062388
+      AMI: ami-0c5a717974f63b04c
     ap-northeast-1:
-      AMI: ami-0cca812282dd2fc0d
+      AMI: ami-03344c819e1ac354d
     sa-east-1:
-      AMI: ami-0f227e142db829b50
+      AMI: ami-0a16d0952a2a7b0ce
     ca-central-1:
-      AMI: ami-0b632b55517980f65
+      AMI: ami-0f06e521718460abf
     ap-southeast-1:
-      AMI: ami-0568159dd0c65b9b6
+      AMI: ami-0ca13b3dabeb6c66d
     ap-southeast-2:
-      AMI: ami-05b67b91e1f703ebf
+      AMI: ami-02d7e25c1cfdd5695
     eu-central-1:
-      AMI: ami-0fd4fe10cea7264a7
+      AMI: ami-03d8059563982d7b0
     us-east-1:
-      AMI: ami-092546daafcc8bc0d
+      AMI: ami-08bc77a2c7eb2b1da
     us-east-2:
-      AMI: ami-02073f7bb66c4c56f
+      AMI: ami-08cec7c429219e339
     us-west-1:
-      AMI: ami-0bc498f1207abb85c
+      AMI: ami-094f0176b0d009d9f
     us-west-2:
-      AMI: ami-017e1dd35b94fb074
+      AMI: ami-02d0ea44ae3fe9561
 
 Metadata:
   'AWS::CloudFormation::Interface':
@@ -256,7 +256,7 @@ Metadata:
         default: "Public elastic IP (EIP)"
       OpenViduSecret:
         default: "OpenVidu secret"
-      WhichCert: 
+      WhichCert:
         default: "Choose the certificate"
       LetsEncryptEmail:
         default: "Email address for Let's Encrypt certification authority"
@@ -270,11 +270,11 @@ Metadata:
         default: "Video Recording Access"
       OpenviduRecordingNotification:
         default: "Recording Notifications"
-      OpenviduStreamsVideoMaxRecvBandwidth: 
+      OpenviduStreamsVideoMaxRecvBandwidth:
         default: "OpenVidu Streams Video Max Recv Bandwidth"
       OpenviduStreamsVideoMinRecvBandwidth:
         default: "OpenVidu Streams Video Min Recv Bandwidth"
-      OpenviduStreamsVideoMaxSendBandwidth: 
+      OpenviduStreamsVideoMaxSendBandwidth:
         default: "OpenVidu Streams Video Max Send Bandwidth"
       OpenviduStreamsVideoMinSendBandwidth:
         default: "OpenVidu Streams Video Min Send Bandwidth"
@@ -292,8 +292,8 @@ Metadata:
         default: "OpenVidu version"
 
 Conditions:
-  NoSelfSigned: !Not 
-    - !Equals 
+  NoSelfSigned: !Not
+    - !Equals
       - !Ref WhichCert
       - selfsigned
 
@@ -372,7 +372,7 @@ Resources:
                 sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" $WORKINGDIR/group_vars/all
                 sed -i "s/MY_SECRET/${OpenViduSecret}/" $WORKINGDIR/group_vars/all
                 sed -i "s/run_ec2: false/run_ec2: true/" $WORKINGDIR/group_vars/all
-                sed -i "s/allowsendinfo: true/allowsendinfo: ${WantToSendInfo}/" $WORKINGDIR/group_vars/all             
+                sed -i "s/allowsendinfo: true/allowsendinfo: ${WantToSendInfo}/" $WORKINGDIR/group_vars/all
                 sed -i "s/FREEHTTPACCESTORECORDINGVIDEOS/${FreeHTTPAccesToRecordingVideos}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDURECORDINGNOTIFICATION/${OpenviduRecordingNotification}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH/${OpenviduStreamsVideoMaxRecvBandwidth}/" $WORKINGDIR/group_vars/all
@@ -402,7 +402,7 @@ Resources:
               owner: "root"
               group: "root"
     Properties:
-      ImageId: !FindInMap 
+      ImageId: !FindInMap
         - RegionMap
         - !Ref 'AWS::Region'
         - AMI
@@ -428,8 +428,8 @@ Resources:
 
           cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServer
 
-          /usr/local/bin/installAnsible.sh || { echo "[Openvidu] Can't install ansible"; exit 1; } 
-          /usr/local/bin/cloneRepo.sh || { echo "[Openvidu] Can't clone the repo"; exit 1; } 
+          /usr/local/bin/installAnsible.sh || { echo "[Openvidu] Can't install ansible"; exit 1; }
+          /usr/local/bin/cloneRepo.sh || { echo "[Openvidu] Can't clone the repo"; exit 1; }
           /usr/local/bin/getPublicInfo.sh || { echo "[Openvidu] Network problem"; exit 1; }
           /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
           if [ "${WhichCert}" == "owncert" ]; then
@@ -437,7 +437,7 @@ Resources:
           fi
           source /home/ubuntu/.bashrc
           export HOME=/home/ubuntu
-          
+
           pushd /usr/src/openvidu/cloudformation-openvidu
           ansible-playbook -i "localhost," -c local play.yml
           popd
@@ -458,21 +458,21 @@ Resources:
             Iops: 200
             DeleteOnTermination: true
             VolumeSize: 100
-  
+
   MyEIP:
     Type: 'AWS::EC2::EIPAssociation'
     Condition: NoSelfSigned
     Properties:
       InstanceId: !Ref OpenviduServer
       EIP: !Ref PublicElasticIP
-  
+
   WaitCondition:
     Type: 'AWS::CloudFormation::WaitCondition'
     CreationPolicy:
       ResourceSignal:
         Timeout: PT30M
         Count: '1'
-  
+
   WebServerSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -526,16 +526,16 @@ Resources:
 Outputs:
   WebsiteURL:
     Description: Use this URL to connect OpenVidu Server
-    Value: !Join 
+    Value: !Join
       - ''
       - - 'https://'
-        - !GetAtt 
+        - !GetAtt
           - OpenviduServer
           - PublicDnsName
         - ':4443'
   WebsiteURLLE:
     Description: Use this URL to connect to OpenVidu
-    Value: !Join 
+    Value: !Join
       - ''
       - - 'https://'
         - !Ref MyDomainName
@@ -551,7 +551,7 @@ Outputs:
           - PublicDnsName
   DemosURLLE:
     Description: If you choose to deploy the demos with your own DNS name you can access througt this
-    Value: !Join 
+    Value: !Join
       - ''
       - - 'https://'
         - !Ref MyDomainName
