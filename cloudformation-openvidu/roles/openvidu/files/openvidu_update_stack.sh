@@ -26,7 +26,8 @@ python -m SimpleHTTPServer 5443 &
 WEB_PID=$!
 
 # Changing source list for Kurento Media Server
-echo deb [arch=amd64] http://ubuntu.openvidu.io/${KURENTO_NEW_VERSION} {{ codename }} kms6 > /etc/apt/sources.list.d/kurento.list
+CODENAME=$(lsb_release -cs)
+echo deb [arch=amd64] http://ubuntu.openvidu.io/${KURENTO_NEW_VERSION} $CODENAME kms6 > /etc/apt/sources.list.d/kurento.list
 
 apt-get update
 
