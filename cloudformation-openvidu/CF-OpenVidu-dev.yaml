@@ -360,7 +360,7 @@ Resources:
               content: !Sub |
                 #!/bin/bash -x
                 WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu
-                OPENVIDU_VERSION=2.11.0
+                OPENVIDU_VERSION=2.12.0-SNAPSHOT
                 OPENVIDU_DEMOS_VERSION=2.11.0
                 OPENVIDU_CALL_VERSION=2.11.0
                 sed -i "s/OPENVIDU_VERSION/$OPENVIDU_VERSION/" $WORKINGDIR/group_vars/all
