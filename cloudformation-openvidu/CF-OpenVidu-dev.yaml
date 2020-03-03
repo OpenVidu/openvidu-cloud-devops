@@ -479,11 +479,11 @@ Resources:
       GroupDescription: SSH, Proxy and OpenVidu WebRTC Ports
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 1024
+          FromPort: 1
           ToPort: 65535
           CidrIp: 0.0.0.0/0
         - IpProtocol: udp
-          FromPort: 1024
+          FromPort: 1
           ToPort: 65535
           CidrIp: 0.0.0.0/0
 
