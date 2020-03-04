@@ -341,7 +341,7 @@ Resources:
                 #!/bin/bash
                 git clone https://github.com/OpenVidu/openvidu-cloud-devops /usr/src/openvidu
                 cd /usr/src/openvidu/cloudformation-openvidu
-                git checkout master
+                git checkout @GAB@
               mode: "000755"
               owner: "root"
               group: "root"
