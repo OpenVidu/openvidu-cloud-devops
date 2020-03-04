@@ -184,37 +184,37 @@ Parameters:
 Mappings:
   RegionMap:
     eu-north-1:
-      AMI: ami-06723d9a4e8d77741
+      AMI: ami-017ad30b324faed9b
     ap-south-1:
-      AMI: ami-0a943aa1c727d4c63
+      AMI: ami-0c28d7c6dd94fb3a7
     eu-west-3:
-      AMI: ami-0220349d77ba2e87d
+      AMI: ami-051ebe9615b416c15
     eu-west-2:
-      AMI: ami-00b21efcf155178c4
+      AMI: ami-0a590332f9f499197
     eu-west-1:
-      AMI: ami-0c224e30f7a997d9f
+      AMI: ami-0f630a3f40b1eb0b8
     ap-northeast-2:
-      AMI: ami-0f6a0c2e905062388
+      AMI: ami-0c5a717974f63b04c
     ap-northeast-1:
-      AMI: ami-0cca812282dd2fc0d
+      AMI: ami-03344c819e1ac354d
     sa-east-1:
-      AMI: ami-0f227e142db829b50
+      AMI: ami-0a16d0952a2a7b0ce
     ca-central-1:
-      AMI: ami-0b632b55517980f65
+      AMI: ami-0f06e521718460abf
     ap-southeast-1:
-      AMI: ami-0568159dd0c65b9b6
+      AMI: ami-0ca13b3dabeb6c66d
     ap-southeast-2:
-      AMI: ami-05b67b91e1f703ebf
+      AMI: ami-02d7e25c1cfdd5695
     eu-central-1:
-      AMI: ami-0fd4fe10cea7264a7
+      AMI: ami-03d8059563982d7b0
     us-east-1:
-      AMI: ami-092546daafcc8bc0d
+      AMI: ami-08bc77a2c7eb2b1da
     us-east-2:
-      AMI: ami-02073f7bb66c4c56f
+      AMI: ami-08cec7c429219e339
     us-west-1:
-      AMI: ami-0bc498f1207abb85c
+      AMI: ami-094f0176b0d009d9f
     us-west-2:
-      AMI: ami-017e1dd35b94fb074
+      AMI: ami-02d0ea44ae3fe9561
 
 Metadata:
   'AWS::CloudFormation::Interface':

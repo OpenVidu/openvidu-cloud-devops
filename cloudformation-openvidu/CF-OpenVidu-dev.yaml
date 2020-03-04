@@ -473,7 +473,7 @@ Resources:
         Timeout: PT30M
         Count: '1'
 
-    WebServerSecurityGroup:
+  WebServerSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: SSH, Proxy and OpenVidu WebRTC Ports
