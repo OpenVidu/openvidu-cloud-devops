@@ -114,6 +114,12 @@ Parameters:
       - moderator
       - none
 
+  OpenViduRecordingTimeOut:
+    Description: >-
+      Timeout in seconds for recordings to automatically stop.
+    Type: String
+    Default: '120'
+
   OpenviduStreamsVideoMaxRecvBandwidth:
     Description: >-
       Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0
@@ -375,6 +381,7 @@ Resources:
                 sed -i "s/allowsendinfo: true/allowsendinfo: ${WantToSendInfo}/" $WORKINGDIR/group_vars/all
                 sed -i "s/FREEHTTPACCESTORECORDINGVIDEOS/${FreeHTTPAccesToRecordingVideos}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDURECORDINGNOTIFICATION/${OpenviduRecordingNotification}/" $WORKINGDIR/group_vars/all
+                sed -i "s/OPENVIDURECORDINGTIMEOUT/${OpenViduRecordingTimeOut}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH/${OpenviduStreamsVideoMaxRecvBandwidth}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMIN-RECV-BANDWIDTH/${OpenviduStreamsVideoMinRecvBandwidth}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMAX-SEND-BANDWIDTH/${OpenviduStreamsVideoMaxSendBandwidth}/" $WORKINGDIR/group_vars/all
