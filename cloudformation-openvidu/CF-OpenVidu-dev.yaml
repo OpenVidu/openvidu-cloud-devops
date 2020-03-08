@@ -196,7 +196,8 @@ Parameters:
       - Ubuntu-18.04
 
 Mappings:
-  RegionMapUbuntu-16.04:
+
+  RegionMapXenial:
     eu-north-1:
       AMI: ami-017ad30b324faed9b
     eu-west-3:
@@ -240,7 +241,7 @@ Mappings:
     me-south-1:
       AMI: ami-0df89c0ad05708804
 
-  RegionMapUbuntu-18.04:
+  RegionMapBionic:
     eu-north-1:
       AMI: ami-0e850e0e9c20d9deb
     eu-west-3:
@@ -364,6 +365,10 @@ Conditions:
     - !Equals
       - !Ref WhichCert
       - selfsigned
+  IsUbuntu16:
+    - !Equals
+      - !Ref UbuntuVersion
+      - Ubuntu-16.04
 
 Resources:
 
@@ -471,10 +476,16 @@ Resources:
               owner: "root"
               group: "root"
     Properties:
-      ImageId: !FindInMap
-        - !Join ['', [ RegionMap, !Ref UbuntuVersion ]]
-        - !Ref 'AWS::Region'
-        - AMI
+      ImageId: !If
+        - IsUbuntu16
+        - !FindInMap
+          - RegionMapXenial
+          - !Ref 'AWS::Region'
+          - AMI
+        - !FindInMap
+          - RegionMapBionic
+          - !Ref 'AWS::Region'
+          - AMI
       InstanceType: !Ref InstanceType
       SecurityGroups:
         - !Ref WebServerSecurityGroup
