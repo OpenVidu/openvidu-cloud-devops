@@ -60,7 +60,7 @@
     state: present
   loop:
     - "deb http://ddebs.ubuntu.com {{ codename }} main restricted universe multiverse"
-  when: "codename == xenial"
+  when: codename == "xenial"
 
 - name: add ubuntu 'dbgsym' repository sources for Ubuntu bionic
   apt_repository:
@@ -69,7 +69,7 @@
   loop:
     - "deb http://ddebs.ubuntu.com {{ codename }} main restricted universe multiverse"
     - "deb http://ddebs.ubuntu.com {{ codename }}-updates main restricted universe multiverse"
-  when: "codename == bionic"
+  when: codename == "bionic"
 
 - name: dbgsym key
   apt_key:
@@ -82,7 +82,7 @@
     name: kurento-dbg
     state: "present"
     update_cache: yes
-  when: "codename == xenial"
+  when: codename == "xenial"
 
 - name: installing Kurento Debug Symbols for Ubuntu bionic
   apt:
@@ -109,7 +109,7 @@
     - "kurento-media-server-dbg"
   notify: restart kms
   ignore_errors: yes
-  when: "codename == bionic"
+  when: codename == "bionic"
 
 - name: preconfiguring Kurento Media Server
   template:
