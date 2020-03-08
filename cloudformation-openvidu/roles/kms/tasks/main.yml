@@ -48,14 +48,28 @@
     update_cache: yes
   notify: start kms
 
-- name: add ubuntu 'dbgsym' repository sources
+- name: installing gnupg
+  apt:
+    name: "gnupg"
+    state: present
+    update_cache: yes
+
+- name: add ubuntu 'dbgsym' repository sources for Ubuntu xenial
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop:
+    - "deb http://ddebs.ubuntu.com {{ codename }} main restricted universe multiverse"
+  when: "codename == xenial"
+
+- name: add ubuntu 'dbgsym' repository sources for Ubuntu bionic
   apt_repository:
     repo: "{{ item }}"
     state: present
   loop:
     - "deb http://ddebs.ubuntu.com {{ codename }} main restricted universe multiverse"
     - "deb http://ddebs.ubuntu.com {{ codename }}-updates main restricted universe multiverse"
-    - "deb http://ddebs.ubuntu.com {{ codename }}-proposed main restricted universe multiverse"
+  when: "codename == bionic"
 
 - name: dbgsym key
   apt_key:
@@ -63,31 +77,24 @@
     id: F2EDC64DC5AEE1F6B9C621F0C8CAB6595FDFF622
     state: present
 
-- name: installing Kurento Debug Symbols
+- name: installing Kurento Debug Symbols for Ubuntu xenial
+  apt:
+    name: kurento-dbg
+    state: "present"
+    update_cache: yes
+  when: "codename == xenial"
+
+- name: installing Kurento Debug Symbols for Ubuntu bionic
   apt:
     name: "{{ item }}"
     state: "present"
     update_cache: yes
   loop:
     - "libc6-dbg"
-    - "libc6-dbgsym"
-    - "libglib2.0-0-dbg"
     - "libglib2.0-0-dbgsym"
-    - "libssl1.0.0-dbg"
-    - "libssl1.0.0-dbgsym"
     - "kmsjsoncpp-dbg"
     - "libnice10-dbgsym"
-    - "libsrtp0-dbg"
-    - "libsrtp0-dbgsym"
-    - "libusrsctp-dbgsym"
     - "openwebrtc-gst-plugins-dbg"
-    - "libgstreamer1.0-0-dbg"
-    - "gstreamer1.0-libav-dbg"
-    - "gstreamer1.0-nice-dbgsym"
-    - "gstreamer1.0-plugins-bad-dbg"
-    - "gstreamer1.0-plugins-base-dbg"
-    - "gstreamer1.0-plugins-good-dbg"
-    - "gstreamer1.0-plugins-ugly-dbg"
     - "libgstreamer1.5-0-dbg"
     - "gstreamer1.5-libav-dbg"
     - "gstreamer1.5-nice-dbgsym"
@@ -102,6 +109,7 @@
     - "kurento-media-server-dbg"
   notify: restart kms
   ignore_errors: yes
+  when: "codename == bionic"
 
 - name: preconfiguring Kurento Media Server
   template:
