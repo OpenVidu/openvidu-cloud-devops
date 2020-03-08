@@ -187,12 +187,18 @@ Parameters:
     Type: String
     Default: 2.11.0
 
+  UbuntuVersion:
+    Description: Wich Ubuntu version to use for OpenVidu.
+    Type: String
+    Default: Ubuntu-16.04
+    AllowedValues:
+      - Ubuntu-16.04
+      - Ubuntu-18.04
+
 Mappings:
-  RegionMap:
+  RegionMapUbuntu-16.04:
     eu-north-1:
       AMI: ami-017ad30b324faed9b
-    ap-south-1:
-      AMI: ami-0c28d7c6dd94fb3a7
     eu-west-3:
       AMI: ami-051ebe9615b416c15
     eu-west-2:
@@ -207,10 +213,20 @@ Mappings:
       AMI: ami-0a16d0952a2a7b0ce
     ca-central-1:
       AMI: ami-0f06e521718460abf
+    ap-south-1:
+      AMI: ami-0c28d7c6dd94fb3a7
     ap-southeast-1:
       AMI: ami-0ca13b3dabeb6c66d
     ap-southeast-2:
       AMI: ami-02d7e25c1cfdd5695
+    ap-northeast-1:
+      AMI: ami-03344c819e1ac354d
+    ap-northeast-2:
+      AMI: ami-0c5a717974f63b04c
+    ap-northeast-3:
+      AMI: ami-03f0ddd1562f1b937
+    ap-east-1:
+      AMI: ami-9f793dee
     eu-central-1:
       AMI: ami-03d8059563982d7b0
     us-east-1:
@@ -221,6 +237,52 @@ Mappings:
       AMI: ami-094f0176b0d009d9f
     us-west-2:
       AMI: ami-02d0ea44ae3fe9561
+    me-south-1:
+      AMI: ami-0df89c0ad05708804
+
+  RegionMapUbuntu-18.04:
+    eu-north-1:
+      AMI: ami-0e850e0e9c20d9deb
+    eu-west-3:
+      AMI: ami-0c367ebddcf279dc6
+    eu-west-2:
+      AMI: ami-04cc79dd5df3bffca
+    eu-west-1:
+      AMI: ami-07042e91d04b1c30d
+    ap-northeast-2:
+      AMI: ami-096e3ded41e3bda6a
+    ap-northeast-1:
+      AMI: ami-01f90b0460589991e
+    sa-east-1:
+      AMI: ami-0cb1ddea3786f6c0d
+    ca-central-1:
+      AMI: ami-064efdb82ae15e93f
+    ap-south-1:
+      AMI: ami-0d11056c10bfdde69
+    ap-southeast-1:
+      AMI: ami-07ce5f60a39f1790e
+    ap-southeast-2:
+      AMI: ami-04c7af7de7ad468f0
+    ap-northeast-1:
+      AMI: ami-01f90b0460589991e
+    ap-northeast-2:
+      AMI: ami-096e3ded41e3bda6a
+    ap-northeast-3:
+      AMI: ami-0942fd36e1571cbdf
+    ap-east-1:
+      AMI: ami-868bcff7
+    eu-central-1:
+      AMI: ami-0718a1ae90971ce4d
+    us-east-1:
+      AMI: ami-046842448f9e74e7d
+    us-east-2:
+      AMI: ami-0367b500fdcac0edc
+    us-west-1:
+      AMI: ami-0d58800f291760030
+    us-west-2:
+      AMI: ami-0edf3b95e26a682df
+    me-south-1:
+      AMI: ami-0e40363f9ed76073b
 
 Metadata:
   'AWS::CloudFormation::Interface':
@@ -410,7 +472,7 @@ Resources:
               group: "root"
     Properties:
       ImageId: !FindInMap
-        - RegionMap
+        - !Join ['', [ RegionMap, !Ref UbuntuVersion ]]
         - !Ref 'AWS::Region'
         - AMI
       InstanceType: !Ref InstanceType
