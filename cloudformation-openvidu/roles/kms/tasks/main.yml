@@ -54,6 +54,12 @@
     state: present
     update_cache: yes
 
+- name: dbgsym key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: F2EDC64DC5AEE1F6B9C621F0C8CAB6595FDFF622
+    state: present
+
 - name: add ubuntu 'dbgsym' repository sources xenial
   apt_repository:
     repo: "{{ item }}"
@@ -64,7 +70,7 @@
   ignore_errors: yes
   when: codename == "xenial"
 
-- name: add ubuntu 'dbgsym' repository sources xenial
+- name: add ubuntu 'dbgsym' repository sources bionic
   apt_repository:
     repo: "{{ item }}"
     state: present
@@ -73,12 +79,6 @@
     - "deb http://ddebs.ubuntu.com bionic-updates main restricted universe multiverse"
   ignore_errors: yes
   when: codename == "bionic"
-
-- name: dbgsym key
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: F2EDC64DC5AEE1F6B9C621F0C8CAB6595FDFF622
-    state: present
 
 - name: installing Kurento Debug Symbols for Ubuntu bionic
   apt:
