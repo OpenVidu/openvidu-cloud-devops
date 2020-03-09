@@ -58,7 +58,7 @@ Parameters:
 
   OpenViduSecret:
     Description: >-
-      Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed. 
+      Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed.
       If you deploy the demos the password must be MY_SECRET or the demos won't be able to connect to server.
     Type: String
     Default: MY_SECRET
@@ -245,8 +245,8 @@ Metadata:
           - OpenViduWebhookEvents
 
 Conditions:
-  NoSelfSigned: !Not 
-    - !Equals 
+  NoSelfSigned: !Not
+    - !Equals
       - !Ref WhichCert
       - selfsigned
 
@@ -294,7 +294,7 @@ Resources:
                 #!/bin/bash
                 git clone https://github.com/OpenVidu/openvidu-cloud-devops /usr/src/openvidu
                 cd /usr/src/openvidu/cloudformation-openvidu
-                git checkout master
+                git checkout v2.11.0-load-test
               mode: "000755"
               owner: "root"
               group: "root"
@@ -325,7 +325,7 @@ Resources:
                 sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" $WORKINGDIR/group_vars/all
                 sed -i "s/MY_SECRET/${OpenViduSecret}/" $WORKINGDIR/group_vars/all
                 sed -i "s/run_ec2: false/run_ec2: true/" $WORKINGDIR/group_vars/all
-                sed -i "s/allowsendinfo: true/allowsendinfo: ${WantToSendInfo}/" $WORKINGDIR/group_vars/all             
+                sed -i "s/allowsendinfo: true/allowsendinfo: ${WantToSendInfo}/" $WORKINGDIR/group_vars/all
                 sed -i "s/FREEHTTPACCESTORECORDINGVIDEOS/${FreeHTTPAccesToRecordingVideos}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDURECORDINGNOTIFICATION/${OpenviduRecordingNotification}/" $WORKINGDIR/group_vars/all
                 sed -i "s/OPENVIDUSTREAMSVIDEOMAX-RECV-BANDWIDTH/${OpenviduStreamsVideoMaxRecvBandwidth}/" $WORKINGDIR/group_vars/all
@@ -355,7 +355,7 @@ Resources:
               owner: "root"
               group: "root"
     Properties:
-      ImageId: !FindInMap 
+      ImageId: !FindInMap
         - RegionMap
         - !Ref 'AWS::Region'
         - AMI
@@ -381,8 +381,8 @@ Resources:
 
           cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServer
 
-          /usr/local/bin/installAnsible.sh || { echo "[Openvidu] Can't install ansible"; exit 1; } 
-          /usr/local/bin/cloneRepo.sh || { echo "[Openvidu] Can't clone the repo"; exit 1; } 
+          /usr/local/bin/installAnsible.sh || { echo "[Openvidu] Can't install ansible"; exit 1; }
+          /usr/local/bin/cloneRepo.sh || { echo "[Openvidu] Can't clone the repo"; exit 1; }
           /usr/local/bin/getPublicInfo.sh || { echo "[Openvidu] Network problem"; exit 1; }
           /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
           if [ "${WhichCert}" == "owncert" ]; then
@@ -390,7 +390,7 @@ Resources:
           fi
           source /home/ubuntu/.bashrc
           export HOME=/home/ubuntu
-          
+
           pushd /usr/src/openvidu/cloudformation-openvidu
           ansible-playbook -i "localhost," -c local play.yml
           popd
@@ -411,21 +411,21 @@ Resources:
             Iops: '200'
             DeleteOnTermination: 'true'
             VolumeSize: '100'
-  
+
   MyEIP:
     Type: 'AWS::EC2::EIPAssociation'
     Condition: NoSelfSigned
     Properties:
       InstanceId: !Ref OpenviduServer
       EIP: !Ref PublicElasticIP
-  
+
   WaitCondition:
     Type: 'AWS::CloudFormation::WaitCondition'
     CreationPolicy:
       ResourceSignal:
         Timeout: PT15M
         Count: '1'
-  
+
   WebServerSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -479,16 +479,16 @@ Resources:
 Outputs:
   WebsiteURL:
     Description: Use this URL to connect OpenVidu Server
-    Value: !Join 
+    Value: !Join
       - ''
       - - 'https://'
-        - !GetAtt 
+        - !GetAtt
           - OpenviduServer
           - PublicDnsName
         - ':4443'
   WebsiteURLLE:
     Description: Use this URL to connect to OpenVidu
-    Value: !Join 
+    Value: !Join
       - ''
       - - 'https://'
         - !Ref MyDomainName
@@ -504,7 +504,7 @@ Outputs:
           - PublicDnsName
   DemosURLLE:
     Description: If you choose to deploy the demos with your own DNS name you can access througt this
-    Value: !Join 
+    Value: !Join
       - ''
       - - 'https://'
         - !Ref MyDomainName
