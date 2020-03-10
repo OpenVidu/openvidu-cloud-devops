@@ -60,25 +60,14 @@
     id: F2EDC64DC5AEE1F6B9C621F0C8CAB6595FDFF622
     state: present
 
-- name: add ubuntu 'dbgsym' repository sources xenial
+- name: add ubuntu 'dbgsym' repository sources
   apt_repository:
     repo: "{{ item }}"
     state: present
   loop:
-    - "deb http://ddebs.ubuntu.com xenial main restricted universe multiverse"
-    - "deb http://ddebs.ubuntu.com xenial-updates main restricted universe multiverse"
+    - "deb http://ddebs.ubuntu.com {{ codename }} main restricted universe multiverse"
+    - "deb http://ddebs.ubuntu.com {{ codename }}-updates main restricted universe multiverse"
   ignore_errors: yes
-  when: codename == "xenial"
-
-- name: add ubuntu 'dbgsym' repository sources bionic
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  loop:
-    - "deb http://ddebs.ubuntu.com bionic main restricted universe multiverse"
-    - "deb http://ddebs.ubuntu.com bionic-updates main restricted universe multiverse"
-  ignore_errors: yes
-  when: codename == "bionic"
 
 - name: installing Kurento Debug Symbols for Ubuntu bionic
   apt:
