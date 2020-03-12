@@ -601,14 +601,6 @@ Resources:
           ToPort: 22
           CidrIp: 0.0.0.0/0
         - IpProtocol: udp
-          FromPort: 15000
-          ToPort: 39999
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 15000
-          ToPort: 39999
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: udp
           FromPort: 40000
           ToPort: 65535
           CidrIp: 0.0.0.0/0
