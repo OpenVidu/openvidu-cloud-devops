@@ -351,15 +351,15 @@ Metadata:
       OpenviduStreamsVideoMinSendBandwidth:
         default: "OpenVidu Streams Video Min Send Bandwidth"
       WantToDeployDemos:
-        default: "Do you want to deploy demos?"
+        default: "Deploy Demos"
       OpenViduWebhook:
-        default: "Do you want to enable OpenVidu webhook?"
+        default: "OpenVidu Webhook"
       OpenViduWebhookEndpoint:
-        default: "Endpoint for Openvidu webhook"
+        default: "OpenVidu Webhook Endpoint"
       OpenViduWebhookHeaders:
-        default: "Headers for OpenVidu webhook"
+        default: "OpenVidu Webhook Headers"
       OpenViduWebhookEvents:
-        default: "Events for OpenVidu webhook"
+        default: "OpenVidu Webhook Events"
       OpenViduVersion:
         default: "OpenVidu version"
 
