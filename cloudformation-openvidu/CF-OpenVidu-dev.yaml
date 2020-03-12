@@ -298,10 +298,6 @@ Metadata:
           - OwnCertCRT
           - OwnCertKEY
       - Label:
-          default: Ubuntu Configuration
-        Parameters:
-          - UbuntuVersion
-      - Label:
           default: OpenVidu Configuration
         Parameters:
           - OpenViduVersion
