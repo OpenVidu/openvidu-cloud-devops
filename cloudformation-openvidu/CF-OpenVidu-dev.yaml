@@ -114,6 +114,13 @@ Parameters:
     Type: String
     Default: "sessionCreated,sessionDestroyed,participantJoined,participantLeft,webrtcConnectionCreated,webrtcConnectionDestroyed,recordingStatusChanged,filterEventDispatched"
 
+  OpenviduCDREnable:
+    Description: "Whether to enable Call Detail Record or not"
+    Type: String
+    Default: false
+    AllowedValues:
+    - false
+    - true
   # Other configuration
 
   InstanceType:
@@ -297,6 +304,7 @@ Metadata:
           - OpenViduWebhookEndpoint
           - OpenViduWebhookHeaders
           - OpenViduWebhookEvents
+          - OpenviduCDREnable
       - Label:
           default: Other configuration
         Parameters:
@@ -346,6 +354,8 @@ Metadata:
         default: "openvidu.webhook.headers"
       OpenViduWebhookEvents:
         default: "openvidu.webhook.events"
+      OpenviduCDREnable:
+        default: "openvidu.cdr"
       # Other configuration
       InstanceType:
         default: "Instance type"
@@ -456,6 +466,7 @@ Resources:
                 sed -i "s#WEBHOOK_ENDPOINT#${OpenViduWebhookEndpoint}#" $WORKINGDIR/group_vars/all
                 sed -i "s/WEBHOOK_HEADERS/${OpenViduWebhookHeaders}/" $WORKINGDIR/group_vars/all
                 sed -i "s/WEBHOOK_EVENTS/${OpenViduWebhookEvents}/" $WORKINGDIR/group_vars/all
+                sed -i "s/OPENVIDU_CDR/${OpenviduCDREnable}/" $WORKINGDIR/group_vars/all
               mode: "000755"
               owner: "root"
               group: "root"

@@ -80,6 +80,12 @@ openvidu_webhook_headers: "WEBHOOK_HEADERS"
 # Leave blank if all events.
 openvidu_webhook_events: WEBHOOK_EVENTS
 
+# Parameter "openvidu.cdr"
+# Call Detail Record enabled
+# Whether to enable Call Detail Record or not
+# Values: true | false
+openvidu_cdr: OPENVIDU_CDR
+
 ################
 # Demos Section
 ################
