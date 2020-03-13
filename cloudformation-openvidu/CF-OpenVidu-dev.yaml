@@ -180,7 +180,7 @@ Parameters:
       Comma separate list of events that will be sent by OpenVidu Server Webhook service. Check out all the events
        here: https://openvidu.io/docs/reference-docs/openvidu-server-cdr/
     Type: String
-    Default: "sessionCreated,sessionDestroyed,participantJoined,participantLeft,webrtcConnectionCreated,webrtcConnectionDestroyed,recordingStatusChanged"
+    Default: "sessionCreated,sessionDestroyed,participantJoined,participantLeft,webrtcConnectionCreated,webrtcConnectionDestroyed,recordingStatusChanged,filterEventDispatched"
 
   OpenViduVersion:
     Description: OpenVidu Server version. This parameter is only for updating the stack
