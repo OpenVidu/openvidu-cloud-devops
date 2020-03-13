@@ -3,10 +3,112 @@ Description: Deploying OpenVidu Server over AWS
 
 Parameters:
 
-  KeyName:
-    Description: "Name of an existing EC2 KeyPair to enable SSH access to the instance"
-    Type: 'AWS::EC2::KeyPair::KeyName'
-    ConstraintDescription: "must be the name of an existing EC2 KeyPair."
+  WhichCert:
+    Description: "You can choose from the list below which certificate mode to use"
+    Type: String
+    AllowedValues:
+      - selfsigned
+      - letsencrypt
+      - owncert
+    Default: selfsigned
+
+  LetsEncryptEmail:
+    Description: "Email necessary for Let's Encrypt notifications"
+    Type: String
+
+  MyDomainName:
+    Description: "Valid DNS record name like mycompany.com."
+    Type: String
+    AllowedPattern: ^(?:_?(?>[a-z\d][a-z\d-]{0,61}[a-z\d]|[a-z\d])\.)*(?:_?(?>[a-z\d][a-z\d-]{0,61}[a-z\d]|[a-z\d]))\.?$
+    Default: openvidu.mycompany.com
+    ConstraintDescription: Must be a valid DNS name. Like myapp.example.com
+
+  PublicElasticIP:
+    Description: "Valid AWS elastic IP for using with Let's Encrypt or OwnCertificate."
+    Type: String
+    AllowedPattern: ^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$
+    Default: 1.0.2.0
+    ConstraintDescription: Must be a valid IP address. A valid IP address must be in the form of xxx.xxx.xxx.xxx, where xxx is a number from 0-255
+
+  OwnCertCRT:
+    Description: "URL to the CRT file"
+    Type: String
+
+  OwnCertKEY:
+    Description: "URL to the KEY file"
+    Type: String
+
+  OpenViduSecret:
+    Description: "Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed. NOTE: If you deploy the demos (see 'Other configuration' section below) password must be MY_SECRET or the demos won't be able to connect to OpenVidu out-of-the-box"
+    Type: String
+    AllowedPattern: ^((?!")(?! ).)*$
+    Default: MY_SECRET
+    NoEcho: true
+
+  FreeHTTPAccesToRecordingVideos:
+    Description: "Do you want your recordings to be access publicly?"
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Default: false
+
+  OpenviduRecordingNotification:
+    Description: "Which users should receive recording events in the client side"
+    Type: String
+    AllowedValues:
+      - all
+      - publisher_moderator
+      - moderator
+      - none
+    Default: publisher_moderator
+
+  OpenViduRecordingTimeOut:
+    Description: "Timeout in seconds for recordings to automatically stop"
+    Type: String
+    Default: "120"
+
+  OpenviduStreamsVideoMaxRecvBandwidth:
+    Description: "Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained"
+    Type: String
+    Default: "1000"
+
+  OpenviduStreamsVideoMinRecvBandwidth:
+    Description: "Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained"
+    Type: String
+    Default: "300"
+
+  OpenviduStreamsVideoMaxSendBandwidth:
+    Description: "Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained"
+    Type: String
+    Default: "1000"
+
+  OpenviduStreamsVideoMinSendBandwidth:
+    Description: "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained"
+    Type: String
+    Default: "300"
+
+  OpenViduWebhook:
+    Description: "true to enable OpenVidu Server Webhook service. false otherwise."
+    Type: String
+    AllowedValues:
+      - false
+      - true
+    Default: false
+
+  OpenViduWebhookEndpoint:
+    Description: "HTTP endpoint where OpenVidu Server will send Webhook HTTP POST messages."
+    Type: String
+    Default: http://my.endpoint.com
+
+  OpenViduWebhookHeaders:
+    Description: "List of headers that OpenVidu Server Webhook service will attach to HTTP POST messages. JUST one header at the moment"
+    Type: String
+
+  OpenViduWebhookEvents:
+    Description: "Comma separated list of events that will be notified by OpenVidu Server Webhook service. Check out available events here: https://openvidu.io/docs/reference-docs/openvidu-server-cdr"
+    Type: String
+    Default: "sessionCreated,sessionDestroyed,participantJoined,participantLeft,webrtcConnectionCreated,webrtcConnectionDestroyed,recordingStatusChanged,filterEventDispatched"
 
   InstanceType:
     Description: "Specifies the EC2 instance type for your OpenVidu instance"
@@ -36,164 +138,41 @@ Parameters:
       - c4.2xlarge
       - c4.4xlarge
       - c4.8xlarge
-    ConstraintDescription: "must be a valid EC2 instance type."
+    ConstraintDescription: "Must be a valid EC2 instance type"
 
-  MyDomainName:
-    Description: "Valid DNS record name like mycompany.com."
-    Type: String
-    Default: openvidu.mycompany.com
-    AllowedPattern: >-
-      ^(?:_?(?>[a-z\d][a-z\d-]{0,61}[a-z\d]|[a-z\d])\.)*(?:_?(?>[a-z\d][a-z\d-]{0,61}[a-z\d]|[a-z\d]))\.?$
-    ConstraintDescription: >-
-      Must be a valid DNS name. Like myapp.example.com
+  KeyName:
+    Description: "Name of an existing EC2 KeyPair to enable SSH access to the instance"
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: "must be the name of an existing EC2 KeyPair"
 
-  PublicElasticIP:
-    Description: "Valid AWS elastic IP for using with Let's Encrypt or OwnCertificate."
+  UbuntuVersion:
+    Description: "Ubuntu version where to deploy OpenVidu"
     Type: String
-    Default: 1.0.2.0
-    AllowedPattern: >-
-      ^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$
-    ConstraintDescription: >-
-      Must be a valid IP address. A valid IP address must be in the form of xxx.xxx.xxx.xxx, where xxx is a number from 0-255.
-
-  OpenViduSecret:
-    Description: >-
-      Secret to connect to your OpenVidu Server. No whitespaces or quotations allowed.
-      If you deploy the demos the password must be MY_SECRET or the demos won't be able to connect to server.
-    Type: String
-    Default: MY_SECRET
-    AllowedPattern: ^((?!")(?! ).)*$
-    NoEcho: true
-
-  WhichCert:
-    Description: "You can choose from the list below which certificate to use"
-    Type: String
-    Default: selfsigned
+    Default: Ubuntu-16.04
     AllowedValues:
-      - selfsigned
-      - letsencrypt
-      - owncert
-
-  LetsEncryptEmail:
-    Description: "Email necesary for Let's Encrypt notifications"
-    Type: String
-
-  OwnCertCRT:
-    Description: "URL to the CRT file"
-    Type: String
-
-  OwnCertKEY:
-    Description: "URL to the KEY file"
-    Type: String
-
-  WantToSendInfo:
-    Description: "Do you agree to send anonymous information to OpenVidu Team for statistics"
-    Type: String
-    Default: 'true'
-    AllowedValues:
-      - 'true'
-      - 'false'
-
-  FreeHTTPAccesToRecordingVideos:
-    Description: "Do you want your recordings to be access publicly?"
-    Type: String
-    Default: 'false'
-    AllowedValues:
-      - 'true'
-      - 'false'
-
-  OpenviduRecordingNotification:
-    Description: >-
-      Which users should receive the recording events in the client side
-      (recordingStarted, recordingStopped).
-    Type: String
-    Default: publisher_moderator
-    AllowedValues:
-      - all
-      - publisher_moderator
-      - moderator
-      - none
-
-  OpenViduRecordingTimeOut:
-    Description: >-
-      Timeout in seconds for recordings to automatically stop.
-    Type: String
-    Default: '120'
-
-  OpenviduStreamsVideoMaxRecvBandwidth:
-    Description: >-
-      Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0
-      means unconstrained
-    Type: String
-    Default: '1000'
-
-  OpenviduStreamsVideoMinRecvBandwidth:
-    Description: >-
-      Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0
-      means unconstrained
-    Type: String
-    Default: '300'
-
-  OpenviduStreamsVideoMaxSendBandwidth:
-    Description: >-
-      Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0
-      means unconstrained
-    Type: String
-    Default: '1000'
-
-  OpenviduStreamsVideoMinSendBandwidth:
-    Description: >-
-      Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0
-      means unconstrained
-    Type: String
-    Default: '300'
+      - Ubuntu-16.04
+      - Ubuntu-18.04
 
   WantToDeployDemos:
-    Description: >-
-      Choose if you want to deploy practical examples of OpenVidu functionality.
-      If set to true, then parameter OpenViduSecret must be MY_SECRET for the demos to work.
+    Description: "Choose if you want to deploy OpenVidu demo applications. If true, then parameter openvidu.secret must be MY_SECRET for the demos to work out-of-the-box"
     Type: String
     AllowedValues:
       - true
       - false
     Default: false
 
-  OpenViduWebhook:
-    Description: "true to enable OpenVidu Server Webhook service. false otherwise."
+  WantToSendInfo:
+    Description: "Do you agree to send anonymous information to OpenVidu team for statistics?"
     Type: String
-    Default: false
     AllowedValues:
-    - false
-    - true
-
-  OpenViduWebhookEndpoint:
-    Description: "HTTP endpoint where OpenVidu Server will send Webhook HTTP POST messages."
-    Type: String
-    Default: http://my.endpoint.com
-
-  OpenViduWebhookHeaders:
-    Description: "List of headers that OpenVidu Server Webhook service will attach to HTTP POST messages. JUST one header at the moment"
-    Type: String
-
-  OpenViduWebhookEvents:
-    Description: >-
-      Comma separate list of events that will be sent by OpenVidu Server Webhook service. Check out all the events
-       here: https://openvidu.io/docs/reference-docs/openvidu-server-cdr/
-    Type: String
-    Default: "sessionCreated,sessionDestroyed,participantJoined,participantLeft,webrtcConnectionCreated,webrtcConnectionDestroyed,recordingStatusChanged,filterEventDispatched"
+      - true
+      - false
+    Default: true
 
   OpenViduVersion:
-    Description: OpenVidu Server version. This parameter is only for updating the stack
+    Description: "OpenVidu Server version. This parameter is only for updating the stack"
     Type: String
     Default: @CF_V@
-
-  UbuntuVersion:
-    Description: Wich Ubuntu version to use for OpenVidu.
-    Type: String
-    Default: Ubuntu-16.04
-    AllowedValues:
-      - Ubuntu-16.04
-      - Ubuntu-18.04
 
 Mappings:
 
@@ -289,7 +268,7 @@ Metadata:
   'AWS::CloudFormation::Interface':
     ParameterGroups:
       - Label:
-          default: SSL Certificate Configuration
+          default: SSL certificate configuration
         Parameters:
           - WhichCert
           - LetsEncryptEmail
@@ -298,9 +277,8 @@ Metadata:
           - OwnCertCRT
           - OwnCertKEY
       - Label:
-          default: OpenVidu Configuration
+          default: OpenVidu configuration (https://openvidu.io/docs/reference-docs/openvidu-server-params)
         Parameters:
-          - OpenViduVersion
           - OpenViduSecret
           - FreeHTTPAccesToRecordingVideos
           - OpenviduRecordingNotification
@@ -309,11 +287,19 @@ Metadata:
           - OpenviduStreamsVideoMinRecvBandwidth
           - OpenviduStreamsVideoMaxSendBandwidth
           - OpenviduStreamsVideoMinSendBandwidth
-          - WantToDeployDemos
           - OpenViduWebhook
           - OpenViduWebhookEndpoint
           - OpenViduWebhookHeaders
           - OpenViduWebhookEvents
+      - Label:
+          default: Other configuration
+        Parameters:
+          - InstanceType
+          - KeyName
+          - UbuntuVersion
+          - WantToDeployDemos
+          - WantToSendInfo
+          - OpenViduVersion
 
     ParameterLabels:
       KeyName:
@@ -324,8 +310,6 @@ Metadata:
         default: "My domain name"
       PublicElasticIP:
         default: "Public elastic IP (EIP)"
-      OpenViduSecret:
-        default: "openvidu.secret"
       WhichCert:
         default: "Choose the certificate"
       LetsEncryptEmail:
@@ -336,6 +320,8 @@ Metadata:
         default: "URL to the key file"
       WantToSendInfo:
         default: "Do you want to send info to OpenVidu?"
+      OpenViduSecret:
+        default: "openvidu.secret"
       FreeHTTPAccesToRecordingVideos:
         default: "openvidu.recording.public-access"
       OpenviduRecordingNotification:
@@ -350,8 +336,6 @@ Metadata:
         default: "openvidu.streams.video.max-send-bandwidth"
       OpenviduStreamsVideoMinSendBandwidth:
         default: "openvidu.streams.video.min-send-bandwidth"
-      WantToDeployDemos:
-        default: "Deploy Demos"
       OpenViduWebhook:
         default: "openvidu.webhook"
       OpenViduWebhookEndpoint:
@@ -360,6 +344,8 @@ Metadata:
         default: "openvidu.webhook.headers"
       OpenViduWebhookEvents:
         default: "openvidu.webhook.events"
+      WantToDeployDemos:
+        default: "Deploy Demos"
       OpenViduVersion:
         default: "OpenVidu version"
 
