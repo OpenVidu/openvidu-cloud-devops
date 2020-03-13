@@ -185,7 +185,7 @@ Parameters:
   OpenViduVersion:
     Description: OpenVidu Server version. This parameter is only for updating the stack
     Type: String
-    Default: v@CF_V@
+    Default: @CF_V@
 
   UbuntuVersion:
     Description: Wich Ubuntu version to use for OpenVidu.
