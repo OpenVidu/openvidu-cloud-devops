@@ -32,7 +32,7 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 4. In the *OpenVidu Security* choose true or false depends on if you want to use security.
 
-5. Focus on the *Other parameters* 
+5. Focus on the *Other configuration* 
 
     1. Choose an *Instance Type*. We recommended __t2.medium__ at least.
 
@@ -70,7 +70,7 @@ Independent of the scenario of your choice, there are some steps you should do i
 
 4. In the *OpenVidu Security* choose true or false depends on if you want to use security.
 
-5. Check now *Other parameters* 
+5. Check now *Other configuration* 
 
     1. Choose an *Instance Type*. We recommended __t2.medium__ at least.
 

@@ -184,7 +184,7 @@ Parameters:
     Default: true
 
   OpenViduVersion:
-    Description: "OpenVidu Server version. This parameter is only for updating the stack"
+    Description: "OpenVidu Server version. WARNING: this parameter is only used when upgrading/downgrading an existing stack (https://openvidu.io/docs/deployment/upgrading)"
     Type: String
     Default: @CF_V@
 
