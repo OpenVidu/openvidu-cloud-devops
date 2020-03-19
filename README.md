@@ -38,7 +38,8 @@ You can find old server releases on this urls:
 - https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.8.0.json 
 - https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.9.0.yaml
 - https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.10.0.yaml
-- https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.11.0.yaml (latest)
+- https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.11.0.yaml
+- https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-2.12.0.yaml (latest)
 
 
 **Note**: Please, keep in mind that the stack is complex and it has dependencies outside our control so maybe some of this deployment fail for unknown reasons.
