@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenVidu Server Pro service
+After=syslog.target
+
+[Service]
+SyslogIdentifier=openvidu
+ExecStart=/usr/local/bin/openvidu-server.sh
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+{
+	"openviduSettings": {
+		"chat": true,
+		"autopublish": false,
+		"toolbarButtons": {
+			"audio": true,
+			"video": true,
+			"screenShare": true,
+			"fullscreen": true,
+			"exit": true
+		}
+	},
+	"openviduCredentials": {
+		"openvidu_url": "https://demos.openvidu.io:4443",
+		"openvidu_secret": "MY_SECRET"
+	}
+}

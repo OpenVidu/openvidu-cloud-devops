@@ -1,0 +1,17 @@
+[Unit]
+Description=OpenVidu Classroom Service
+After=network.target
+
+[Service]
+User=openvidu
+Group=openvidu
+
+ExecStart=/bin/bash /var/www/html/classroom/app.sh localhost
+
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
