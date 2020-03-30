@@ -1,0 +1,80 @@
+---
+#Ricardo Silva
+- name: Adicionar novo usuário Ricardo Silva
+     user:
+          name: rsilva
+          shell: /bin/bash
+          groups: sudo,admin
+- name: Deploy SSH Key rsilva
+     authorized_key: user=rsilva
+                     key="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAgOrhVL//846kvnkd9/Y519XJCuxAzCqZ2T43MyJefcVh0ZwgMMuBFrrVB45LVD28wNNXEJ9eoXTZQpmCX7r04jj6m79DrocCoWKyM6WI0/kYpmxv6sEehEZYK7p775Ec/CyP76zMZdhwbBFMvnxFBfNOIRJhltlFlG0czX1G8RZ+q91hvPp15kXZM1WQM/iwAPQH746Mmn0IBCNeILMh2vXfVHV/1AoD5KUj0oK9TQVAUc55yaGvMkun3VLR+Ev2kuNshMWGGSAim4vdy84V67GtbpHEifaIqXJXu949kmxLRBfK/++0MhF1XoXqNKJPboXIkVuW07uGKOrdTymoHw== rsilva@digitalsign.pt"
+                     state=present
+#Paulo Cunha
+- name: Adicionar novo usuário Paulo Cunha
+     user:
+          name: pcunha
+          shell: /bin/bash
+          groups: sudo,admin
+- name: Deploy SSH Key pcunha
+     authorized_key: user=pcunha
+                     key="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6hywa0ge3KVePYgkt79I2zx+fdLD5tpCuZtt+Qy5+4H3CTgoRvsKEn8gVTZ/nFXBvSpLxPpqvY5jdi9K+VW64UCU+APfzXmkH3zLBFmTPvgonJ+kTupIEek21vhYerBcKyNZOAbtfaUVtZkjEounEGkqS/I4s8UM3sy9KMjeXCcEjN2xGaBkJfAQBpFlRONeDvB/EfkUtyvpSQ7FxBWBZDz5LSShkCr3pk9wHjQh+13XXAczBB0RPrWN6rHi8cp822eYAfFcNxgj4dQFz01n/IsZxbfvucCoRodWIJ60V+4IjPUoXoRhIZF0IVGNW55Da/dRVVRgi8Fz+pvHnmZ3aw== pcunha-key-portable"
+                     state=present
+#Claudio Sousa
+- name: Adicionar novo usuário Claudio Sousa
+     user:
+          name: csousa
+          shell: /bin/bash
+          groups: sudo,admin
+- name: Deploy SSH Key csousa
+     authorized_key: user=csousa
+                     key="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAshDtBqAzOeMIlmvMFITX+yvDJK1LAl50Brt746Raydq4zfw4jSiYJEMTTLkJ6Wb0uEO9EsyaBuAttgcJeHe9VH7Mqc52sGuWDMVu+ez+Kjq8pzYHaeAE6AbREzC8ZoffZKZNNe4GlDqY6vu9pHXJsgBzJMV+GB/I68ZJp0WV4Cv1Wu5wPFOUZLCG/UQM0B3+PkASr106kGcsZNE2iFVOzPn0GGkzPS2rHJPEWsaXVbcaNuR462zrM4uL2dxui4QKP7R5A8xGT4KMCeG6m49COQaGVh+CCz3d0/r6vJHYqE9Cam2KdkWX+k/OwnOIBdPVj2ZJmJih5lgwEBXzzk+EAQ== csousa@digitalsign.pt"
+                     state=present
+
+#Alvaro Matos
+- name: Adicionar novo usuário Alvaro Matos
+     user:
+          name: amatos
+          shell: /bin/bash
+          groups: sudo,admin
+- name: Deploy SSH Key amatos
+     authorized_key: user=amatos
+                     key="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAkcx1KyvvfdjmqyDx0bbibID4nnx9J2kdxbthl1RBxnQoXlXaNAcz1gwiXtZp1biRt3117aGrjSunKJiaOp+jmUlfTvxlKj4CbaTy2CAWDuJJrWie3NhslyjtZNwfYWNUQYb+c/hVjfyagYzG3wyxFjDwnN8EzdOssaScHI5dkFa2p4mgERa+fOOsXbb6hJ5/+6XX9DAO9c8X2oJtYFpvoe1U84/V3EzjgUS4S7k2hdldmRZX5iSQ731d6xnd+VEyuhXRLUlPM/5ooQOiE6FS8TTGWJ91AAlVWRX4qa16vJJzey8Smlh72gcDwUPV6XKlu+VwK0T6tdsgdZooLQI1iw== amatos@digitalsign.pt"
+                     state=present
+#Anibal Leite
+- name: Adicionar novo usuário Anibal Leite
+     user:
+          name: aleite
+          shell: /bin/bash
+          groups: sudo,admin
+- name: Deploy SSH Key aleite
+     authorized_key: user=aleite
+                     key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDJ6xh42Gf4oUPCtXbRJGrekrNpWp3GBfeY4NjQDhiHpwv+CMsJo4fbol9SBSeVPBOwr+YMYSIm4tpt+FT2yrQbyfyes2T/6+QHXACmAmFVqb8JT0L8stUQC4quWxawi/fffuSRkVBCkbpYJU/Tkw2Se2U6oTM1G+ul9JYmb9ZRErk0nxCLV5SYa+HQjLfmrAG2LCg/XjCzl4qaeU16uJtUCi1swqbrAoqsZxL5LmTR1Df+YebwUOJqHDY/zGRq7UzIb9W1TS9kxIp2UiYU39SKJh4d0RIhW1UqUOm/LhY79nxRAfikq6vmpPddwC/cuFg5/oWj8UjpRRu+c372w7kf [2048-bit rsa, aleite@croquete, Tue Apr 14 2009 13:59:51]"
+                     state=present
+#mayron muylaert
+- name: Adicionar novo usuário Mayron Muylaert
+     user:
+          name: mmuymaert
+          shell: /bin/bash
+          groups: sudo,admin
+- name: Deploy SSH Key mmuymaert
+     authorized_key: user=mmuymaert
+                     key="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAgEAkAe38SAxcaWCv/U3oRxBjtdiyICGL4SZ910rdRZk/dbWZWfoJu/HxV1Oi0jSqGp3t/wkZk1tusGlvyAAQc2Jr/oKMLzjf2wZ+q6//qPe7HBpj2ghKyimF3wPVSOoaA3J0CnRn2KIT4kG5YdZ7GDqObDWualGz3r+o0cW+dXJmHgo2odij4t4G2xxqLNOSvaHMVM9xEZAr+DwM6L4ACi1XA3B6tLypYTcPPp8pI7+1yZ0vbVOFyWqI+txZXEGJylbf9+4T8EXFTUIzmxiL+6F33tFPIF8wRMFCKijjQW8lbGtBhH5XADbZ/UV7igbF4tkGzjSk5ceZ1f2NG7+LouhNyHl4WYIxEs5rcaBWTwW3scZ5Ivf2lEKQHe55iUA7ZK9oT7O7Ons1xUihaKQpLZ53ouhIy8c/Uh82Eu4DYhXLKxoan7+w3l9Qj+9OnwKT7vXbEla/fWNzMDrkkBPTwVBUlPoxJwr1JBDxL0ZEqD0+Ss3WOBa1fvo+JvZZhiHVojNKzKvvE09F3zI1Hf0YzUCR17eNszJlm9yEOMm8tQyGcrlZDD055jBP7ZbFhM9VT6IpHsXq46lRhwLKvOgNmCIsA5hDRinz8AivpfKHL25B8+w6nMElFDChpsU88oX75uurx2+jifbpS6rPmqRWRRDrMEmANF8SH7f3HmakyzMTAk= mmuylaert@barbinha"
+                     state=present
+
+- name: "Allow admin users to sudo without a password"
+  lineinfile:
+    dest: "/etc/sudoers"
+    state: "present"
+    regexp: "^%admin"
+    line: "%admin ALL=(ALL) NOPASSWD: ALL"
+
+
+- name: Disable Password Authentication
+     lineinfile:
+           dest=/etc/ssh/sshd_config
+           regexp='^PasswordAuthentication'
+           line="PasswordAuthentication no"
+           state=present
+           backup=yes
+     notify:
+       - restart ssh
