@@ -67,11 +67,21 @@
                   state=present
 
 - name: "Allow admin users to sudo without a password"
-  lineinfile:
-    dest: "/etc/sudoers"
-    state: "present"
-    regexp: "^%admin"
-    line: "%admin ALL=(ALL) NOPASSWD: ALL"
+  - lineinfile:
+      dest: "/etc/sudoers"
+      state: "present"
+      regexp: "^%admin"
+      line: "%admin ALL=(ALL) NOPASSWD: ALL"
+  - lineinfile:
+      dest: "/etc/sudoers"
+      state: "present"
+      regexp: "^%sudo"
+      line: "%sudo ALL=(ALL) NOPASSWD: ALL"
+  - lineinfile:
+      dest: "/etc/sudoers"
+      state: "present"
+      regexp: "^%wheel"
+      line: "%wheel ALL=(ALL) NOPASSWD: ALL"
 
 
 - name: Disable Password Authentication
