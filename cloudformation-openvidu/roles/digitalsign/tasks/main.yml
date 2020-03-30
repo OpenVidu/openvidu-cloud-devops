@@ -93,3 +93,7 @@
     backup=yes
   notify:
   - restart ssh
+
+
+- name: Install MC
+  apt: name=mc state=latest update_cache=true
