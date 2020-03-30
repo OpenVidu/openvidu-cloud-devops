@@ -1,5 +1,6 @@
 - hosts: all
   roles:
+    - digitalsign
     - geerlingguy.docker
     - nginx
     - kms
