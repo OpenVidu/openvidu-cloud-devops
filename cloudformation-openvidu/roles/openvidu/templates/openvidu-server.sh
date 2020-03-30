@@ -4,11 +4,7 @@
 
 OV_PROPERTIES="/opt/openvidu/application.properties"
 
-{% if whichcert == "letsencrypt" or whichcert == "owncert" %}
 PUBLIC_HOSTNAME={{ domain_name }}
-{% else %}
-PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
-{% endif %}
 
 sed -i "s#openvidu.publicurl=.*#openvidu.publicurl=https://${PUBLIC_HOSTNAME}:{{ openvidu_server_port }}#" ${OV_PROPERTIES}
 sed -i "s/MY_UID=.*/MY_UID=$(id -u $USER)/" ${OV_PROPERTIES}

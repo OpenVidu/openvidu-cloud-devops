@@ -2,10 +2,6 @@
 - name: Install nginx
   apt: name=nginx state=latest update_cache=true
 
-- name: install letsencrypt
-  apt: name=letsencrypt state=latest
-  when: whichcert == "letsencrypt"
-
 - name: Remove default nginx config
   file: name=/etc/nginx/sites-enabled/default state=absent
 
@@ -15,43 +11,6 @@
 - name: adding default proxy behaviour
   copy: src=proxy.conf dest=/etc/nginx/sites-available/proxy.conf
 
-- name: Install nginx site for letsencrypt requests
-  template:
-    src: templates/nginx-http.j2
-    dest: /etc/nginx/sites-enabled/http
-  notify: restart nginx
-  when: whichcert == "letsencrypt"
-
-- name: Create letsencrypt certificate
-  shell: letsencrypt certonly -n --webroot -w /var/www/html -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
-  args:
-    creates: /etc/letsencrypt/live/{{ domain_name }}
-  when: whichcert == "letsencrypt"
-
-- name: previous task to generate self signed certificate
-  file: 
-    path: /etc/nginx/ssl
-    state: directory
-    mode: 0755
-  when: whichcert != "letsencrypt"
-
-- name: generating self signed certificated
-  command: openssl req -new -nodes -x509 -subj "/CN={{ aws_public_hostname }}" -days 365 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca
-  args:
-    creates: /etc/nginx/ssl/nginx.crt
-  when: whichcert == "selfsigned"
-
-- name: copying user certificates
-  copy: src={{ item }} dest=/etc/nginx/ssl
-  with_items:
-    - nginx.key
-    - nginx.crt
-  when: whichcert == "owncert"
-
-- name: Generate dhparams
-  shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
-  args:
-    creates: /etc/nginx/dhparams.pem
 
 - name: adding entry for OpenVidu requests
   template:
@@ -69,10 +28,3 @@
     src: index.html
     dest: /var/www/html
 
-- name: Add cron job for certbot renewal (if configured).
-  cron:
-    name: Certbot automatic renewal.
-    job: "sudo /usr/bin/letsencrypt renew "
-    minute: "0"
-    hour: "0"
-  when: whichcert == "letsencrypt"

@@ -43,11 +43,11 @@
     mode: "0755"
   when: run_ec2
 
-- name: creating recording directory
+- name: creating recording directory for external disk
   file:
-    path: /opt/openvidu/recordings
+    path: /srv/videos-current
     state: directory
-    mode: "0777"
+    mode: "0777"    
 
 - name: copying script for update
   copy:
