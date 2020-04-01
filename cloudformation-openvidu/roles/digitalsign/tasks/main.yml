@@ -72,11 +72,15 @@
       state: "present"
       regexp: "^%admin"
       line: "%admin ALL=(ALL) NOPASSWD: ALL"
+
+- name: "Allow sudo users to sudo without a password"
   lineinfile:
       dest: "/etc/sudoers"
       state: "present"
-      regexp: "^%sudo"
+      regexp: "^%sudo ALL="
       line: "%sudo ALL=(ALL) NOPASSWD: ALL"
+
+- name: "Allow wheel users to sudo without a password"
   lineinfile:
       dest: "/etc/sudoers"
       state: "present"
