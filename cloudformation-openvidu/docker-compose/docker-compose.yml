@@ -72,9 +72,13 @@ services:
         restart: on-failure
         network_mode: host
         volumes:
+            - ./nginx/default.conf:/custom_nginx_conf/default.conf
+            - ./nginx/default-app.conf:/custom_nginx_conf/default-app.conf
+            - ./nginx/index.html:/var/www/html/index.html
             - ./certificates:/etc/letsencrypt
             - ./owncert:/owncert
         environment:
             - DOMAIN_OR_PUBLIC_IP=${OPENVIDU_DOMAIN_OR_PUBLIC_IP}
             - CERTIFICATE_TYPE=${CERTIFICATE_TYPE}
             - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+            - NGINX_CONF=custom

@@ -6,11 +6,11 @@
 # All values are stored as-is, even if they contain spaces, so don't quote them.
 
 # OpenVidu SECRET used for apps to connect to OpenVidu server and users to access to OpenVidu Dashboard
-OPENVIDU_SECRET=MY_SECRET
+OPENVIDU_SECRET=PRUEBA
 
 # Domain name. If you do not have one, the public IP of the machine.
 # For example: 198.51.100.1, or openvidu.example.com
-OPENVIDU_DOMAIN_OR_PUBLIC_IP=DOMAIN_NAME
+OPENVIDU_DOMAIN_OR_PUBLIC_IP=PRUEBA
 
 # Openvidu Folder Record used for save the openvidu recording videos. Change it
 # with the folder you want to use from your host.
@@ -22,7 +22,7 @@ OPENVIDU_RECORDING_FOLDER=/opt/recordings
 
 
 # Certificate type:
-# - selfsigned:  Self signed certificate. Not recommended for production use.
+# - PRUEBA:  Self signed certificate. Not recommended for production use.
 #                Users will see an ERROR when connected to web page.
 # - owncert:     Valid certificate purchased in a Internet services company.
 #                Please put the certificates in same folder as docker-compose.yml
@@ -30,11 +30,11 @@ OPENVIDU_RECORDING_FOLDER=/opt/recordings
 # - letsencrypt: Generate a new certificate using letsencrypt. Please set the
 #                required contact email for Let's Encrypt in LETSENCRYPT_EMAIL
 #                variable.
-CERTIFICATE_TYPE=selfsigned
+CERTIFICATE_TYPE=PRUEBA
 
 # If CERTIFICATE_TYPE=letsencrypt, you need to configure a valid email for
 # notifications
-LETSENCRYPT_EMAIL=LETS_EMAIL
+LETSENCRYPT_EMAIL=PRUEBA
 
 # Kurento Media Server image
 # --------------------------
