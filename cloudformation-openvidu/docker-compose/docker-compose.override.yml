@@ -7,6 +7,8 @@ services:
     app:
         image: ${OV_CALL_IMAGE}
         restart: on-failure
+        env_file:
+            - .env
         ports:
             - "5442:80"
         environment: 
