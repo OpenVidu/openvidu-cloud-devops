@@ -71,7 +71,9 @@ Resources:
                 #!/bin/bash
                 set -eu -o pipefail
                 cd /usr/src
-                curl https://raw.githubusercontent.com/OpenVidu/openvidu/master/openvidu-server/docker/openvidu-docker-compose/install_docker_compose.sh | bash
+                
+                # Install openvidu-ce
+                curl https://raw.githubusercontent.com/OpenVidu/openvidu/master/openvidu-server/docker/openvidu-docker-compose/install_ov_ce.sh | bash
               mode: "000755"
               owner: "root"
               group: "root"

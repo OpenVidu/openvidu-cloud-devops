@@ -206,7 +206,7 @@ Resources:
 
                 # Replace certificated type
                 sed -i "s/CERTIFICATE_TYPE=selfsigned/CERTIFICATE_TYPE=${WhichCert}/" $WORKINGDIR/.env
-                sed -i "s/LETSENCRYPT_EMAIL=/LETSENCRYPT_EMAIL=${LetsEncryptEmail}/" $WORKINGDIR/.env
+                sed -i "s/LETSENCRYPT_EMAIL=user@example.com/LETSENCRYPT_EMAIL=${LetsEncryptEmail}/" $WORKINGDIR/.env
                 
                 # Without Demos
                 if [ "${WantToDeployDemos}" == "false" ]; then
