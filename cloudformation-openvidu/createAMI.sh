@@ -41,7 +41,7 @@ sed -i "s/AMIUSEAST1/${AMIUSEAST1}/" cfn-mkt-ov-ce-ami.yaml
 ## OpenVidu AMI
 
 # Copy template to S3
-aws s3 cp cfn-mkt-ov-ami.yaml s3://aws.openvidu.io
+aws s3 cp cfn-mkt-ov-ce-ami.yaml s3://aws.openvidu.io
 TEMPLATE_URL=https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/cfn-mkt-ov-ce-ami.yaml
 
 aws cloudformation create-stack \
