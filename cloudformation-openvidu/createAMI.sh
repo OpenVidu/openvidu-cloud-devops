@@ -49,7 +49,7 @@ aws cloudformation create-stack \
   --template-url ${TEMPLATE_URL} \
   --disable-rollback
 
-aws cloudformation wait stack-create-complete --stack-name openvidu-${DATESTAMP}
+aws cloudformation wait stack-create-complete --stack-name openvidu-ce-${DATESTAMP}
 
 echo "Getting instance ID"
 INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=openvidu-ce-${DATESTAMP}" | jq -r ' .Reservations[] | .Instances[] | .InstanceId')
@@ -64,7 +64,7 @@ echo "Creating AMI"
 OV_RAW_AMI_ID=$(aws ec2 create-image --instance-id ${INSTANCE_ID} --name OpenViduServerCE-${OPENVIDU_VERSION}-${DATESTAMP} --description "Openvidu Server CE" --output text)
 
 echo "Cleaning up"
-aws cloudformation delete-stack --stack-name openvidu-${DATESTAMP}
+aws cloudformation delete-stack --stack-name openvidu-ce-${DATESTAMP}
 
 # Wait for the instance
 aws ec2 wait image-available --image-ids ${OV_RAW_AMI_ID}

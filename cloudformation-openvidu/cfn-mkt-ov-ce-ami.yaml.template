@@ -10,7 +10,7 @@ Mappings:
       AMI: AMIUSEAST1
 
 Resources:
-  OpenviduServerPro:
+  OpenviduServerCE:
     Type: 'AWS::EC2::Instance'
     Metadata:
       Comment: "Install OpenVidu Server CE"
@@ -91,7 +91,7 @@ Resources:
             apt-get install -y python-pip
             pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
 
-            cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServerPro
+            cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServerCE
 
             /usr/local/bin/installDockerAndDockerCompose.sh || { echo "[Openvidu] error installing docker and compose"; exit 1; }
 
