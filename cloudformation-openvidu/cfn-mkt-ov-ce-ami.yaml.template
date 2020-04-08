@@ -70,9 +70,9 @@ Resources:
               content: !Sub |
                 #!/bin/bash
                 set -eu -o pipefail
-                git clone https://github.com/OpenVidu/openvidu-cloud-devops /usr/src/openvidu
-                cd /usr/src/openvidu/cloudformation-openvidu
-                git checkout deploy-with-docker-compose
+                mkdir -p /usr/src/openvidu
+                cd /usr/src/openvidu
+                curl https://raw.githubusercontent.com/OpenVidu/openvidu/master/openvidu-server/docker/openvidu-docker-compose/install_docker_compose.sh | bash
               mode: "000755"
               owner: "root"
               group: "root"

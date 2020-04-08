@@ -105,7 +105,7 @@ Parameters:
 Mappings:
   OVAMIMAP:
     eu-west-1:
-      AMI: ami-030cfdc4e0e5b64e9
+      AMI: OV_AMI_ID
 
 Metadata:
   'AWS::CloudFormation::Interface':
@@ -188,28 +188,10 @@ Resources:
               mode: "000755"
               owner: "root"
               group: "root"
-            '/usr/local/bin/typeDeploy.sh':
-              content: |
-                #!/bin/bash
-                WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu
-
-                if [ "$1" == "demos" ]; then
-                  rm $WORKINGDIR/docker-compose/nginx/default-app-without-demos.conf
-                  mv $WORKINGDIR/docker-compose/nginx/default-app-with-demos.conf $WORKINGDIR/docker-compose/nginx/default-app.conf
-                fi
-
-                if [ "$1" == "without_demos" ]; then
-                  rm $WORKINGDIR/docker-compose/nginx/default-app-with-demos.conf
-                  mv $WORKINGDIR/docker-compose/nginx/default-app-without-demos.conf $WORKINGDIR/docker-compose/nginx/default-app.conf
-                  rm $WORKINGDIR/docker-compose/docker-compose.override.yml
-                fi
-              mode: "000755"
-              owner: "root"
-              group: "root"
             '/usr/local/bin/feedGroupVars.sh':
               content: !Sub |
                 #!/bin/bash -x
-                WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu/docker-compose
+                WORKINGDIR=/usr/src/openvidu/openvidu-docker-compose
                 
                 # Replace secret
                 sed -i "s/OPENVIDU_SECRET=/OPENVIDU_SECRET=${OpenViduSecret}/" $WORKINGDIR/.env
@@ -224,7 +206,14 @@ Resources:
 
                 # Replace certificated type
                 sed -i "s/CERTIFICATE_TYPE=selfsigned/CERTIFICATE_TYPE=${WhichCert}/" $WORKINGDIR/.env
-                sed -i "s/LETSENCRYPT_EMAIL=/LETSENCRYPT_EMAIL=${LetsEncryptEmail}/" $WORKINGDIR/.env        
+                sed -i "s/LETSENCRYPT_EMAIL=/LETSENCRYPT_EMAIL=${LetsEncryptEmail}/" $WORKINGDIR/.env
+                
+                # Without Demos
+                if [ "${WantToDeployDemos}" == "false" ]; then
+                  sed -i "s/WITH_DEMOS=true/WITH_DEMOS=false/" $WORKINGDIR/docker-compose.yml
+                  rm $WORKINGDIR/docker-compose.override.yml
+                fi
+
               mode: "000755"
               owner: "root"
               group: "root"
@@ -261,12 +250,6 @@ Resources:
           /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
           if [ "${WhichCert}" == "owncert" ]; then
             /usr/local/bin/buildCerts.sh || { echo "[Openvidu] error with the certificate files"; exit 1; }
-          fi
-
-          if [ "${WantToDeployDemos}" == "true" ]; then
-            /usr/local/bin/typeDeploy.sh "demos"
-          else
-            /usr/local/bin/typeDeploy.sh "without_demos"
           fi
 
           pushd /usr/src/openvidu/cloudformation-openvidu/docker-compose
