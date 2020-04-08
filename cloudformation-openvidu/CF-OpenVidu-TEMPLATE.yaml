@@ -175,10 +175,10 @@ Resources:
           files:
             '/usr/local/bin/check_app_ready.sh':
               content: |
-                #!/bin/bash 
+                #!/bin/bash
                 sleep 1m
 
-                while true; do 
+                while true; do
                   HTTP_STATUS=$(curl -Ik http://localhost:5443 | head -n1 | awk '{print $2}')
                   if [ $HTTP_STATUS == 401 ]; then
                     break
