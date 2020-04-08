@@ -29,14 +29,9 @@ services:
         environment:
             - SERVER_SSL_ENABLED=false
             - SERVER_PORT=5443
-            - OPENVIDU_SECRET=${OPENVIDU_SECRET}
-            - OPENVIDU_PUBLICURL=
             - KMS_URIS=["ws://localhost:8888/kurento"]
-            - COTURN_IP=${OPENVIDU_DOMAIN_OR_PUBLIC_IP}
             - COTURN_REDIS_IP=127.0.0.1
-            - LOGGING_LEVEL_ROOT=${OV_CE_DEBUG_LEVEL:-INFO}
             - OPENVIDU_RECORDING=true
-            - OPENVIDU_RECORDING_PATH=${OPENVIDU_RECORDING_FOLDER}
 
     kms:
         image: ${KMS_IMAGE:-kurento/kurento-media-server-dev:6.13}
@@ -50,7 +45,6 @@ services:
             - KMS_EXTERNAL_ADDRESS=auto
             - KMS_MIN_PORT=40000
             - KMS_MAX_PORT=57000
-            - GST_DEBUG=${KMS_DEBUG_LEVEL:-}
 
     redis:
         image: redis:5.0.7
@@ -76,13 +70,10 @@ services:
         env_file:
             - .env
         volumes:
-            - ./nginx/default.conf:/custom_nginx_conf/default.conf
-            - ./nginx/default-app.conf:/custom_nginx_conf/default-app.conf
-            - ./nginx/index.html:/var/www/html/index.html
+            - ./nginx_conf/default.conf:/custom_nginx_conf/default.conf
+            - ./nginx_conf/default-app.conf:/custom_nginx_conf/default-app.conf
+            - ./nginx_conf/index.html:/var/www/html/index.html
             - ./certificates:/etc/letsencrypt
             - ./owncert:/owncert
         environment:
-            - DOMAIN_OR_PUBLIC_IP=${OPENVIDU_DOMAIN_OR_PUBLIC_IP}
-            - CERTIFICATE_TYPE=${CERTIFICATE_TYPE}
-            - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
             - NGINX_CONF=custom

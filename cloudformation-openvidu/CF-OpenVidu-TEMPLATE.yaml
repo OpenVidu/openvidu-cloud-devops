@@ -49,79 +49,6 @@ Parameters:
     Default: MY_SECRET
     NoEcho: true
 
-  FreeHTTPAccesToRecordingVideos:
-    Description: "Do you want your recordings to be access publicly?"
-    Type: String
-    AllowedValues:
-      - true
-      - false
-    Default: false
-
-  OpenviduRecordingNotification:
-    Description: "Which users should receive recording events in the client side"
-    Type: String
-    AllowedValues:
-      - all
-      - publisher_moderator
-      - moderator
-      - none
-    Default: publisher_moderator
-
-  OpenViduRecordingTimeOut:
-    Description: "Timeout in seconds for recordings to automatically stop"
-    Type: Number
-    Default: 120
-
-  OpenviduStreamsVideoMaxRecvBandwidth:
-    Description: "Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained"
-    Type: Number
-    Default: 1000
-
-  OpenviduStreamsVideoMinRecvBandwidth:
-    Description: "Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained"
-    Type: Number
-    Default: 300
-
-  OpenviduStreamsVideoMaxSendBandwidth:
-    Description: "Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained"
-    Type: Number
-    Default: 1000
-
-  OpenviduStreamsVideoMinSendBandwidth:
-    Description: "Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained"
-    Type: Number
-    Default: 300
-
-  OpenViduWebhook:
-    Description: "Whether to enable OpenVidu Server Webhook service or not"
-    Type: String
-    AllowedValues:
-      - false
-      - true
-    Default: false
-
-  OpenViduWebhookEndpoint:
-    Description: "HTTP endpoint where OpenVidu Server will send Webhook HTTP POST messages"
-    Type: String
-    Default: http://my.endpoint.com
-
-  OpenViduWebhookHeaders:
-    Description: "List of headers that OpenVidu Server Webhook service will attach to HTTP POST messages. JUST one header at the moment"
-    Type: String
-
-  OpenViduWebhookEvents:
-    Description: "Comma separated list of events that will be notified by OpenVidu Server Webhook service. Check out available events here: https://openvidu.io/docs/reference-docs/openvidu-server-cdr"
-    Type: String
-    Default: "sessionCreated,sessionDestroyed,participantJoined,participantLeft,webrtcConnectionCreated,webrtcConnectionDestroyed,recordingStatusChanged,filterEventDispatched"
-
-  OpenviduCDREnable:
-    Description: "Whether to enable OpenVidu Call Detail Record service or not"
-    Type: String
-    AllowedValues:
-      - false
-      - true
-    Default: false
-
   # Other configuration
 
   InstanceType:
@@ -159,21 +86,13 @@ Parameters:
     Type: 'AWS::EC2::KeyPair::KeyName'
     ConstraintDescription: "must be the name of an existing EC2 KeyPair"
 
-  UbuntuVersion:
-    Description: "Ubuntu version where to deploy OpenVidu"
-    Type: String
-    Default: Ubuntu-16.04
-    AllowedValues:
-      - Ubuntu-16.04
-      - Ubuntu-18.04
-
   WantToDeployDemos:
-    Description: "Choose if you want to deploy OpenVidu demo applications. If true, then parameter openvidu.secret must be MY_SECRET for the demos to work out-of-the-box"
+    Description: "Choose if you want to deploy OpenVidu call application. If true, then parameter openvidu.secret must be MY_SECRET for the demos to work out-of-the-box"
     Type: String
     AllowedValues:
       - true
       - false
-    Default: false
+    Default: true
 
   WantToSendInfo:
     Description: "Do you agree to send anonymous information to OpenVidu team for statistics?"
@@ -183,100 +102,10 @@ Parameters:
       - false
     Default: true
 
-  OpenViduVersion:
-    Description: "OpenVidu Server version. WARNING: this parameter is only used when upgrading/downgrading an existing stack (https://openvidu.io/docs/deployment/upgrading)"
-    Type: String
-    Default: @CF_V@
-
 Mappings:
-
-  RegionMapXenial:
-    eu-north-1:
-      AMI: ami-017ad30b324faed9b
-    eu-west-3:
-      AMI: ami-051ebe9615b416c15
-    eu-west-2:
-      AMI: ami-0a590332f9f499197
+  OVAMIMAP:
     eu-west-1:
-      AMI: ami-0f630a3f40b1eb0b8
-    ap-northeast-2:
-      AMI: ami-0c5a717974f63b04c
-    ap-northeast-1:
-      AMI: ami-03344c819e1ac354d
-    sa-east-1:
-      AMI: ami-0a16d0952a2a7b0ce
-    ca-central-1:
-      AMI: ami-0f06e521718460abf
-    ap-south-1:
-      AMI: ami-0c28d7c6dd94fb3a7
-    ap-southeast-1:
-      AMI: ami-0ca13b3dabeb6c66d
-    ap-southeast-2:
-      AMI: ami-02d7e25c1cfdd5695
-    ap-northeast-1:
-      AMI: ami-03344c819e1ac354d
-    ap-northeast-2:
-      AMI: ami-0c5a717974f63b04c
-    ap-northeast-3:
-      AMI: ami-03f0ddd1562f1b937
-    ap-east-1:
-      AMI: ami-9f793dee
-    eu-central-1:
-      AMI: ami-03d8059563982d7b0
-    us-east-1:
-      AMI: ami-08bc77a2c7eb2b1da
-    us-east-2:
-      AMI: ami-08cec7c429219e339
-    us-west-1:
-      AMI: ami-094f0176b0d009d9f
-    us-west-2:
-      AMI: ami-02d0ea44ae3fe9561
-    me-south-1:
-      AMI: ami-0df89c0ad05708804
-
-  RegionMapBionic:
-    eu-north-1:
-      AMI: ami-0e850e0e9c20d9deb
-    eu-west-3:
-      AMI: ami-0c367ebddcf279dc6
-    eu-west-2:
-      AMI: ami-04cc79dd5df3bffca
-    eu-west-1:
-      AMI: ami-07042e91d04b1c30d
-    ap-northeast-2:
-      AMI: ami-096e3ded41e3bda6a
-    ap-northeast-1:
-      AMI: ami-01f90b0460589991e
-    sa-east-1:
-      AMI: ami-0cb1ddea3786f6c0d
-    ca-central-1:
-      AMI: ami-064efdb82ae15e93f
-    ap-south-1:
-      AMI: ami-0d11056c10bfdde69
-    ap-southeast-1:
-      AMI: ami-07ce5f60a39f1790e
-    ap-southeast-2:
-      AMI: ami-04c7af7de7ad468f0
-    ap-northeast-1:
-      AMI: ami-01f90b0460589991e
-    ap-northeast-2:
-      AMI: ami-096e3ded41e3bda6a
-    ap-northeast-3:
-      AMI: ami-0942fd36e1571cbdf
-    ap-east-1:
-      AMI: ami-868bcff7
-    eu-central-1:
-      AMI: ami-0718a1ae90971ce4d
-    us-east-1:
-      AMI: ami-046842448f9e74e7d
-    us-east-2:
-      AMI: ami-0367b500fdcac0edc
-    us-west-1:
-      AMI: ami-0d58800f291760030
-    us-west-2:
-      AMI: ami-0edf3b95e26a682df
-    me-south-1:
-      AMI: ami-0e40363f9ed76073b
+      AMI: OV_AMI_ID
 
 Metadata:
   'AWS::CloudFormation::Interface':
@@ -294,27 +123,13 @@ Metadata:
           default: OpenVidu configuration (https://openvidu.io/docs/reference-docs/openvidu-server-params)
         Parameters:
           - OpenViduSecret
-          - FreeHTTPAccesToRecordingVideos
-          - OpenviduRecordingNotification
-          - OpenViduRecordingTimeOut
-          - OpenviduStreamsVideoMaxRecvBandwidth
-          - OpenviduStreamsVideoMinRecvBandwidth
-          - OpenviduStreamsVideoMaxSendBandwidth
-          - OpenviduStreamsVideoMinSendBandwidth
-          - OpenViduWebhook
-          - OpenViduWebhookEndpoint
-          - OpenViduWebhookHeaders
-          - OpenViduWebhookEvents
-          - OpenviduCDREnable
       - Label:
           default: Other configuration
         Parameters:
           - InstanceType
           - KeyName
-          - UbuntuVersion
           - WantToDeployDemos
           - WantToSendInfo
-          - OpenViduVersion
 
     ParameterLabels:
       # SSL certificate configuration
@@ -333,52 +148,21 @@ Metadata:
       # OpenVidu configuration
       OpenViduSecret:
         default: "openvidu.secret"
-      FreeHTTPAccesToRecordingVideos:
-        default: "openvidu.recording.public-access"
-      OpenviduRecordingNotification:
-        default: "openvidu.recording.notification"
-      OpenViduRecordingTimeOut:
-        default: "openvidu.recording.autostop-timeout"
-      OpenviduStreamsVideoMaxRecvBandwidth:
-        default: "openvidu.streams.video.max-recv-bandwidth"
-      OpenviduStreamsVideoMinRecvBandwidth:
-        default: "openvidu.streams.video.min-recv-bandwidth"
-      OpenviduStreamsVideoMaxSendBandwidth:
-        default: "openvidu.streams.video.max-send-bandwidth"
-      OpenviduStreamsVideoMinSendBandwidth:
-        default: "openvidu.streams.video.min-send-bandwidth"
-      OpenViduWebhook:
-        default: "openvidu.webhook"
-      OpenViduWebhookEndpoint:
-        default: "openvidu.webhook.endpoint"
-      OpenViduWebhookHeaders:
-        default: "openvidu.webhook.headers"
-      OpenViduWebhookEvents:
-        default: "openvidu.webhook.events"
-      OpenviduCDREnable:
-        default: "openvidu.cdr"
       # Other configuration
       InstanceType:
         default: "Instance type"
       KeyName:
         default: "Key name"
-      UbuntuVersion:
-        default: "Ubuntu version"
       WantToDeployDemos:
         default: "Deploy Demos"
       WantToSendInfo:
         default: "Do you want to send info to OpenVidu?"
-      OpenViduVersion:
-        default: "OpenVidu version"
 
 Conditions:
   NoSelfSigned: !Not
     - !Equals
       - !Ref WhichCert
       - selfsigned
-  IsUbuntu16: !Equals
-      - !Ref UbuntuVersion
-      - Ubuntu-16.04
 
 Resources:
 
@@ -389,101 +173,58 @@ Resources:
       AWS::CloudFormation::Init:
         config:
           files:
-            '/etc/cfn/cfn-hup.conf':
-              content: !Sub |
-                [main]
-                stack=${AWS::StackId}
-                region=${AWS::Region}
-                verbose=true
-                interval=5
-              mode: '000400'
-              owner: root
-              group: root
-            '/etc/cfn/hooks.d/cfn-auto-reloader.conf':
+            '/usr/local/bin/check_app_ready.sh':
               content: |
-                [cfn-auto-reloader-hook]
-                triggers=post.update
-                path=Resources.OpenviduServer.Metadata.AWS::CloudFormation::Init
-                action=/usr/local/bin/openvidu_update_stack.sh
-                runas=root
-              mode: '000400'
-              owner: root
-              group: root
-              '/usr/local/bin/check_app_ready.sh':
-                content: |
-                  #!/bin/bash 
+                #!/bin/bash 
+                sleep 1m
 
-                  sleep 1m
-
-                  while true
-                  do 
-                    HTTP_STATUS=$(curl -Ik https://localhost:{{ openvidu_server_port }} | head -n1 | awk '{print $2}')
-                    if [ $HTTP_STATUS == 401 ]; then
-                      break
-                    fi
-                    sleep 1
-                  done
-                mode: "000755"
-                owner: "root"
-                group: "root"
-            '/usr/local/bin/installDockerAndDockerCompose.sh':
-              content: |
-              #!/bin/bash              
-              # Install Docker
-              apt-get update && apt-get install -y \
-                  apt-transport-https \
-                  ca-certificates \
-                  curl \
-                  gnupg-agent \
-                  software-properties-common
-
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-              apt-key fingerprint 0EBFCD88
-              add-apt-repository \
-                "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-                $(lsb_release -cs) \
-                stable"
-
-              apt-get update && apt-get install -y \
-                  docker-ce \
-                  docker-ce-cli \
-                  containerd.io
-
-              # Install docker-compose
-              curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-              chmod +x /usr/local/bin/docker-compose
-              ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+                while true; do 
+                  HTTP_STATUS=$(curl -Ik http://localhost:5443 | head -n1 | awk '{print $2}')
+                  if [ $HTTP_STATUS == 401 ]; then
+                    break
+                  fi
+                  sleep 1
+                done
               mode: "000755"
               owner: "root"
               group: "root"
-            '/usr/local/bin/cloneRepo.sh':
+            '/usr/local/bin/typeDeploy.sh':
               content: |
                 #!/bin/bash
-                git clone https://github.com/OpenVidu/openvidu-cloud-devops /usr/src/openvidu
-                cd /usr/src/openvidu/cloudformation-openvidu
-                git checkout v@GAB@
+                WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu
+
+                if [ "$1" == "demos" ]; then
+                  rm $WORKINGDIR/docker-compose/nginx/default-app-without-demos.conf
+                  mv $WORKINGDIR/docker-compose/nginx/default-app-with-demos.conf $WORKINGDIR/docker-compose/nginx/default-app.conf
+                fi
+
+                if [ "$1" == "without_demos" ]; then
+                  rm $WORKINGDIR/docker-compose/nginx/default-app-with-demos.conf
+                  mv $WORKINGDIR/docker-compose/nginx/default-app-without-demos.conf $WORKINGDIR/docker-compose/nginx/default-app.conf
+                  rm $WORKINGDIR/docker-compose/docker-compose.override.yml
+                fi
               mode: "000755"
               owner: "root"
               group: "root"
             '/usr/local/bin/feedGroupVars.sh':
               content: !Sub |
                 #!/bin/bash -x
-                WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu
-                OPENVIDU_VERSION=@OV_V@
+                WORKINGDIR=/usr/src/openvidu/cloudformation-openvidu/docker-compose
+                
+                # Replace secret
+                sed -i "s/OPENVIDU_SECRET=/OPENVIDU_SECRET=${OpenViduSecret}/" $WORKINGDIR/.env
 
-                sed -i "s/OPENVIDU_VERSION/$OPENVIDU_VERSION/" $WORKINGDIR/docker-compose/.env
-                sed -i "s/WANTDEMOS/${WantToDeployDemos}/" $WORKINGDIR/docker-compose/.env
-                sed -i "s/whichcert: selfsigned/whichcert: ${WhichCert}/" $WORKINGDIR/docker-compose/.env
-                sed -i "s/LETSENCRYPT_EMAIL/${LetsEncryptEmail}/" $WORKINGDIR/docker-compose/.env
-                sed -i "s/MY_SECRET/${OpenViduSecret}/" $WORKINGDIR/docker-compose/.env
-                
-                if [ "${WhichCert}" == "letsencrypt" || "${WhichCert}" == "owncert" ]; then
-                    sed -i "s/DOMAIN_NAME/${MyDomainName}/" $WORKINGDIR/docker-compose/.env
+                # Replace domain name
+                if [[ "${WhichCert}" == "letsencrypt" || "${WhichCert}" == "owncert" ]]; then
+                  sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=${MyDomainName}/" $WORKINGDIR/.env
                 else
-                    PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
-                
-                    sed -i "s/DOMAIN_NAME/${PublicHostname}/" $WORKINGDIR/docker-compose/.env
+                  PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+                  sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=$PublicHostname/" $WORKINGDIR/.env
                 fi
+
+                # Replace certificated type
+                sed -i "s/CERTIFICATE_TYPE=selfsigned/CERTIFICATE_TYPE=${WhichCert}/" $WORKINGDIR/.env
+                sed -i "s/LETSENCRYPT_EMAIL=/LETSENCRYPT_EMAIL=${LetsEncryptEmail}/" $WORKINGDIR/.env        
               mode: "000755"
               owner: "root"
               group: "root"
@@ -496,23 +237,8 @@ Resources:
               mode: "000755"
               owner: "root"
               group: "root"
-            "/opt/openvidu/version":
-              content: !Sub |
-                ${OpenViduVersion}
-              mode: "000644"
-              owner: "root"
-              group: "root"
     Properties:
-      ImageId: !If
-        - IsUbuntu16
-        - !FindInMap
-          - RegionMapXenial
-          - !Ref 'AWS::Region'
-          - AMI
-        - !FindInMap
-          - RegionMapBionic
-          - !Ref 'AWS::Region'
-          - AMI
+      ImageId: !FindInMap [OVAMIMAP, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref InstanceType
       SecurityGroups:
         - !Ref WebServerSecurityGroup
@@ -530,16 +256,17 @@ Resources:
 
           pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
 
-          # Set the version
-          OPENVIDU_VERSION=${OpenViduVersion}
-
           cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServer
 
-          /usr/local/bin/installDockerAndDockerCompose.sh || { echo "[Openvidu] Can't install docker or docker-compose"; exit 1; }
-          /usr/local/bin/cloneRepo.sh || { echo "[Openvidu] Can't clone the repo"; exit 1; }
           /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
           if [ "${WhichCert}" == "owncert" ]; then
             /usr/local/bin/buildCerts.sh || { echo "[Openvidu] error with the certificate files"; exit 1; }
+          fi
+
+          if [ "${WantToDeployDemos}" == "true" ]; then
+            /usr/local/bin/typeDeploy.sh "demos"
+          else
+            /usr/local/bin/typeDeploy.sh "without_demos"
           fi
 
           pushd /usr/src/openvidu/cloudformation-openvidu/docker-compose
@@ -636,14 +363,12 @@ Outputs:
         - !GetAtt
           - OpenviduServer
           - PublicDnsName
-        - ':4443'
   WebsiteURLLE:
     Description: Use this URL to connect to OpenVidu
     Value: !Join
       - ''
       - - 'https://'
         - !Ref MyDomainName
-        - ':4443'
     Condition: NoSelfSigned
   DemosURL:
     Description: If you choose to deploy the demos you can access througt this
@@ -660,4 +385,3 @@ Outputs:
       - - 'https://'
         - !Ref MyDomainName
     Condition: NoSelfSigned
-
