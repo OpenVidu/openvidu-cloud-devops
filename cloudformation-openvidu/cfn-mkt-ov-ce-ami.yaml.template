@@ -70,8 +70,7 @@ Resources:
               content: !Sub |
                 #!/bin/bash
                 set -eu -o pipefail
-                mkdir -p /usr/src/openvidu
-                cd /usr/src/openvidu
+                cd /usr/src
                 curl https://raw.githubusercontent.com/OpenVidu/openvidu/master/openvidu-server/docker/openvidu-docker-compose/install_docker_compose.sh | bash
               mode: "000755"
               owner: "root"
