@@ -173,6 +173,23 @@ Resources:
       AWS::CloudFormation::Init:
         config:
           files:
+            '/usr/local/bin/ping.sh':
+              content: |
+                #!/bin/bash
+
+                INXDB_URL=193.147.51.51
+                INXDB_DB=ov_server
+                INXDB_MEASUREMENT=server
+
+                OV_VERSION=2.13.0-beta3
+                EC2_AVAIL_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+                EC2_REGION=$(echo "$EC2_AVAIL_ZONE" | sed 's/[a-z]$//')
+
+                curl -i -XPOST "http://$INXDB_URL:8086/write?db=$INXDB_DB" \
+                  --data-binary "$INXDB_MEASUREMENT,region=$EC2_REGION ov_version=\"$OV_VERSION\" "
+              mode: "000755"
+              owner: "root"
+              group: "root"
             '/usr/local/bin/check_app_ready.sh':
               content: |
                 #!/bin/bash
@@ -221,7 +238,7 @@ Resources:
               content: !Sub |
                 #!/bin/bash -x
                 WORKINGDIR=/usr/src/openvidu
-                wget -O $WORKINGDIR/owncert/certificate.crt ${OwnCertCRT}
+                wget -O $WORKINGDIR/owncert/certificate.cert ${OwnCertCRT}
                 wget -O $WORKINGDIR/owncert/certificate.key ${OwnCertKEY}
               mode: "000755"
               owner: "root"
@@ -240,11 +257,6 @@ Resources:
           #!/bin/bash -x
           set -eu -o pipefail
 
-          apt-get update
-          apt-get install -y git software-properties-common python-pip
-
-          pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
-
           cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServer
 
           /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
@@ -255,6 +267,12 @@ Resources:
           pushd /usr/src/openvidu
           docker-compose up -d
           popd
+
+          # Send info to openvidu
+          if [ "${WantToSendInfo}" == "true" ]; then
+            /usr/local/bin/ping.sh
+          fi
+          rm /usr/local/bin/ping.sh 
 
           # Wait for the app
           /usr/local/bin/check_app_ready.sh
