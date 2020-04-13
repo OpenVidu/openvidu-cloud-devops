@@ -38,6 +38,7 @@ Resources:
               content: |
                 #!/bin/bash
                 set -eu -o pipefail
+                export LC_ALL=C
 
                 apt-get update && apt-get install -y \
                   python-pip \

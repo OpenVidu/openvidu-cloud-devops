@@ -5,9 +5,6 @@ set -eu -o pipefail
 #
 # Input parameters:
 #
-# KMS_AMI_NAME  Media server AMI Name
-# KMS_AMI_ID    Media server AMI ID
-#
 # OV_AMI_NAME   OpenVidu AMI Name
 # OV_AMI_ID     OpenVidu AMI ID
 
