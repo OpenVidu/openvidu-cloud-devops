@@ -206,7 +206,7 @@ Resources:
             '/usr/local/bin/feedGroupVars.sh':
               content: !Sub |
                 #!/bin/bash -x
-                WORKINGDIR=/usr/src/openvidu
+                WORKINGDIR=/opt/openvidu
                 
                 # Replace secret
                 sed -i "s/OPENVIDU_SECRET=/OPENVIDU_SECRET=${OpenViduSecret}/" $WORKINGDIR/.env
@@ -235,7 +235,7 @@ Resources:
             '/usr/local/bin/buildCerts.sh':
               content: !Sub |
                 #!/bin/bash -x
-                WORKINGDIR=/usr/src/openvidu
+                WORKINGDIR=/opt/openvidu
                 wget -O $WORKINGDIR/owncert/certificate.cert ${OwnCertCRT}
                 wget -O $WORKINGDIR/owncert/certificate.key ${OwnCertKEY}
               mode: "000755"
@@ -262,7 +262,7 @@ Resources:
             /usr/local/bin/buildCerts.sh || { echo "[Openvidu] error with the certificate files"; exit 1; }
           fi
 
-          pushd /usr/src/openvidu
+          pushd /opt/openvidu
           docker-compose up -d
           popd
 
