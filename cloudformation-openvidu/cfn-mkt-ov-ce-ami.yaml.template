@@ -86,7 +86,7 @@ Resources:
                 # Installation path
                 cd /opt
                 # Install openvidu-ce
-                curl https://raw.githubusercontent.com/OpenVidu/openvidu/master/openvidu-server/docker/openvidu-docker-compose/install_ov_ce.sh | bash
+                curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_OPENVIDU_VERSION.sh | bash
               mode: "000755"
               owner: "root"
               group: "root"
