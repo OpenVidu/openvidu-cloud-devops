@@ -34,6 +34,19 @@ Resources:
               mode: "000400"
               owner: "root"
               group: "root"
+            "/usr/local/bin/installAWSSoftware.conf":
+              content: |
+                #!/bin/bash
+                set -eu -o pipefail
+
+                apt-get update && apt-get install -y \
+                  python-pip \
+                  ec2-instance-connect
+
+                pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+              mode: "000755"
+              owner: "root"
+              group: "root"
             "/usr/local/bin/installDockerAndDockerCompose.sh":
               content: |
                 #!/bin/bash
@@ -70,10 +83,20 @@ Resources:
               content: !Sub |
                 #!/bin/bash
                 set -eu -o pipefail
-                cd /usr/src
-                
+                # Installation path
+                cd /opt
                 # Install openvidu-ce
                 curl https://raw.githubusercontent.com/OpenVidu/openvidu/master/openvidu-server/docker/openvidu-docker-compose/install_ov_ce.sh | bash
+              mode: "000755"
+              owner: "root"
+              group: "root"
+            "/usr/local/bin/getDockerImages.sh":
+              content: !Sub |
+                #!/bin/bash
+                set -eu -o pipefail
+                
+                # Openvidu recording
+                docker pull openvidu/openvidu-recording:2.9.0
               mode: "000755"
               owner: "root"
               group: "root"
@@ -88,15 +111,15 @@ Resources:
           !Sub |
             #!/bin/bash -x
             set -eu -o pipefail
-            apt-get update
-            apt-get install -y python-pip
-            pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+            /usr/local/bin/installAWSSoftware.conf || { echo "[Openvidu] error installing AWS software"; exit 1; }
 
             cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServerCE
 
             /usr/local/bin/installDockerAndDockerCompose.sh || { echo "[Openvidu] error installing docker and compose"; exit 1; }
 
             /usr/local/bin/getDockerCompose.sh || { echo "[Openvidu] error getting compose"; exit 1; }
+
+            /usr/local/bin/getDockerImages.sh || { echo "[Openvidu] error getting docker images"; exit 1; }
 
             # sending the finish call
             /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource WaitCondition --region ${AWS::Region}
