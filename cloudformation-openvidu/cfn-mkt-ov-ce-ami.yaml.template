@@ -87,6 +87,19 @@ Resources:
               mode: "000755"
               owner: "root"
               group: "root"
+            "/usr/local/bin/getDockerImages.sh":
+              content: !Sub |
+                #!/bin/bash
+                set -eu -o pipefail
+                
+                apt-get update && apt-get install -y \
+                    python-pip \
+                    ec2-instance-connect
+
+                pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+              mode: "000755"
+              owner: "root"
+              group: "root"
     Properties:
       ImageId: !FindInMap [AMIMAP, !Ref 'AWS::Region', AMI]
       InstanceType: "t2.2xlarge"
@@ -99,11 +112,8 @@ Resources:
           !Sub |
             #!/bin/bash -x
             set -eu -o pipefail
-            apt-get update && apt-get install -y \
-                  python-pip \
-                  ec2-instance-connect
 
-            pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+            /usr/local/bin/installAWSSoftware.conf || { echo "[Openvidu] error installing AWS software"; exit 1; }
 
             cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServerCE
 
