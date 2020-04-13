@@ -35,6 +35,7 @@ AMIUSEAST1=$(getUbuntuAmiId 'us-east-1')
 cp cfn-mkt-ov-ce-ami.yaml.template cfn-mkt-ov-ce-ami.yaml
 
 ## Setting Openvidu Version and Ubuntu Latest AMIs
+sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/" cfn-mkt-ov-ce-ami.yaml
 sed -i "s/AMIEUWEST1/${AMIEUWEST1}/" cfn-mkt-ov-ce-ami.yaml
 sed -i "s/AMIUSEAST1/${AMIUSEAST1}/" cfn-mkt-ov-ce-ami.yaml
 
@@ -70,7 +71,7 @@ aws cloudformation delete-stack --stack-name openvidu-ce-${DATESTAMP}
 aws ec2 wait image-available --image-ids ${OV_RAW_AMI_ID}
 
 # Updating the template
-sed "s/OV_AMI_ID/${OV_RAW_AMI_ID}/" CF-OpenVidu-TEMPLATE.yaml > CF-OpenVidu-${OPENVIDU_VERSION}.yaml
+sed "s/OV_AMI_ID/${OV_RAW_AMI_ID}/" CF-OpenVidu.yaml.template > CF-OpenVidu-${OPENVIDU_VERSION}.yaml
 
 rm $TEMPJSON
 rm cfn-mkt-ov-ce-ami.yaml
