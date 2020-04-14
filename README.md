@@ -8,7 +8,7 @@
 openvidu-cloud-devops
 ===
 
-Configuration files for automatic launching of [OpenVidu Server](http://openvidu.io/docs/deployment/deploying-aws/) and [OpenVidu Demos](http://openvidu.io/docs/deployment/deploying-demos-aws/) in AWS CloudFormation.
+Configuration files for automatic launching of [OpenVidu Server](http://docs.openvidu.io/en/stable/deployment/deploying-aws/) and [OpenVidu Demos](http://docs.openvidu.io/en/stable/deployment/deploying-demos-aws/) in AWS CloudFormation.
 
 [OpenViduLogo]: https://secure.gravatar.com/avatar/5daba1d43042f2e4e85849733c8e5702?s=120
 
@@ -18,7 +18,7 @@ In this repo you can find the Ansible playbooks we use to deploy OpenVidu Server
 
 # Deploying
 
-Please refer to the OpenVidu official documentation [here](https://openvidu.io/docs/deployment/deploying-aws/). The latest release for AWS CloudFormation is this [one](https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-latest.yaml)
+Please refer to the OpenVidu official documentation [here](https://docs.openvidu.io/en/stable/deployment/deploying-aws/). The latest release for AWS CloudFormation is this [one](https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/CF-OpenVidu-latest.yaml)
 
 # Troubleshooting
 
