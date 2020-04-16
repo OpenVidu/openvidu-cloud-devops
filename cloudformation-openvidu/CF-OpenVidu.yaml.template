@@ -215,8 +215,10 @@ Resources:
                 if [[ "${WhichCert}" == "letsencrypt" || "${WhichCert}" == "owncert" ]]; then
                   sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=${MyDomainName}/" $WORKINGDIR/.env
                 else
+                  [ ! -d "/usr/share/openvidu" ] && mkdir -p /usr/share/openvidu
                   PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
                   sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=$PublicHostname/" $WORKINGDIR/.env
+                  echo $PublicHostname > /usr/share/openvidu/old-host-name
                 fi
 
                 # Replace certificated type
@@ -241,6 +243,20 @@ Resources:
               mode: "000755"
               owner: "root"
               group: "root"
+            '/usr/local/bin/checkAmazonURL.sh':
+              content: !Sub |
+                #!/bin/bash -x
+                WORKINGDIR=/opt/openvidu
+
+                if [ "${WhichCert}" == "selfsigned" ]; then
+                  OldPublicHostname=$(cat /usr/share/openvidu/old-host-name)
+                  PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+                  sed -i "s/$OldPublicHostname/$PublicHostname/" $WORKINGDIR/.env
+                  echo $PublicHostname > /usr/share/openvidu/old-host-name
+                fi
+              mode: "000755"
+              owner: "root"
+              group: "root"
     Properties:
       ImageId: !FindInMap [OVAMIMAP, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref InstanceType
@@ -257,11 +273,19 @@ Resources:
 
           cfn-init --region ${AWS::Region} --stack ${AWS::StackId} --resource OpenviduServer
 
+          # Replace .env variables
           /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
+
+          # Launch on reboot
+          echo "@reboot /usr/local/bin/checkAmazonURL.sh" | crontab
+          echo '@reboot /bin/bash -c "cd /opt/openvidu && docker-compose up -d"' | crontab
+
+          # Download certs if "WichCert" mode
           if [ "${WhichCert}" == "owncert" ]; then
             /usr/local/bin/buildCerts.sh || { echo "[Openvidu] error with the certificate files"; exit 1; }
           fi
 
+          # Start openvidu application
           pushd /opt/openvidu
           docker-compose up -d
           popd
