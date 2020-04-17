@@ -71,9 +71,9 @@ Resources:
                 #!/bin/bash
                 set -eu -o pipefail
                 # Configure crash report
-                mkdir -p /core
+                mkdir -p /opt/openvidu/kms-crashes
                 sed -i "s/enabled=1/enabled=0/" /etc/default/apport
-                echo "kernel.core_pattern=/core/core_%e_%p_%u_%t" >> /etc/sysctl.conf
+                echo "kernel.core_pattern=/opt/openvidu/kms-crashes/core_%e_%p_%u_%t" >> /etc/sysctl.conf
                 sysctl --system
                 # Installation path
                 cd /opt
