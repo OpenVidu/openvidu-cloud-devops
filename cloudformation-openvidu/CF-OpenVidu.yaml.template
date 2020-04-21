@@ -181,7 +181,7 @@ Resources:
                 INXDB_DB=ov_server
                 INXDB_MEASUREMENT=server
 
-                OV_VERSION=2.13.0-beta3
+                OV_VERSION=OPENVIDU_VERSION
                 EC2_AVAIL_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
                 EC2_REGION=$(echo "$EC2_AVAIL_ZONE" | sed 's/[a-z]$//')
 
@@ -257,6 +257,19 @@ Resources:
               mode: "000755"
               owner: "root"
               group: "root"
+            '/usr/local/bin/restartCE.sh':
+              content: !Sub |
+                #!/bin/bash -x
+                # Get new amazon URL
+                /usr/local/bin/checkAmazonURL.sh
+
+                # Restart all services
+                pushd /opt/openvidu
+                docker-compose up -d
+                popd
+              mode: "000755"
+              owner: "root"
+              group: "root"
     Properties:
       ImageId: !FindInMap [OVAMIMAP, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref InstanceType
@@ -277,8 +290,7 @@ Resources:
           /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
 
           # Launch on reboot
-          crontab -l | { cat; echo '@reboot /usr/local/bin/checkAmazonURL.sh'; } | crontab -
-          crontab -l | { cat; echo '@reboot /bin/bash -c "cd /opt/openvidu && docker-compose up -d"'; } | crontab -
+          echo "@reboot /usr/local/bin/restartCE.sh" | crontab
 
           # Download certs if "WichCert" mode
           if [ "${WhichCert}" == "owncert" ]; then
