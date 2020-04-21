@@ -277,8 +277,8 @@ Resources:
           /usr/local/bin/feedGroupVars.sh || { echo "[Openvidu] Parameters incorrect/insufficient"; exit 1; }
 
           # Launch on reboot
-          echo "@reboot /usr/local/bin/checkAmazonURL.sh" | crontab
-          echo '@reboot /bin/bash -c "cd /opt/openvidu && docker-compose up -d"' | crontab
+          crontab -l | { cat; echo '@reboot /usr/local/bin/checkAmazonURL.sh'; } | crontab -
+          crontab -l | { cat; echo '@reboot /bin/bash -c "cd /opt/openvidu && docker-compose up -d"'; } | crontab -
 
           # Download certs if "WichCert" mode
           if [ "${WhichCert}" == "owncert" ]; then
