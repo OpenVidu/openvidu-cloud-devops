@@ -20,7 +20,7 @@ Parameters:
   PublicElasticIP:
     Description: "Previously created AWS Elastic IP to associate it to the OpenVidu EC2 instance. If certificate type is 'selfsigned' this value is optional. If certificate type is 'owncert' or 'letsencrypt' this value is mandatory. Example 13.33.145.23."
     Type: String
-    AllowedPattern: ^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$
+    AllowedPattern: ^$|^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$
 
   MyDomainName:
     Description: "Valid domain name pointing to previous IP. If certificate type is 'selfsigned' this value is optional. If certificate type is 'owncert' or 'letsencrypt' this value is mandatory. Example: openvidu.company.com"
