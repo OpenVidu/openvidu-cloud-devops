@@ -21,11 +21,13 @@ Parameters:
     Description: "Previously created AWS Elastic IP to associate it to the OpenVidu EC2 instance. If certificate type is 'selfsigned' this value is optional. If certificate type is 'owncert' or 'letsencrypt' this value is mandatory. Example 13.33.145.23."
     Type: String
     AllowedPattern: ^$|^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$
+    ConstraintDescription: The public Elastic IP does not have a valid IPv4 format
 
   MyDomainName:
     Description: "Valid domain name pointing to previous IP. If certificate type is 'selfsigned' this value is optional. If certificate type is 'owncert' or 'letsencrypt' this value is mandatory. Example: openvidu.company.com"
     Type: String
-    AllowedPattern: ^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$
+    AllowedPattern: ^$|^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$
+    ConstraintDescription: The domain name does not have a valid domain name format
 
   OwnCertCRT:
     Description: "If certificate type is 'owncert' this is the URL where CRT file will be downloaded"
