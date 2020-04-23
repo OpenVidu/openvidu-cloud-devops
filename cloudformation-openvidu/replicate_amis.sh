@@ -38,11 +38,30 @@ TARGET_REGIONS="eu-north-1
                 us-west-2
                 me-south-1"
 
-echo "OV IDs"
+AMI_IDS=()
+REGIONS=()
 for REGION in ${TARGET_REGIONS}
 do
     ID=$(aws ec2 copy-image --name ${OV_AMI_NAME} --source-image-id ${OV_AMI_ID} --source-region ${AWS_DEFAULT_REGION} --region ${REGION} --output text --query 'ImageId')
-    # aws ec2 modify-image-attribute --image-id ${ID} --launch-permission "Add=[{Group=all}]"
+    echo "Replicated AMI in region ${REGION} with id ${ID}"
+    AMI_IDS+=($ID)
+    REGIONS+=($REGION)
+done
+
+if [ "${#AMI_IDS[@]}" -ne "${#REGIONS[@]}" ]; then
+    echo "The number of elements in array of AMI ids and array of regions is not equal"
+    exit 1
+fi
+
+echo "OV IDs"
+ITER=0
+for i in "${AMI_IDS[@]}"
+do
+    AMI_ID=${AMI_IDS[$ITER]}
+    REGION=${REGIONS[$ITER]}
+	aws ec2 wait image-exists --region ${REGION} --image-ids ${AMI_ID}
+    aws ec2 modify-image-attribute --region ${REGION} --image-id ${AMI_ID} --launch-permission "Add=[{Group=all}]"
     echo "    ${REGION}:"
-    echo "      AMI: ${ID}"
+    echo "      AMI: ${AMI_ID}"
+    ITER=$(expr $ITER + 1)
 done
