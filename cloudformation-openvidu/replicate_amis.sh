@@ -14,6 +14,9 @@ if [ ${CF_OVP_TARGET} == "market" ]; then
     export AWS_SECRET_ACCESS_KEY=${NAEVA_AWS_SECRET_ACCESS_KEY}
 fi
 
+echo "Making original AMI public"
+aws ec2 modify-image-attribute --image-id ${OV_AMI_ID} --launch-permission "Add=[{Group=all}]"
+
 TARGET_REGIONS="eu-north-1
                 eu-west-3
                 eu-west-2
