@@ -93,6 +93,7 @@ Resources:
                 # Openvidu CE images
                 docker pull openvidu/openvidu-server:OPENVIDU_VERSION
                 docker pull kurento/kurento-media-server:KMS_DOCKER_TAG
+                docker pull redis:REDIS_DOCKER_TAG
                 docker pull openvidu/openvidu-coturn:OPENVIDU_COTURN_DOCKER_TAG
                 docker pull openvidu/openvidu-proxy:OPENVIDU_PROXY_DOCKER_TAG
                 docker pull openvidu/openvidu-call:OPENVIDU_CALL_DOCKER_TAG

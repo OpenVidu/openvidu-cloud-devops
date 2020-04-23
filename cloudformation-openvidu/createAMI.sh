@@ -38,6 +38,7 @@ cp cfn-mkt-ov-ce-ami.yaml.template cfn-mkt-ov-ce-ami.yaml
 sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/g" cfn-mkt-ov-ce-ami.yaml
 sed -i "s/OPENVIDU_RECORDING_DOCKER_TAG/${OPENVIDU_RECORDING_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
 sed -i "s/KMS_DOCKER_TAG/${KMS_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/REDIS_DOCKER_TAG/${REDIS_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
 sed -i "s/OPENVIDU_COTURN_DOCKER_TAG/${OPENVIDU_COTURN_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
 sed -i "s/OPENVIDU_PROXY_DOCKER_TAG/${OPENVIDU_PROXY_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
 sed -i "s/OPENVIDU_CALL_DOCKER_TAG/${OPENVIDU_CALL_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
