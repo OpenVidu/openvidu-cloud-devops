@@ -60,6 +60,7 @@ do
     AMI_ID=${AMI_IDS[$ITER]}
     REGION=${REGIONS[$ITER]}
 	aws ec2 wait image-exists --region ${REGION} --image-ids ${AMI_ID}
+    aws ec2 wait image-available --region ${REGION} --image-ids ${AMI_ID}
     aws ec2 modify-image-attribute --region ${REGION} --image-id ${AMI_ID} --launch-permission "Add=[{Group=all}]"
     echo "    ${REGION}:"
     echo "      AMI: ${AMI_ID}"
