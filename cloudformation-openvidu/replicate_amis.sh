@@ -15,6 +15,8 @@ if [ ${CF_OVP_TARGET} == "market" ]; then
 fi
 
 echo "Making original AMI public"
+aws ec2 wait image-exists --image-ids ${OV_AMI_ID}
+aws ec2 wait image-available --image-ids ${OV_AMI_ID}
 aws ec2 modify-image-attribute --image-id ${OV_AMI_ID} --launch-permission "Add=[{Group=all}]"
 
 TARGET_REGIONS="eu-north-1
@@ -53,15 +55,29 @@ if [ "${#AMI_IDS[@]}" -ne "${#REGIONS[@]}" ]; then
     exit 1
 fi
 
-echo "OV IDs"
+echo "Waiting for images to be available..."
+echo "-------------------------------------"
 ITER=0
 for i in "${AMI_IDS[@]}"
 do
     AMI_ID=${AMI_IDS[$ITER]}
     REGION=${REGIONS[$ITER]}
 	aws ec2 wait image-exists --region ${REGION} --image-ids ${AMI_ID}
+    echo "${AMI_ID} of region ${REGION} exists"
     aws ec2 wait image-available --region ${REGION} --image-ids ${AMI_ID}
+    echo "${AMI_ID} of region ${REGION} available"
     aws ec2 modify-image-attribute --region ${REGION} --image-id ${AMI_ID} --launch-permission "Add=[{Group=all}]"
+    echo "${AMI_ID} of region ${REGION} is now public"
+    echo "-------------------------------------"
+    ITER=$(expr $ITER + 1)
+done
+
+echo "OV IDs"
+ITER=0
+for i in "${AMI_IDS[@]}"
+do
+    AMI_ID=${AMI_IDS[$ITER]}
+    REGION=${REGIONS[$ITER]}
     echo "    ${REGION}:"
     echo "      AMI: ${AMI_ID}"
     ITER=$(expr $ITER + 1)
