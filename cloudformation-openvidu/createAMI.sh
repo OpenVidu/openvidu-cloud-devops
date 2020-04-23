@@ -35,14 +35,14 @@ AMIUSEAST1=$(getUbuntuAmiId 'us-east-1')
 cp cfn-mkt-ov-ce-ami.yaml.template cfn-mkt-ov-ce-ami.yaml
 
 ## Setting Openvidu Version and Ubuntu Latest AMIs
-sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/" cfn-mkt-ov-ce-ami.yaml
-sed -i "s/OPENVIDU_RECORDING_DOCKER_TAG/${OPENVIDU_RECORDING_DOCKER_TAG}/" cfn-mkt-ov-ce-ami.yaml
-sed -i "s/KMS_DOCKER_TAG/${KMS_DOCKER_TAG}/" cfn-mkt-ov-ce-ami.yaml
-sed -i "s/OPENVIDU_COTURN_DOCKER_TAG/${OPENVIDU_COTURN_DOCKER_TAG}/" cfn-mkt-ov-ce-ami.yaml
-sed -i "s/OPENVIDU_PROXY_DOCKER_TAG/${OPENVIDU_PROXY_DOCKER_TAG}/" cfn-mkt-ov-ce-ami.yaml
-sed -i "s/OPENVIDU_CALL_DOCKER_TAG/${OPENVIDU_CALL_DOCKER_TAG}/" cfn-mkt-ov-ce-ami.yaml
-sed -i "s/AMIEUWEST1/${AMIEUWEST1}/" cfn-mkt-ov-ce-ami.yaml
-sed -i "s/AMIUSEAST1/${AMIUSEAST1}/" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/g" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/OPENVIDU_RECORDING_DOCKER_TAG/${OPENVIDU_RECORDING_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/KMS_DOCKER_TAG/${KMS_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/OPENVIDU_COTURN_DOCKER_TAG/${OPENVIDU_COTURN_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/OPENVIDU_PROXY_DOCKER_TAG/${OPENVIDU_PROXY_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/OPENVIDU_CALL_DOCKER_TAG/${OPENVIDU_CALL_DOCKER_TAG}/g" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/AMIEUWEST1/${AMIEUWEST1}/g" cfn-mkt-ov-ce-ami.yaml
+sed -i "s/AMIUSEAST1/${AMIUSEAST1}/g" cfn-mkt-ov-ce-ami.yaml
 
 ## OpenVidu AMI
 
