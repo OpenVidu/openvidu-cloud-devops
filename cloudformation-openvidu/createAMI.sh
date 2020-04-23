@@ -78,6 +78,7 @@ aws ec2 wait image-available --image-ids ${OV_RAW_AMI_ID}
 
 # Updating the template
 sed "s/OV_AMI_ID/${OV_RAW_AMI_ID}/" CF-OpenVidu.yaml.template > CF-OpenVidu-${OPENVIDU_VERSION}.yaml
+sed -i "s/OPENVIDU_VERSION/${OPENVIDU_VERSION}/g" CF-OpenVidu-${OPENVIDU_VERSION}.yaml
 
 rm $TEMPJSON
 rm cfn-mkt-ov-ce-ami.yaml
