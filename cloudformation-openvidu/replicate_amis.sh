@@ -42,7 +42,7 @@ echo "OV IDs"
 for REGION in ${TARGET_REGIONS}
 do
     ID=$(aws ec2 copy-image --name ${OV_AMI_NAME} --source-image-id ${OV_AMI_ID} --source-region ${AWS_DEFAULT_REGION} --region ${REGION} --output text --query 'ImageId')
-    aws ec2 modify-image-attribute --image-id ${ID} --launch-permission "Add=[{Group=all}]"
+    # aws ec2 modify-image-attribute --image-id ${ID} --launch-permission "Add=[{Group=all}]"
     echo "    ${REGION}:"
     echo "      AMI: ${ID}"
 done
