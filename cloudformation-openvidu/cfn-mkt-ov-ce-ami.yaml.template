@@ -88,7 +88,14 @@ Resources:
                 set -eu -o pipefail
                 
                 # Openvidu recording
-                docker pull openvidu/openvidu-recording:2.9.0
+                docker pull openvidu/openvidu-recording:OPENVIDU_RECORDING_DOCKER_TAG
+
+                # Openvidu CE images
+                docker pull openvidu/openvidu-server:OV_VERSION
+                docker pull kurento/kurento-media-server:KMS_DOCKER_TAG
+                docker pull openvidu/openvidu-coturn:OPENVIDU_COTURN_DOCKER_TAG
+                docker pull openvidu/openvidu-proxy:OPENVIDU_PROXY_DOCKER_TAG
+                docker pull openvidu/openvidu-call:OPENVIDU_CALL_DOCKER_TAG
               mode: "000755"
               owner: "root"
               group: "root"
