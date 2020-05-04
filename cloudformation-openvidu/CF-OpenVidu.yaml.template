@@ -166,11 +166,9 @@ Metadata:
         default: "Send deployment info to OpenVidu team"
 
 Conditions:
-  NoSelfSigned: !Not
-    - !Equals
-      - !Ref WhichCert
-      - selfsigned
-
+    WhichCertPresent: !Not [ !Equals [!Ref WhichCert, ""] ]
+    PublicElasticIPPresent: !Not [ !Equals [!Ref PublicElasticIP, ""] ]
+    
 Resources:
 
   OpenviduServer:
@@ -219,8 +217,10 @@ Resources:
                 sed -i "s/OPENVIDU_SECRET=/OPENVIDU_SECRET=${OpenViduSecret}/" $WORKINGDIR/.env
 
                 # Replace domain name
-                if [[ "${WhichCert}" == "letsencrypt" || "${WhichCert}" == "owncert" ]]; then
+                if [[ "${MyDomainName}" != ''  && "${PublicElasticIP}" != '' ]]; then
                   sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=${MyDomainName}/" $WORKINGDIR/.env
+                elif [[ "${MyDomainName}" == '' && "${PublicElasticIP}" != '' ]]; then
+                  sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=${PublicElasticIP}/" $WORKINGDIR/.env
                 else
                   [ ! -d "/usr/share/openvidu" ] && mkdir -p /usr/share/openvidu
                   PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
@@ -232,12 +232,11 @@ Resources:
                 sed -i "s/CERTIFICATE_TYPE=selfsigned/CERTIFICATE_TYPE=${WhichCert}/" $WORKINGDIR/.env
                 sed -i "s/LETSENCRYPT_EMAIL=user@example.com/LETSENCRYPT_EMAIL=${LetsEncryptEmail}/" $WORKINGDIR/.env
                 
-                # Without Demos
+                # Without Application
                 if [ "${WantToDeployDemos}" == "false" ]; then
-                  sed -i "s/WITH_DEMOS=true/WITH_DEMOS=false/" $WORKINGDIR/docker-compose.yml
+                  sed -i "s/WITH_APP=true/WITH_APP=false/" $WORKINGDIR/docker-compose.yml
                   rm $WORKINGDIR/docker-compose.override.yml
                 fi
-
               mode: "000755"
               owner: "root"
               group: "root"
@@ -245,30 +244,21 @@ Resources:
               content: !Sub |
                 #!/bin/bash -x
                 WORKINGDIR=/opt/openvidu
-                wget -O $WORKINGDIR/owncert/certificate.cert ${OwnCertCRT}
-                wget -O $WORKINGDIR/owncert/certificate.key ${OwnCertKEY}
-              mode: "000755"
-              owner: "root"
-              group: "root"
-            '/usr/local/bin/checkAmazonURL.sh':
-              content: !Sub |
-                #!/bin/bash -x
-                WORKINGDIR=/opt/openvidu
-
-                if [ "${WhichCert}" == "selfsigned" ]; then
-                  OldPublicHostname=$(cat /usr/share/openvidu/old-host-name)
-                  PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
-                  sed -i "s/$OldPublicHostname/$PublicHostname/" $WORKINGDIR/.env
-                  echo $PublicHostname > /usr/share/openvidu/old-host-name
-                fi
+                wget --no-check-certificate -O $WORKINGDIR/owncert/certificate.cert ${OwnCertCRT}
+                wget --no-check-certificate -O $WORKINGDIR/owncert/certificate.key ${OwnCertKEY}
               mode: "000755"
               owner: "root"
               group: "root"
             '/usr/local/bin/restartCE.sh':
               content: !Sub |
                 #!/bin/bash -x
+                WORKINGDIR=/opt/openvidu
+                
                 # Get new amazon URL
-                /usr/local/bin/checkAmazonURL.sh
+                OldPublicHostname=$(cat /usr/share/openvidu/old-host-name)
+                PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+                sed -i "s/$OldPublicHostname/$PublicHostname/" $WORKINGDIR/.env
+                echo $PublicHostname > /usr/share/openvidu/old-host-name
 
                 # Restart all services
                 pushd /opt/openvidu
@@ -334,7 +324,7 @@ Resources:
 
   MyEIP:
     Type: 'AWS::EC2::EIPAssociation'
-    Condition: NoSelfSigned
+    Condition: PublicElasticIPPresent
     Properties:
       InstanceId: !Ref OpenviduServer
       EIP: !Ref PublicElasticIP
@@ -379,15 +369,6 @@ Resources:
           FromPort: 40000
           ToPort: 65535
           CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: 1
-          ToPort: 65535
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: udp
-          FromPort: 1
-          ToPort: 65535
-          CidrIp: 0.0.0.0/0
 
 Outputs:
   OpenViduServerURL:
@@ -404,7 +385,7 @@ Outputs:
       - ''
       - - 'https://'
         - !Ref MyDomainName
-    Condition: NoSelfSigned
+    Condition: WhichCertPresent
   OpenViduCallURL:
     Description: If you choose to deploy OpenVidu Call application, use this URL
     Value: !Join
@@ -419,4 +400,4 @@ Outputs:
       - ''
       - - 'https://'
         - !Ref MyDomainName
-    Condition: NoSelfSigned
+    Condition: WhichCertPresent
