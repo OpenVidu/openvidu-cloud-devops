@@ -218,13 +218,13 @@ Resources:
 
                 # Replace domain name
                 if [[ "${MyDomainName}" != ''  && "${PublicElasticIP}" != '' ]]; then
-                  sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=${MyDomainName}/" $WORKINGDIR/.env
+                  sed -i "s/DOMAIN_OR_PUBLIC_IP=/DOMAIN_OR_PUBLIC_IP=${MyDomainName}/" $WORKINGDIR/.env
                 elif [[ "${MyDomainName}" == '' && "${PublicElasticIP}" != '' ]]; then
-                  sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=${PublicElasticIP}/" $WORKINGDIR/.env
+                  sed -i "s/DOMAIN_OR_PUBLIC_IP=/DOMAIN_OR_PUBLIC_IP=${PublicElasticIP}/" $WORKINGDIR/.env
                 else
                   [ ! -d "/usr/share/openvidu" ] && mkdir -p /usr/share/openvidu
                   PublicHostname=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
-                  sed -i "s/OPENVIDU_DOMAIN_OR_PUBLIC_IP=/OPENVIDU_DOMAIN_OR_PUBLIC_IP=$PublicHostname/" $WORKINGDIR/.env
+                  sed -i "s/DOMAIN_OR_PUBLIC_IP=/DOMAIN_OR_PUBLIC_IP=$PublicHostname/" $WORKINGDIR/.env
                   echo $PublicHostname > /usr/share/openvidu/old-host-name
                 fi
 
