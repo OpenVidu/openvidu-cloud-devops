@@ -66,19 +66,20 @@ Resources:
               mode: "000755"
               owner: "root"
               group: "root"
-            "/usr/local/bin/getDockerCompose.sh":
+            "/usr/local/bin/installOpenviduCE.sh":
               content: !Sub |
                 #!/bin/bash
                 set -eu -o pipefail
+                
+                # Install openvidu-ce
+                cd /opt
+                curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_OPENVIDU_VERSION.sh | bash
+
                 # Configure crash report
                 mkdir -p /opt/openvidu/kms-crashes
                 sed -i "s/enabled=1/enabled=0/" /etc/default/apport
                 echo "kernel.core_pattern=/opt/openvidu/kms-crashes/core_%e_%p_%u_%t" >> /etc/sysctl.conf
                 sysctl --system
-                # Installation path
-                cd /opt
-                # Install openvidu-ce
-                curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_OPENVIDU_VERSION.sh | bash
               mode: "000755"
               owner: "root"
               group: "root"
@@ -116,7 +117,7 @@ Resources:
 
             /usr/local/bin/installDockerAndDockerCompose.sh || { echo "[Openvidu] error installing docker and compose"; exit 1; }
 
-            /usr/local/bin/getDockerCompose.sh || { echo "[Openvidu] error getting compose"; exit 1; }
+            /usr/local/bin/installOpenviduCE.sh || { echo "[Openvidu] error installing Openvidu CE"; exit 1; }
 
             /usr/local/bin/getDockerImages.sh || { echo "[Openvidu] error getting docker images"; exit 1; }
 
