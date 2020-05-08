@@ -127,7 +127,9 @@ Resources:
             # Cleaning the house
             shred -u /var/log/cloud-init-output.log
             shred -u /etc/ssh/*_key /etc/ssh/*_key.pub
-            shred -u /usr/local/bin/getOpenVidu.sh
+            shred -u /usr/local/bin/installDockerAndDockerCompose.sh
+            shred -u /usr/local/bin/installOpenviduCE.sh
+            shred -u /usr/local/bin/getDockerImages.sh
             find /var/lib/cloud/instances/$(curl http://169.254.169.254/latest/meta-data/instance-id) -type f | xargs shred -u
             rm -rf /var/lib/cloud/instances/$(curl http://169.254.169.254/latest/meta-data/instance-id)
 
