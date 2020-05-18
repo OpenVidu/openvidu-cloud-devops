@@ -60,26 +60,36 @@ Parameters:
       - t2.large
       - t2.xlarge
       - t2.2xlarge
-      - m5.xlarge
-      - m5.2xlarge
-      - m5.4xlarge
-      - m5.12xlarge
-      - m5.24xlarge
+      - t3.large
+      - t3.xlarge
+      - t3.2xlarge
+      - m4.large
       - m4.xlarge
       - m4.2xlarge
       - m4.4xlarge
       - m4.10xlarge
       - m4.16xlarge
-      - c5.xlarge
-      - c5.2xlarge
-      - c5.4xlarge
-      - c5.9xlarge
-      - c5d.xlarge
-      - c5d.2xlarge
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - m5.8xlarge
+      - m5.12xlarge
+      - m5.16xlarge
+      - m5.24xlarge
+      - c4.large
       - c4.xlarge
       - c4.2xlarge
       - c4.4xlarge
       - c4.8xlarge
+      - c5.large
+      - c5.xlarge
+      - c5.2xlarge
+      - c5.4xlarge
+      - c5.9xlarge	
+      - c5.12xlarge
+      - c5.18xlarge
+      - c5.24xlarge
     ConstraintDescription: "Must be a valid EC2 instance type"
 
   KeyName:
