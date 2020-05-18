@@ -75,6 +75,9 @@ Resources:
                 cd /opt
                 curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_OPENVIDU_VERSION.sh | bash
 
+                # Define Installation Type
+                sed -i "s/Installation Mode: On Premises/Installation Mode: Cloud Formation/" /opt/openvidu/docker-compose.yml
+
                 # Configure crash report
                 mkdir -p /opt/openvidu/kms-crashes
                 sed -i "s/enabled=1/enabled=0/" /etc/default/apport
