@@ -74,9 +74,7 @@
     groups: sudo,admin
 - name: Deploy SSH Key sgomes
   authorized_key: user=sgomes
-                  key="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAhqcEsXAcVZc0jdwfY+ysaqUbcXXrYZaHaRuA/dZRefNoMLDHzbpYfC9WKBCkNC/NnFwRoDPBq56dK+TsJipa5IvwJIWZXHWULUsIlQPhfD1iF0J+LP3yBmMc1zPNAnk8IfvaiXJT1mVjWZHtbQGX/dWQ6J1
-UPHmiksbBH0Fa6Eq855uJ9iUwwUKPCtNjzkm9/KtDUw/uz65BsK48fMZ5D5wzdFIQtDtGv1YV6N06dcnOuR+qMedhVLsvqkJEL7DjrVmVCbDIvmDHDOlpvyVdxJI4gcBKMhCcuI81MjRUNCTPRjNdgaFXSmCCXiNi693cu1gnSx2Ph8aAqU7TtV7dUw== s
-gomes@digitalsign.pt"
+                  key="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAhqcEsXAcVZc0jdwfY+ysaqUbcXXrYZaHaRuA/dZRefNoMLDHzbpYfC9WKBCkNC/NnFwRoDPBq56dK+TsJipa5IvwJIWZXHWULUsIlQPhfD1iF0J+LP3yBmMc1zPNAnk8IfvaiXJT1mVjWZHtbQGX/dWQ6J1UPHmiksbBH0Fa6Eq855uJ9iUwwUKPCtNjzkm9/KtDUw/uz65BsK48fMZ5D5wzdFIQtDtGv1YV6N06dcnOuR+qMedhVLsvqkJEL7DjrVmVCbDIvmDHDOlpvyVdxJI4gcBKMhCcuI81MjRUNCTPRjNdgaFXSmCCXiNi693cu1gnSx2Ph8aAqU7TtV7dUw== sgomes@digitalsign.pt"
                   state=present
 
 - name: "Allow admin users to sudo without a password"
