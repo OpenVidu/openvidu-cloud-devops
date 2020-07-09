@@ -66,6 +66,19 @@
                   key="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAgEAkAe38SAxcaWCv/U3oRxBjtdiyICGL4SZ910rdRZk/dbWZWfoJu/HxV1Oi0jSqGp3t/wkZk1tusGlvyAAQc2Jr/oKMLzjf2wZ+q6//qPe7HBpj2ghKyimF3wPVSOoaA3J0CnRn2KIT4kG5YdZ7GDqObDWualGz3r+o0cW+dXJmHgo2odij4t4G2xxqLNOSvaHMVM9xEZAr+DwM6L4ACi1XA3B6tLypYTcPPp8pI7+1yZ0vbVOFyWqI+txZXEGJylbf9+4T8EXFTUIzmxiL+6F33tFPIF8wRMFCKijjQW8lbGtBhH5XADbZ/UV7igbF4tkGzjSk5ceZ1f2NG7+LouhNyHl4WYIxEs5rcaBWTwW3scZ5Ivf2lEKQHe55iUA7ZK9oT7O7Ons1xUihaKQpLZ53ouhIy8c/Uh82Eu4DYhXLKxoan7+w3l9Qj+9OnwKT7vXbEla/fWNzMDrkkBPTwVBUlPoxJwr1JBDxL0ZEqD0+Ss3WOBa1fvo+JvZZhiHVojNKzKvvE09F3zI1Hf0YzUCR17eNszJlm9yEOMm8tQyGcrlZDD055jBP7ZbFhM9VT6IpHsXq46lRhwLKvOgNmCIsA5hDRinz8AivpfKHL25B8+w6nMElFDChpsU88oX75uurx2+jifbpS6rPmqRWRRDrMEmANF8SH7f3HmakyzMTAk= mmuylaert@barbinha"
                   state=present
 
+#mayron muylaert
+- name: Adicionar novo usuário Serafim Gomes
+  user:
+    name: sgomes
+    shell: /bin/bash
+    groups: sudo,admin
+- name: Deploy SSH Key sgomes
+  authorized_key: user=sgomes
+                  key="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAhqcEsXAcVZc0jdwfY+ysaqUbcXXrYZaHaRuA/dZRefNoMLDHzbpYfC9WKBCkNC/NnFwRoDPBq56dK+TsJipa5IvwJIWZXHWULUsIlQPhfD1iF0J+LP3yBmMc1zPNAnk8IfvaiXJT1mVjWZHtbQGX/dWQ6J1
+UPHmiksbBH0Fa6Eq855uJ9iUwwUKPCtNjzkm9/KtDUw/uz65BsK48fMZ5D5wzdFIQtDtGv1YV6N06dcnOuR+qMedhVLsvqkJEL7DjrVmVCbDIvmDHDOlpvyVdxJI4gcBKMhCcuI81MjRUNCTPRjNdgaFXSmCCXiNi693cu1gnSx2Ph8aAqU7TtV7dUw== s
+gomes@digitalsign.pt"
+                  state=present
+
 - name: "Allow admin users to sudo without a password"
   lineinfile:
       dest: "/etc/sudoers"
