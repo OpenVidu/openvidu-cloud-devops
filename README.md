@@ -15,8 +15,6 @@ openvidu-cloud-devops
 
 :warning: :warning: :warning:
 
-:warning: :warning: :warning:
-
 > If you are here because you want to deploy OpenVidu CE follow this instructions:
 > - AWS: https://docs.openvidu.io/en/2.15.0/deployment/deploying-aws/
 > - On Premises: https://docs.openvidu.io/en/2.15.0/deployment/deploying-on-premises/
