@@ -8,18 +8,18 @@
 openvidu-cloud-devops
 ===
 
-:warning: :warning: :warning:
+:warning: :warning: :warning: **WARNING** :warning: :warning: :warning:
 
 > This repository is deprecated. OpenVidu CE is now deployed using Docker and Docker Compose. New content of OpenVidu CE deployments
 > are in this repository: https://github.com/OpenVidu/openvidu/tree/master/openvidu-server/deployments/ce
 
-:warning: :warning: :warning:
+:warning: :warning: :warning: **WARNING** :warning: :warning: :warning:
 
 > If you are here because you want to deploy OpenVidu CE follow this instructions:
 > - AWS: https://docs.openvidu.io/en/2.15.0/deployment/deploying-aws/
 > - On Premises: https://docs.openvidu.io/en/2.15.0/deployment/deploying-on-premises/
 
-:warning: :warning: :warning:
+:warning: :warning: :warning: **WARNING** :warning: :warning: :warning:
 
 Configuration files for automatic launching of [OpenVidu Server](http://docs.openvidu.io/en/stable/deployment/deploying-aws/) and [OpenVidu Demos](http://docs.openvidu.io/en/stable/deployment/deploying-demos-aws/) in AWS CloudFormation.
 
